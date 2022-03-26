@@ -15,6 +15,9 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideSetProfileRepository(remoteDataSource: DataSource.RemoteDataSource): SetProfileRepository =
-        SetProfileRepositoryImpl(remoteDataSource)
+    fun provideSetProfileRepository(
+        localDataSource: DataSource.LocalDataSource,
+        remoteDataSource: DataSource.RemoteDataSource
+    ): SetProfileRepository =
+        SetProfileRepositoryImpl(localDataSource, remoteDataSource)
 }
