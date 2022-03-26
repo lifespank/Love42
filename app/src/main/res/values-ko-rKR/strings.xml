@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">러브 42</string>
+    <string name="sign_in">로그인</string>
+    <string name="logo_42">42 로고</string>
+</resources>

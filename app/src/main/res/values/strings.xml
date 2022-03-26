@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Love 42</string>
+    <string name="sign_in">Sign In</string>
+    <string name="logo_42">42 Logo</string>
 </resources>
