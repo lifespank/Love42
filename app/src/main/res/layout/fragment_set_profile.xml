@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.mylittleproject.love42.ui.SetProfileViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -41,6 +44,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@{viewModel.userInfo.login}"
                     tools:text="sumkim" />
 
             </com.google.android.material.textfield.TextInputLayout>

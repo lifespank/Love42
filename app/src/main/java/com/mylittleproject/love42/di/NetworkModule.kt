@@ -1,6 +1,6 @@
 package com.mylittleproject.love42.di
 
-import com.mylittleproject.love42.network.AuthService
+import com.mylittleproject.love42.network.IntraService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,10 +17,10 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideAuthService(): AuthService =
+    fun provideIntraService(): IntraService =
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(AuthService::class.java)
+            .create(IntraService::class.java)
 }

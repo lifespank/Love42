@@ -28,12 +28,15 @@ class SetProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = setProfileViewModel
         val code = requireActivity().intent.data?.getQueryParameter(PARAMETER_KEY)
         if (code != null) {
             Log.d(NAME_TAG, "Code received: $code")
             setProfileViewModel.fetchAccessToken(code)
         } else {
-            Log.w(NAME_TAG, "Authentication failure")
+            Log.w(NAME_TAG, "No code received")
+            setProfileViewModel.fetchAccessToken(code)
         }
     }
 
