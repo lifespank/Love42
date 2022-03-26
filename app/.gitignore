@@ -220,4 +220,6 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 
+keys/
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,android,androidstudio,kotlin,firebase

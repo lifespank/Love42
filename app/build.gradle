@@ -58,4 +58,7 @@ dependencies {
     //Lottie
     def lottie_version = "5.0.3"
     implementation "com.airbnb.android:lottie:$lottie_version"
+
+    //Browser
+    implementation 'androidx.browser:browser:1.4.0'
 }
