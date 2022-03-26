@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/signInFragment">
+    app:startDestination="@id/setProfileFragment">
 
     <fragment
-        android:id="@+id/signInFragment"
-        android:name="com.mylittleproject.love42.ui.SignInFragment"
-        android:label="SignInFragment"
-        tools:layout="@layout/fragment_sign_in" />
+        android:id="@+id/setProfileFragment"
+        android:name="com.mylittleproject.love42.ui.SetProfileFragment"
+        android:label="SetProfileFragment"
+        tools:layout="@layout/fragment_set_profile" />
 </navigation>
