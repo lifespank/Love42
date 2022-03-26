@@ -1,8 +1,8 @@
 package com.mylittleproject.love42.di
 
 import com.mylittleproject.love42.model.DataSource
-import com.mylittleproject.love42.repository.SetProfileRepository
-import com.mylittleproject.love42.repository.SetProfileRepositoryImpl
+import com.mylittleproject.love42.repository.AccessTokenRepository
+import com.mylittleproject.love42.repository.AccessTokenRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,9 +15,9 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideSetProfileRepository(
+    fun provideAccessTokenRepository(
         localDataSource: DataSource.LocalDataSource,
         remoteDataSource: DataSource.RemoteDataSource
-    ): SetProfileRepository =
-        SetProfileRepositoryImpl(localDataSource, remoteDataSource)
+    ): AccessTokenRepository =
+        AccessTokenRepositoryImpl(localDataSource, remoteDataSource)
 }

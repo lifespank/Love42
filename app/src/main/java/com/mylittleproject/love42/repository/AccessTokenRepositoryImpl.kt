@@ -4,15 +4,15 @@ import android.util.Log
 import com.mylittleproject.love42.model.DataSource
 import com.mylittleproject.love42.tools.NAME_TAG
 
-class SetProfileRepositoryImpl(
+class AccessTokenRepositoryImpl(
     private val localDataSource: DataSource.LocalDataSource,
     private val remoteDataSource: DataSource.RemoteDataSource
 ) :
-    SetProfileRepository {
+    AccessTokenRepository {
 
     private var token: String? = null
 
-    override suspend fun fetchAccessToken(code: String): String? {
+    override suspend fun fetchAccessToken(code: String?): String? {
         if (token != null) {
             return token
         }
@@ -26,15 +26,17 @@ class SetProfileRepositoryImpl(
         tokenResult.onFailure {
             Log.e(NAME_TAG, "Auth token fetch failure", it)
         }
-        tokenResult = remoteDataSource.fetchAccessToken(code)
-        tokenResult.onSuccess {
-            token = it
-            Log.d(NAME_TAG, "Token fetched from remote")
-            saveAccessToken()
-            return token
-        }
-        tokenResult.onFailure {
-            Log.e(NAME_TAG, "Auth token fetch failure", it)
+        if (code != null) {
+            tokenResult = remoteDataSource.fetchAccessToken(code)
+            tokenResult.onSuccess {
+                token = it
+                Log.d(NAME_TAG, "Token fetched from remote")
+                saveAccessToken()
+                return token
+            }
+            tokenResult.onFailure {
+                Log.e(NAME_TAG, "Auth token fetch failure", it)
+            }
         }
         return null
     }

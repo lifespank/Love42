@@ -1,16 +1,31 @@
 package com.mylittleproject.love42.ui
 
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import com.mylittleproject.love42.repository.AccessTokenRepository
 import com.mylittleproject.love42.tools.Event
+import com.mylittleproject.love42.tools.preventDoubleClick
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class SignInViewModel : ViewModel() {
+@HiltViewModel
+class SignInViewModel @Inject constructor(private val accessTokenRepository: AccessTokenRepository) :
+    ViewModel() {
 
     private val _signInClickEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
     val signInClickEvent: LiveData<Event<Unit>> get() = _signInClickEvent
+    private val _buttonEnabled: MutableLiveData<Boolean> by lazy { MutableLiveData() }
+    val buttonEnabled: LiveData<Boolean> get() = _buttonEnabled
+    val accessToken = liveData {
+        _buttonEnabled.value = false
+        emit(Event(accessTokenRepository.fetchAccessToken()))
+        _buttonEnabled.value = true
+    }
 
-    fun onSignInClick() {
-        _signInClickEvent.value = Event(Unit)
+    fun onSignInClick(button: View) {
+        button.preventDoubleClick { _signInClickEvent.value = Event(Unit) }
     }
 }
