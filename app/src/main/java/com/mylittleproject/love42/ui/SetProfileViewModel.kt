@@ -5,9 +5,11 @@ import androidx.lifecycle.*
 import com.mylittleproject.love42.data.UserInfo
 import com.mylittleproject.love42.repository.AccessTokenRepository
 import com.mylittleproject.love42.repository.IntraRepository
+import com.mylittleproject.love42.tools.Event
 import com.mylittleproject.love42.tools.NAME_TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,8 +20,11 @@ class SetProfileViewModel @Inject constructor(
     ViewModel() {
 
     private var accessToken: String? = null
+
     private val _userInfo: MutableLiveData<UserInfo> by lazy { MutableLiveData() }
     val userInfo: LiveData<UserInfo> get() = _userInfo
+    private val _redirectToSignInActivityEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
+    val redirectToSignInActivityEvent: LiveData<Event<Unit>> get() = _redirectToSignInActivityEvent
 
     fun fetchAccessToken(code: String?) {
         viewModelScope.launch {
@@ -32,8 +37,23 @@ class SetProfileViewModel @Inject constructor(
     private fun fetchUserInfo() {
         viewModelScope.launch {
             accessToken?.let {
-                _userInfo.value = intraRepository.fetchUserInfo(it)
+                val data = intraRepository.fetchUserInfo(it)
+                data.onSuccess { userInfo ->
+                    Log.d(NAME_TAG, "Auth with access token success: $userInfo")
+                    _userInfo.value = userInfo
+                }
+                data.onFailure { throwable ->
+                    Log.w(NAME_TAG, "Auth with access token failure", throwable)
+                    resetAccessToken()
+                    if (throwable is HttpException) {
+                        _redirectToSignInActivityEvent.value = Event(Unit)
+                    }
+                }
             }
         }
+    }
+
+    private suspend fun resetAccessToken() {
+        accessTokenRepository.saveAccessToken()
     }
 }

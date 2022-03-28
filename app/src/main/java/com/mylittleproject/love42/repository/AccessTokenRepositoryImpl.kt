@@ -3,6 +3,8 @@ package com.mylittleproject.love42.repository
 import android.util.Log
 import com.mylittleproject.love42.model.DataSource
 import com.mylittleproject.love42.tools.NAME_TAG
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class AccessTokenRepositoryImpl(
     private val localDataSource: DataSource.LocalDataSource,
@@ -10,44 +12,35 @@ class AccessTokenRepositoryImpl(
 ) :
     AccessTokenRepository {
 
-    private var token: String? = null
-
     override suspend fun fetchAccessToken(code: String?): String? {
-        if (token != null) {
-            return token
-        }
-        var tokenResult = localDataSource.fetchAccessToken()
-        tokenResult.onSuccess {
-            if (it != null) {
-                Log.d(NAME_TAG, "Token fetched from local")
-                return it
+        var token: Result<String?>
+        withContext(Dispatchers.IO) {
+            token = localDataSource.fetchAccessToken()
+            token.onSuccess {
+                Log.d(NAME_TAG, "Token fetched from local: $it")
+            }
+            token.onFailure {
+                Log.w(NAME_TAG, "No token in local", it)
+            }
+            if (token.getOrNull() == null || token.isFailure) {
+                code?.let {
+                    token = remoteDataSource.fetchAccessToken(it)
+                    token.onSuccess { fetchedToken ->
+                        Log.d(NAME_TAG, "Token fetched from remote")
+                        saveAccessToken(fetchedToken)
+                    }
+                    token.onFailure { throwable ->
+                        Log.w(NAME_TAG, "Token fetch failed from remote", throwable)
+                    }
+                }
             }
         }
-        tokenResult.onFailure {
-            Log.e(NAME_TAG, "Auth token fetch failure", it)
-        }
-        if (code != null) {
-            tokenResult = remoteDataSource.fetchAccessToken(code)
-            tokenResult.onSuccess {
-                token = it
-                Log.d(NAME_TAG, "Token fetched from remote")
-                saveAccessToken()
-                return token
-            }
-            tokenResult.onFailure {
-                Log.e(NAME_TAG, "Auth token fetch failure", it)
-            }
-        }
-        return null
+        return token.getOrNull()
     }
 
-    private suspend fun saveAccessToken() {
-        val saveTokenResult = token?.let { localDataSource.saveAccessToken(it) }
-        saveTokenResult?.onSuccess {
-            Log.d(NAME_TAG, "Save token success")
-        }
-        saveTokenResult?.onFailure {
-            Log.w(NAME_TAG, "Save token failure", it)
+    override suspend fun saveAccessToken(accessToken: String?): Result<Unit> = runCatching {
+        withContext(Dispatchers.IO) {
+            localDataSource.saveAccessToken(accessToken)
         }
     }
 }

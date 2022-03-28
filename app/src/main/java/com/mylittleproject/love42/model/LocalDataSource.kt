@@ -19,17 +19,13 @@ class LocalDataSource(context: Context) : DataSource.LocalDataSource {
     )
 
     override suspend fun fetchAccessToken(): Result<String?> = runCatching {
-        withContext(Dispatchers.IO) {
-            return@withContext sharedPreferences.getString(KEY, null)
-        }
+        sharedPreferences.getString(KEY, null)
     }
 
-    override suspend fun saveAccessToken(accessToken: String) = runCatching {
-        withContext(Dispatchers.IO) {
-            with(sharedPreferences.edit()) {
-                putString(KEY, accessToken)
-                apply()
-            }
+    override suspend fun saveAccessToken(accessToken: String?) = runCatching {
+        with(sharedPreferences.edit()) {
+            putString(KEY, accessToken)
+            apply()
         }
     }
 

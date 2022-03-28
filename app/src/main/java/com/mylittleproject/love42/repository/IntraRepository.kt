@@ -4,5 +4,5 @@ import com.mylittleproject.love42.data.UserInfo
 
 interface IntraRepository {
 
-    suspend fun fetchUserInfo(accessToken: String): UserInfo?
+    suspend fun fetchUserInfo(accessToken: String): Result<UserInfo>
 }

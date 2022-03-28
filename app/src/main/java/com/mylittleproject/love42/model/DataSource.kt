@@ -13,6 +13,6 @@ interface DataSource {
     interface LocalDataSource {
 
         suspend fun fetchAccessToken(): Result<String?>
-        suspend fun saveAccessToken(accessToken: String): Result<Unit>
+        suspend fun saveAccessToken(accessToken: String?): Result<Unit>
     }
 }
