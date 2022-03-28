@@ -4,4 +4,11 @@
     <string name="sign_in">로그인</string>
     <string name="logo_42">42 로고</string>
     <string name="profile_picture">프로필 사진</string>
+    <string name="intra_id">인트라 ID</string>
+    <string name="fill_out_profile">프로필 작성</string>
+    <string name="save">저장</string>
+    <string name="name">이름</string>
+    <string name="email">이메일</string>
+    <string name="intra_url">인트라 URL</string>
+    <string name="bio">소개</string>
 </resources>

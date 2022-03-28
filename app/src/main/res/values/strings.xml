@@ -2,6 +2,13 @@
     <string name="app_name">Love 42</string>
     <string name="sign_in">Sign In</string>
     <string name="logo_42">42 Logo</string>
-    <string name="intra_id" translatable="false">Intra ID</string>
+    <string name="intra_id">Intra ID</string>
     <string name="profile_picture">profile picture</string>
+    <string name="fill_out_profile">Fill Out Profile</string>
+    <string name="save">Save</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="intra_url">Intra URL</string>
+    <string name="bio">Bio</string>
+    <string name="github" translatable="false">GitHub URL</string>
 </resources>
