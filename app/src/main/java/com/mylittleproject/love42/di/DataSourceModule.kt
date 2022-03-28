@@ -1,6 +1,7 @@
 package com.mylittleproject.love42.di
 
 import android.content.Context
+import com.mylittleproject.love42.data.room.AccessTokenDao
 import com.mylittleproject.love42.model.DataSource
 import com.mylittleproject.love42.model.LocalDataSource
 import com.mylittleproject.love42.model.RemoteDataSource
@@ -23,6 +24,6 @@ object DataSourceModule {
 
     @Singleton
     @Provides
-    fun provideLocalDataSource(@ApplicationContext context: Context): DataSource.LocalDataSource =
-        LocalDataSource(context)
+    fun provideLocalDataSource(accessTokenDao: AccessTokenDao): DataSource.LocalDataSource =
+        LocalDataSource(accessTokenDao)
 }

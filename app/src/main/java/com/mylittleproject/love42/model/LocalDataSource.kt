@@ -1,36 +1,22 @@
 package com.mylittleproject.love42.model
 
-import android.content.Context
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import android.util.Log
+import com.mylittleproject.love42.data.AccessToken
+import com.mylittleproject.love42.data.room.AccessTokenDao
+import com.mylittleproject.love42.tools.NAME_TAG
 
-class LocalDataSource(context: Context) : DataSource.LocalDataSource {
+class LocalDataSource(private val accessTokenDao: AccessTokenDao) : DataSource.LocalDataSource {
 
-    private val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
-    private val mainKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)
-    private val sharedPreferences = EncryptedSharedPreferences.create(
-        ACCESS_TOKEN,
-        mainKeyAlias,
-        context,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
-
-    override suspend fun fetchAccessToken(): Result<String?> = runCatching {
-        sharedPreferences.getString(KEY, null)
+    override suspend fun fetchAccessToken(): Result<AccessToken> = runCatching {
+        accessTokenDao.fetchAccessToken()
     }
 
-    override suspend fun saveAccessToken(accessToken: String?) = runCatching {
-        with(sharedPreferences.edit()) {
-            putString(KEY, accessToken)
-            apply()
+    override suspend fun saveAccessToken(accessToken: AccessToken?): Result<Unit> = runCatching {
+        Log.d(NAME_TAG, "Saving token...:$accessToken")
+        if (accessToken != null) {
+            accessTokenDao.insert(accessToken)
+        } else {
+            accessTokenDao.deleteAccessToken()
         }
-    }
-
-    companion object {
-        private const val ACCESS_TOKEN = "Access Token"
-        private const val KEY = "Access Token Key"
     }
 }

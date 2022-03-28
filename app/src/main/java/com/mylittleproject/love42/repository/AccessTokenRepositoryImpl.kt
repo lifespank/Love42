@@ -1,6 +1,7 @@
 package com.mylittleproject.love42.repository
 
 import android.util.Log
+import com.mylittleproject.love42.data.AccessToken
 import com.mylittleproject.love42.model.DataSource
 import com.mylittleproject.love42.tools.NAME_TAG
 import kotlinx.coroutines.Dispatchers
@@ -12,8 +13,8 @@ class AccessTokenRepositoryImpl(
 ) :
     AccessTokenRepository {
 
-    override suspend fun fetchAccessToken(code: String?): String? {
-        var token: Result<String?>
+    override suspend fun fetchAccessToken(code: String?): AccessToken? {
+        var token: Result<AccessToken>
         withContext(Dispatchers.IO) {
             token = localDataSource.fetchAccessToken()
             token.onSuccess {
@@ -26,7 +27,7 @@ class AccessTokenRepositoryImpl(
                 code?.let {
                     token = remoteDataSource.fetchAccessToken(it)
                     token.onSuccess { fetchedToken ->
-                        Log.d(NAME_TAG, "Token fetched from remote")
+                        Log.d(NAME_TAG, "Token fetched from remote: $fetchedToken")
                         saveAccessToken(fetchedToken)
                     }
                     token.onFailure { throwable ->
@@ -38,9 +39,15 @@ class AccessTokenRepositoryImpl(
         return token.getOrNull()
     }
 
-    override suspend fun saveAccessToken(accessToken: String?): Result<Unit> = runCatching {
+    override suspend fun saveAccessToken(accessToken: AccessToken?): Result<Unit> = runCatching {
         withContext(Dispatchers.IO) {
-            localDataSource.saveAccessToken(accessToken)
+            val result = localDataSource.saveAccessToken(accessToken)
+            result.onSuccess {
+                Log.d(NAME_TAG, "Token save success")
+            }
+            result.onFailure {
+                Log.d(NAME_TAG, "Token save failure", it)
+            }
         }
     }
 }

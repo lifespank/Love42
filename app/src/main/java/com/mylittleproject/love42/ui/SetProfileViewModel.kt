@@ -2,6 +2,7 @@ package com.mylittleproject.love42.ui
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.mylittleproject.love42.data.AccessToken
 import com.mylittleproject.love42.data.UserInfo
 import com.mylittleproject.love42.repository.AccessTokenRepository
 import com.mylittleproject.love42.repository.IntraRepository
@@ -19,7 +20,7 @@ class SetProfileViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    private var accessToken: String? = null
+    private var accessToken: AccessToken? = null
 
     private val _userInfo: MutableLiveData<UserInfo> by lazy { MutableLiveData() }
     val userInfo: LiveData<UserInfo> get() = _userInfo
@@ -37,15 +38,15 @@ class SetProfileViewModel @Inject constructor(
     private fun fetchUserInfo() {
         viewModelScope.launch {
             accessToken?.let {
-                val data = intraRepository.fetchUserInfo(it)
+                val data = intraRepository.fetchUserInfo(it.accessToken)
                 data.onSuccess { userInfo ->
                     Log.d(NAME_TAG, "Auth with access token success: $userInfo")
                     _userInfo.value = userInfo
                 }
                 data.onFailure { throwable ->
                     Log.w(NAME_TAG, "Auth with access token failure", throwable)
-                    resetAccessToken()
                     if (throwable is HttpException) {
+                        resetAccessToken()
                         _redirectToSignInActivityEvent.value = Event(Unit)
                     }
                 }
