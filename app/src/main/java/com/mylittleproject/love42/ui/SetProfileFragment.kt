@@ -14,6 +14,7 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.viewModels
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
 import com.mylittleproject.love42.R
 import com.mylittleproject.love42.databinding.FragmentSetProfileBinding
 import com.mylittleproject.love42.tools.EventObserver
@@ -61,7 +62,6 @@ class SetProfileFragment : Fragment() {
     }
 
     private fun setChip() {
-        val items = listOf("C", "C++", "Java", "C#", "Kotlin", "Swift", "Javascript")
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, items)
         binding.tvLanguage.setAdapter(adapter)
     }
@@ -107,6 +107,19 @@ class SetProfileFragment : Fragment() {
                     })
             }
         }
+        setProfileViewModel.manualLanguagePopUpEvent.observe(viewLifecycleOwner, EventObserver {
+            val editText = TextInputEditText(requireContext())
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.preferred_language)
+                .setView(editText)
+                .setPositiveButton(R.string.confirm) { _, _ ->
+                    setProfileViewModel.addLanguage(editText.text.toString())
+                }
+                .setNegativeButton(R.string.cancel) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        })
     }
 
     override fun onDestroyView() {
@@ -116,6 +129,34 @@ class SetProfileFragment : Fragment() {
 
     companion object {
         const val PARAMETER_KEY = "code"
-        const val GRANT_TYPE = "authorization code"
+        val items = listOf(
+            "Ada",
+            "BASIC",
+            "C",
+            "C++",
+            "C#",
+            "COBOL",
+            "D",
+            "Dart",
+            "Fortran",
+            "Go",
+            "Haskell",
+            "Java",
+            "Javascript",
+            "Kotlin",
+            "LISP",
+            "Lua",
+            "MATLAB",
+            "Objective-C",
+            "Perl",
+            "PHP",
+            "Python",
+            "R",
+            "Ruby",
+            "Scala",
+            "Smalltalk",
+            "Swift",
+            "Something else"
+        )
     }
 }

@@ -37,6 +37,8 @@ class SetProfileViewModel @Inject constructor(
     val loadProfileImageEvent: LiveData<Event<Unit>> get() = _loadProfileImageEvent
     private val _popUpSlackIDDescriptionEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
     val popUpSlackIDDescriptionEvent: LiveData<Event<Unit>> get() = _popUpSlackIDDescriptionEvent
+    private val _manualLanguagePopUpEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
+    val manualLanguagePopUpEvent: LiveData<Event<Unit>> get() = _manualLanguagePopUpEvent
 
     fun fetchAccessToken(code: String?) {
         viewModelScope.launch {
@@ -78,7 +80,11 @@ class SetProfileViewModel @Inject constructor(
 
     fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
         Log.d(NAME_TAG, "onTextChange: $s")
-        addLanguage(s.toString())
+        if (s.toString() != "Something else") {
+            addLanguage(s.toString())
+        } else {
+            _manualLanguagePopUpEvent.value = Event(Unit)
+        }
     }
 
     fun fetchUserInfo() {
