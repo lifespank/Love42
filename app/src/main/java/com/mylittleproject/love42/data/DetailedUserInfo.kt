@@ -8,5 +8,7 @@ data class DetailedUserInfo(
     var email: String,
     var gitHubURL: String = "",
     var slackMemberID: String = "",
-    var bio: String = ""
+    var bio: String = "",
+    var isMale: Boolean = true,
+    val languages: HashSet<String> = hashSetOf()
 )

@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.mylittleproject.love42.data.AccessToken
 import com.mylittleproject.love42.data.DetailedUserInfo
-import com.mylittleproject.love42.data.UserInfo
 import com.mylittleproject.love42.repository.AccessTokenRepository
 import com.mylittleproject.love42.repository.IntraRepository
 import com.mylittleproject.love42.tools.Event
@@ -25,6 +24,13 @@ class SetProfileViewModel @Inject constructor(
 
     private val _userInfo: MutableLiveData<DetailedUserInfo> by lazy { MutableLiveData() }
     val userInfo: LiveData<DetailedUserInfo> get() = _userInfo
+    val preferredLanguages = userInfo.switchMap { it ->
+        liveData {
+            if (it != null) {
+                emit(it.languages.toList())
+            }
+        }
+    }
     private val _redirectToSignInActivityEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
     val redirectToSignInActivityEvent: LiveData<Event<Unit>> get() = _redirectToSignInActivityEvent
     private val _loadProfileImageEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
@@ -52,6 +58,27 @@ class SetProfileViewModel @Inject constructor(
     fun setImageURI(imageURI: String) {
         _userInfo.value = userInfo.value?.copy(imageURI = imageURI)
         Log.d(NAME_TAG, "User image changed: ${userInfo.value}")
+    }
+
+    fun addLanguage(language: String) {
+        val languages = userInfo.value?.languages
+        languages?.let {
+            it.add(language)
+            _userInfo.value = userInfo.value?.copy(languages = it)
+        }
+    }
+
+    fun removeLanguage(language: String) {
+        val languages = userInfo.value?.languages
+        languages?.let {
+            it.remove(language)
+            _userInfo.value = userInfo.value?.copy(languages = it)
+        }
+    }
+
+    fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+        Log.d(NAME_TAG, "onTextChange: $s")
+        addLanguage(s.toString())
     }
 
     fun fetchUserInfo() {

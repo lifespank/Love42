@@ -196,6 +196,35 @@
                     app:srcCompat="@drawable/ic_question_mark_button_svgrepo_com" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tf_languages"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tf_slack_id">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/tv_language"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/preferred_language"
+                        android:inputType="none"
+                        android:onTextChanged="@{viewModel::onTextChanged}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/cg_languages"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layoutDirection="locale"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tf_languages" />
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tf_bio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -203,7 +232,7 @@
                     android:hint="@string/bio"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tf_slack_id">
+                    app:layout_constraintTop_toBottomOf="@id/cg_languages">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"

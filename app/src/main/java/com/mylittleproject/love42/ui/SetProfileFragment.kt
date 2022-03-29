@@ -8,8 +8,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.viewModels
+import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mylittleproject.love42.R
 import com.mylittleproject.love42.databinding.FragmentSetProfileBinding
@@ -54,6 +57,13 @@ class SetProfileFragment : Fragment() {
             setProfileViewModel.fetchAccessToken(code)
         }
         subscribeToObservables()
+        setChip()
+    }
+
+    private fun setChip() {
+        val items = listOf("C", "C++", "Java", "C#", "Kotlin", "Swift", "Javascript")
+        val adapter = ArrayAdapter(requireContext(), R.layout.list_item, items)
+        binding.tvLanguage.setAdapter(adapter)
     }
 
     private fun subscribeToObservables() {
@@ -80,6 +90,23 @@ class SetProfileFragment : Fragment() {
                 }
                 .show()
         })
+        setProfileViewModel.preferredLanguages.observe(viewLifecycleOwner) {
+            binding.cgLanguages.removeAllViews()
+            val newContext = ContextThemeWrapper(
+                requireContext(),
+                com.google.android.material.R.style.Widget_Material3_Chip_Input
+            )
+            it.forEach { language ->
+                binding.cgLanguages.addView(Chip(newContext)
+                    .apply {
+                        text = language
+                        isCloseIconVisible = true
+                        setOnCloseIconClickListener {
+                            setProfileViewModel.removeLanguage(text.toString())
+                        }
+                    })
+            }
+        }
     }
 
     override fun onDestroyView() {
