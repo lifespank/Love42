@@ -23,4 +23,5 @@
     <string name="female">Female</string>
     <string name="sex">Sex</string>
     <string name="campus">Campus</string>
+    <string name="permission_needed">Permission to read external storage is needed</string>
 </resources>

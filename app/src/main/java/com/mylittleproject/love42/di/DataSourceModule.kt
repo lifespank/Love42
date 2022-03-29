@@ -1,6 +1,6 @@
 package com.mylittleproject.love42.di
 
-import android.content.Context
+import com.google.firebase.storage.FirebaseStorage
 import com.mylittleproject.love42.data.room.AccessTokenDao
 import com.mylittleproject.love42.model.DataSource
 import com.mylittleproject.love42.model.LocalDataSource
@@ -9,7 +9,6 @@ import com.mylittleproject.love42.network.IntraService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -19,8 +18,8 @@ object DataSourceModule {
 
     @Singleton
     @Provides
-    fun provideRemoteDataSource(intraService: IntraService): DataSource.RemoteDataSource =
-        RemoteDataSource(intraService)
+    fun provideRemoteDataSource(intraService: IntraService, storage: FirebaseStorage): DataSource.RemoteDataSource =
+        RemoteDataSource(intraService, storage)
 
     @Singleton
     @Provides

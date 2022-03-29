@@ -23,4 +23,5 @@
     <string name="female">여성</string>
     <string name="sex">성별</string>
     <string name="campus">캠퍼스</string>
+    <string name="permission_needed">외부 저장소 읽기 권한이 필요합니다</string>
 </resources>

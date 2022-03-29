@@ -1,6 +1,7 @@
 package com.mylittleproject.love42.ui
 
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.RadioButton
 import androidx.lifecycle.*
@@ -8,6 +9,7 @@ import com.mylittleproject.love42.R
 import com.mylittleproject.love42.data.AccessToken
 import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.repository.AccessTokenRepository
+import com.mylittleproject.love42.repository.FirebaseRepository
 import com.mylittleproject.love42.repository.IntraRepository
 import com.mylittleproject.love42.tools.Event
 import com.mylittleproject.love42.tools.NAME_TAG
@@ -19,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SetProfileViewModel @Inject constructor(
     private val accessTokenRepository: AccessTokenRepository,
-    private val intraRepository: IntraRepository
+    private val intraRepository: IntraRepository,
+    private val firebaseRepository: FirebaseRepository
 ) :
     ViewModel() {
 
@@ -98,6 +101,32 @@ class SetProfileViewModel @Inject constructor(
             _manualLanguagePopUpEvent.value = Event(Unit)
         }
     }
+
+    fun uploadProfileImage() {
+        viewModelScope.launch {
+            val user = userInfo.value
+            user?.let {
+                firebaseRepository.uploadProfileImage(it.intraID, it.imageURI) { task ->
+                    if (task.isSuccessful) {
+                        val downloadURI = task.result
+                        _userInfo.value = it.copy(imageURI = downloadURI.toString())
+                        Log.d(NAME_TAG, "Image uploaded: ${userInfo.value}")
+                    } else {
+                        Log.d(NAME_TAG, "Image upload failed")
+                    }
+                }
+            }
+        }
+    }
+
+    fun onMenuClick(menuItem: MenuItem) =
+        when (menuItem.itemId) {
+            R.id.itm_save -> {
+                uploadProfileImage()
+                true
+            }
+            else -> false
+        }
 
     private fun fetchUserInfo() {
         viewModelScope.launch {

@@ -1,10 +1,7 @@
 package com.mylittleproject.love42.di
 
 import com.mylittleproject.love42.model.DataSource
-import com.mylittleproject.love42.repository.AccessTokenRepository
-import com.mylittleproject.love42.repository.AccessTokenRepositoryImpl
-import com.mylittleproject.love42.repository.IntraRepository
-import com.mylittleproject.love42.repository.IntraRepositoryImpl
+import com.mylittleproject.love42.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,4 +24,9 @@ object RepositoryModule {
     @Provides
     fun provideIntraRepository(remoteDataSource: DataSource.RemoteDataSource): IntraRepository =
         IntraRepositoryImpl(remoteDataSource)
+
+    @Singleton
+    @Provides
+    fun provideFirebaseRepository(remoteDataSource: DataSource.RemoteDataSource): FirebaseRepository =
+        FirebaseRepositoryImpl(remoteDataSource)
 }

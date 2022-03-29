@@ -1,5 +1,8 @@
 package com.mylittleproject.love42.di
 
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import com.mylittleproject.love42.network.IntraService
 import dagger.Module
 import dagger.Provides
@@ -23,4 +26,8 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(IntraService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideFirebaseStorage(): FirebaseStorage = Firebase.storage
 }
