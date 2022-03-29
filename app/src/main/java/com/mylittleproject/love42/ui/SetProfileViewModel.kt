@@ -29,7 +29,8 @@ class SetProfileViewModel @Inject constructor(
 
     fun fetchAccessToken(code: String?) {
         viewModelScope.launch {
-            accessToken = accessTokenRepository.fetchAccessToken(code)
+            accessToken =
+                accessTokenRepository.fetchAccessToken(code = code)
             Log.d(NAME_TAG, "Access token received: $accessToken")
             fetchUserInfo()
         }
@@ -47,7 +48,24 @@ class SetProfileViewModel @Inject constructor(
                     Log.w(NAME_TAG, "Auth with access token failure", throwable)
                     if (throwable is HttpException) {
                         resetAccessToken()
-                        _redirectToSignInActivityEvent.value = Event(Unit)
+                        accessToken = accessTokenRepository.fetchAccessToken(
+                            refreshToken = it.refreshToken,
+                            grantType = "refresh_token"
+                        )
+                        accessToken?.let { accessToken ->
+                            val dataAgain = intraRepository.fetchUserInfo(accessToken.accessToken)
+                            dataAgain.onSuccess { userInfo ->
+                                Log.d(NAME_TAG, "Auth with second access token success: $userInfo")
+                                _userInfo.value = userInfo
+                            }
+                            dataAgain.onFailure { throwable ->
+                                Log.w(NAME_TAG, "Auth with second access token failure", throwable)
+                                _userInfo.value = null
+                            }
+                        }
+                        if (accessToken == null || userInfo.value == null) {
+                            _redirectToSignInActivityEvent.value = Event(Unit)
+                        }
                     }
                 }
             }

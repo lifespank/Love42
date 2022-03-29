@@ -7,7 +7,7 @@ interface DataSource {
 
     interface RemoteDataSource {
 
-        suspend fun fetchAccessToken(code: String): Result<AccessToken>
+        suspend fun fetchAccessToken(code: String?, refreshToken: String?, grantType: String): Result<AccessToken>
         suspend fun fetchUserInfo(accessToken: String): Result<UserInfo>
     }
 

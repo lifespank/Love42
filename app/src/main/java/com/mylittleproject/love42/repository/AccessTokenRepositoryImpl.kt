@@ -13,7 +13,7 @@ class AccessTokenRepositoryImpl(
 ) :
     AccessTokenRepository {
 
-    override suspend fun fetchAccessToken(code: String?): AccessToken? {
+    override suspend fun fetchAccessToken(code: String?, refreshToken: String?, grantType: String): AccessToken? {
         var token: Result<AccessToken>
         withContext(Dispatchers.IO) {
             token = localDataSource.fetchAccessToken()
@@ -24,8 +24,7 @@ class AccessTokenRepositoryImpl(
                 Log.w(NAME_TAG, "No token in local", it)
             }
             if (token.getOrNull() == null || token.isFailure) {
-                code?.let {
-                    token = remoteDataSource.fetchAccessToken(it)
+                    token = remoteDataSource.fetchAccessToken(code, refreshToken, grantType)
                     token.onSuccess { fetchedToken ->
                         Log.d(NAME_TAG, "Token fetched from remote: $fetchedToken")
                         saveAccessToken(fetchedToken)
@@ -33,7 +32,7 @@ class AccessTokenRepositoryImpl(
                     token.onFailure { throwable ->
                         Log.w(NAME_TAG, "Token fetch failed from remote", throwable)
                     }
-                }
+
             }
         }
         return token.getOrNull()

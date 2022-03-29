@@ -13,8 +13,9 @@ interface IntraService {
 
     @POST("oauth/token")
     suspend fun fetchAccessToken(
-        @Query("code") code: String,
-        @Query("grant_type") grantType: String = "authorization_code",
+        @Query("code") code: String?,
+        @Query("refresh_token") refreshToken: String?,
+        @Query("grant_type") grantType: String,
         @Query("client_id") clientID: String = SEOUL_CLIENT_ID,
         @Query("client_secret") clientSecret: String = SEOUL_SECRET,
         @Query("redirect_uri") redirectURI: String = REDIRECT_LINK

@@ -16,6 +16,7 @@ class LocalDataSource(private val accessTokenDao: AccessTokenDao) : DataSource.L
         if (accessToken != null) {
             accessTokenDao.insert(accessToken)
         } else {
+            Log.d(NAME_TAG, "Token deleted")
             accessTokenDao.deleteAccessToken()
         }
     }
