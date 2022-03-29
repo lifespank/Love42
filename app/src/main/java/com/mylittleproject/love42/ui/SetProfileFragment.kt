@@ -113,7 +113,9 @@ class SetProfileFragment : Fragment() {
                 .setTitle(R.string.preferred_language)
                 .setView(editText)
                 .setPositiveButton(R.string.confirm) { _, _ ->
-                    setProfileViewModel.addLanguage(editText.text.toString())
+                    if (!editText.text.isNullOrBlank()) {
+                        setProfileViewModel.addLanguage(editText.text.toString())
+                    }
                 }
                 .setNegativeButton(R.string.cancel) { dialog, _ ->
                     dialog.dismiss()
