@@ -26,6 +26,10 @@ class SetProfileViewModel @Inject constructor(
     val userInfo: LiveData<UserInfo> get() = _userInfo
     private val _redirectToSignInActivityEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
     val redirectToSignInActivityEvent: LiveData<Event<Unit>> get() = _redirectToSignInActivityEvent
+    private val _loadProfileImageEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
+    val loadProfileImageEvent: LiveData<Event<Unit>> get() = _loadProfileImageEvent
+    private val _imageURI: MutableLiveData<String> by lazy { MutableLiveData() }
+    val imageURI: LiveData<String> get() = _imageURI
 
     fun fetchAccessToken(code: String?) {
         viewModelScope.launch {
@@ -36,6 +40,14 @@ class SetProfileViewModel @Inject constructor(
         }
     }
 
+    fun onProfileImageEditClick() {
+        _loadProfileImageEvent.value = Event(Unit)
+    }
+
+    fun setImageURI(imageURI: String) {
+        _imageURI.value = imageURI
+    }
+
     private fun fetchUserInfo() {
         viewModelScope.launch {
             accessToken?.let {
@@ -43,6 +55,7 @@ class SetProfileViewModel @Inject constructor(
                 data.onSuccess { userInfo ->
                     Log.d(NAME_TAG, "Auth with access token success: $userInfo")
                     _userInfo.value = userInfo
+                    _imageURI.value = userInfo.imageUrl
                 }
                 data.onFailure { throwable ->
                     Log.w(NAME_TAG, "Auth with access token failure", throwable)
@@ -57,6 +70,7 @@ class SetProfileViewModel @Inject constructor(
                             dataAgain.onSuccess { userInfo ->
                                 Log.d(NAME_TAG, "Auth with second access token success: $userInfo")
                                 _userInfo.value = userInfo
+                                _imageURI.value = userInfo.imageUrl
                             }
                             dataAgain.onFailure { throwable ->
                                 Log.w(NAME_TAG, "Auth with second access token failure", throwable)

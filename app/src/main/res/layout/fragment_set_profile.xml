@@ -52,11 +52,22 @@
                     android:id="@+id/iv_profile"
                     android:layout_width="250dp"
                     android:layout_height="250dp"
+                    android:background="@drawable/round_rectangle"
                     android:contentDescription="@string/profile_picture"
-                    app:imageURL="@{viewModel.userInfo.imageUrl}"
+                    app:imageURL="@{viewModel.imageURI}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/edit_profile_photo"
+                    android:onClick="@{() -> viewModel.onProfileImageEditClick()}"
+                    app:fabSize="mini"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_profile"
+                    app:layout_constraintEnd_toEndOf="@id/iv_profile"
+                    app:srcCompat="@drawable/ic_baseline_edit_24" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tf_intra_id"

@@ -16,7 +16,7 @@ fun setVisible(view: View, isVisible: Boolean) {
 fun setImageWithUrl(view: ImageView, imageURL: String?) {
     Glide.with(view)
         .load(imageURL)
-        .circleCrop()
+        .centerCrop()
         .placeholder(R.drawable.ic_baseline_person_24)
         .into(view)
 }

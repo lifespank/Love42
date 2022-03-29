@@ -4,10 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/ic_42_logo.xml" value="0.193" />
+        <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/ic_baseline_edit_24.xml" value="0.1945" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.1945" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/ic_baseline_refresh_24.xml" value="0.193" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/ic_baseline_save_24.xml" value="0.193" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/ic_launcher_background.xml" value="0.193" />
+        <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/round_rectangle.xml" value="0.1945" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/layout/activity_main.xml" value="0.18489583333333334" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/layout/activity_sign_in.xml" value="0.29713552800342025" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/layout/fragment_set_profile.xml" value="0.25" />
