@@ -101,7 +101,6 @@ class SetProfileViewModel @Inject constructor(
 
     fun fetchUserInfo() {
         viewModelScope.launch {
-            _userInfo.value = null
             accessToken?.let {
                 val data = intraRepository.fetchUserInfo(it.accessToken)
                 data.onSuccess { userInfo ->
