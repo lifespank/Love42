@@ -2,6 +2,8 @@ package com.mylittleproject.love42.tools
 
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
@@ -19,4 +21,11 @@ fun setImageWithUrl(view: ImageView, imageURL: String?) {
         .centerCrop()
         .placeholder(R.drawable.ic_baseline_person_24)
         .into(view)
+}
+
+@BindingAdapter("isMenuItemEnabled")
+fun setMenuItemEnabled(view: Toolbar, isEnabled: Boolean) {
+    view.menu.forEach {
+        it.isEnabled = isEnabled
+    }
 }

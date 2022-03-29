@@ -47,6 +47,8 @@ class SetProfileViewModel @Inject constructor(
     val manualLanguagePopUpEvent: LiveData<Event<Unit>> get() = _manualLanguagePopUpEvent
     private val _fillOutSlackMemberIDEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
     val fillOutSlackMemberIDEvent: LiveData<Event<Unit>> get() = _fillOutSlackMemberIDEvent
+    private val _showLoading: MutableLiveData<Boolean> by lazy { MutableLiveData() }
+    val showLoading: LiveData<Boolean> get() = _showLoading
 
     fun fetchAccessToken(code: String?) {
         viewModelScope.launch {
@@ -109,6 +111,7 @@ class SetProfileViewModel @Inject constructor(
             val user = userInfo.value
             user?.let {
                 if (it.slackMemberID.isNotBlank()) {
+                    _showLoading.value = true
                     firebaseRepository.uploadProfileImage(it.intraID, it.imageURI) { task ->
                         if (task.isSuccessful) {
                             val downloadURI = task.result
@@ -117,6 +120,7 @@ class SetProfileViewModel @Inject constructor(
                             uploadProfile()
                         } else {
                             Log.d(NAME_TAG, "Image upload failed")
+                            _showLoading.value = false
                         }
                     }
                 } else {
@@ -133,6 +137,7 @@ class SetProfileViewModel @Inject constructor(
                     Log.d(NAME_TAG, "Profile upload success")
                 }
             }
+            _showLoading.value = false
         }
     }
 
@@ -148,6 +153,7 @@ class SetProfileViewModel @Inject constructor(
     private fun fetchUserInfo() {
         viewModelScope.launch {
             accessToken?.let {
+                _showLoading.value = true
                 val data = intraRepository.fetchUserInfo(it.accessToken)
                 data.onSuccess { userInfo ->
                     Log.d(NAME_TAG, "Auth with access token success: $userInfo")
@@ -177,6 +183,7 @@ class SetProfileViewModel @Inject constructor(
                         }
                     }
                 }
+                _showLoading.value = false
             }
         }
     }
