@@ -19,4 +19,7 @@
     <string name="preferred_language">Preferred language</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="sex">Sex</string>
 </resources>

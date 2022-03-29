@@ -1,7 +1,10 @@
 package com.mylittleproject.love42.ui
 
 import android.util.Log
+import android.view.View
+import android.widget.RadioButton
 import androidx.lifecycle.*
+import com.mylittleproject.love42.R
 import com.mylittleproject.love42.data.AccessToken
 import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.repository.AccessTokenRepository
@@ -60,6 +63,15 @@ class SetProfileViewModel @Inject constructor(
     fun setImageURI(imageURI: String) {
         _userInfo.value = userInfo.value?.copy(imageURI = imageURI)
         Log.d(NAME_TAG, "User image changed: ${userInfo.value}")
+    }
+
+    fun onRadioButtonClicked(view: View) {
+        if (view is RadioButton) {
+            when (view.id) {
+                R.id.r_btn_male -> _userInfo.value?.isMale = true
+                R.id.r_btn_female -> _userInfo.value?.isMale = false
+            }
+        }
     }
 
     fun addLanguage(language: String) {

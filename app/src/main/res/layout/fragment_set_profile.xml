@@ -224,6 +224,44 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tf_languages" />
 
+                <TextView
+                    android:id="@+id/tv_sex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/sex"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cg_languages" />
+
+                <RadioGroup
+                    android:id="@+id/rg_sex"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_sex">
+
+                    <RadioButton
+                        android:id="@+id/r_btn_male"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:onClick="@{viewModel::onRadioButtonClicked}"
+                        android:text="@string/male" />
+
+                    <RadioButton
+                        android:id="@+id/r_btn_female"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:onClick="@{viewModel::onRadioButtonClicked}"
+                        android:text="@string/female" />
+                </RadioGroup>
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tf_bio"
                     android:layout_width="match_parent"
@@ -232,7 +270,7 @@
                     android:hint="@string/bio"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cg_languages">
+                    app:layout_constraintTop_toBottomOf="@id/rg_sex">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
