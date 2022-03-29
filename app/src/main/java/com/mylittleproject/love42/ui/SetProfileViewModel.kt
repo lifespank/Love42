@@ -99,7 +99,7 @@ class SetProfileViewModel @Inject constructor(
         }
     }
 
-    fun fetchUserInfo() {
+    private fun fetchUserInfo() {
         viewModelScope.launch {
             accessToken?.let {
                 val data = intraRepository.fetchUserInfo(it.accessToken)

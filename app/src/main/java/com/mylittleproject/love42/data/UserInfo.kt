@@ -15,7 +15,15 @@ data class UserInfo(
     val displayName: String = "",
     @SerializedName("image_url")
     val imageUrl: String = "",
+    @SerializedName("campus")
+    val campus: List<Campus>
 ) {
 
-    fun toDetailedUserInfo() = DetailedUserInfo(displayName, login, url, imageUrl, email)
+    fun toDetailedUserInfo() =
+        DetailedUserInfo(displayName, login, url, imageUrl, email, campus.firstOrNull()?.name)
 }
+
+data class Campus(
+    @SerializedName("name")
+    val name: String = "",
+)

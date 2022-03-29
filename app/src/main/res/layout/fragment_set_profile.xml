@@ -88,6 +88,25 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tf_campus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:enabled="false"
+                    android:hint="@string/campus"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tf_intra_id">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:text="@{viewModel.userInfo.campus}"
+                        tools:text="Seoul" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tf_intra_url"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -96,7 +115,7 @@
                     android:hint="@string/intra_url"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tf_intra_id">
+                    app:layout_constraintTop_toBottomOf="@id/tf_campus">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"

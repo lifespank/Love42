@@ -6,6 +6,7 @@ data class DetailedUserInfo(
     val intraURL: String,
     var imageURI: String,
     var email: String,
+    val campus: String?,
     var gitHubURL: String = "",
     var slackMemberID: String = "",
     var bio: String = "",
