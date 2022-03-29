@@ -54,8 +54,9 @@ class SetProfileViewModel @Inject constructor(
         Log.d(NAME_TAG, "User image changed: ${userInfo.value}")
     }
 
-    private fun fetchUserInfo() {
+    fun fetchUserInfo() {
         viewModelScope.launch {
+            _userInfo.value = null
             accessToken?.let {
                 val data = intraRepository.fetchUserInfo(it.accessToken)
                 data.onSuccess { userInfo ->
