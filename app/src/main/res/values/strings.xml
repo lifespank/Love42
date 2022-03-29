@@ -12,4 +12,8 @@
     <string name="bio">Bio</string>
     <string name="github" translatable="false">GitHub URL</string>
     <string name="edit_profile_photo">Edit profile photo</string>
+    <string name="slack_id">Slack member ID</string>
+    <string name="what_is_slack_id">What is slack member ID?</string>
+    <string name="slack_id_description">Slack member ID can be found in your slack\'s 42born2code profile. It is used for someone to DM you in slack.</string>
+    <string name="close">Close</string>
 </resources>

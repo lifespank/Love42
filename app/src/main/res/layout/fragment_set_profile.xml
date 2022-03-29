@@ -160,6 +160,39 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tf_slack_id"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:hint="@string/slack_id"
+                    app:layout_constraintEnd_toStartOf="@id/btn_what_is_slack_id"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tf_github">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textUri" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/btn_what_is_slack_id"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?android:selectableItemBackground"
+                    android:contentDescription="@string/what_is_slack_id"
+                    android:onClick="@{() -> viewModel.onWhatIsSlackIDClick()}"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintBottom_toBottomOf="@id/tf_slack_id"
+                    app:layout_constraintDimensionRatio="1"
+                    app:layout_constraintEnd_toEndOf="@id/tf_github"
+                    app:layout_constraintHorizontal_weight="0.1"
+                    app:layout_constraintStart_toEndOf="@id/tf_slack_id"
+                    app:layout_constraintTop_toTopOf="@id/tf_slack_id"
+                    app:srcCompat="@drawable/ic_question_mark_button_svgrepo_com" />
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tf_bio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -167,7 +200,7 @@
                     android:hint="@string/bio"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tf_github">
+                    app:layout_constraintTop_toBottomOf="@id/tf_slack_id">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"

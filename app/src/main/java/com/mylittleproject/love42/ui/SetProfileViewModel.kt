@@ -30,6 +30,8 @@ class SetProfileViewModel @Inject constructor(
     val loadProfileImageEvent: LiveData<Event<Unit>> get() = _loadProfileImageEvent
     private val _imageURI: MutableLiveData<String> by lazy { MutableLiveData() }
     val imageURI: LiveData<String> get() = _imageURI
+    private val _popUpSlackIDDescriptionEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
+    val popUpSlackIDDescriptionEvent: LiveData<Event<Unit>> get() = _popUpSlackIDDescriptionEvent
 
     fun fetchAccessToken(code: String?) {
         viewModelScope.launch {
@@ -38,6 +40,10 @@ class SetProfileViewModel @Inject constructor(
             Log.d(NAME_TAG, "Access token received: $accessToken")
             fetchUserInfo()
         }
+    }
+
+    fun onWhatIsSlackIDClick() {
+        _popUpSlackIDDescriptionEvent.value = Event(Unit)
     }
 
     fun onProfileImageEditClick() {

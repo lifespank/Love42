@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.mylittleproject.love42.R
 import com.mylittleproject.love42.databinding.FragmentSetProfileBinding
 import com.mylittleproject.love42.tools.EventObserver
 import com.mylittleproject.love42.tools.NAME_TAG
@@ -69,6 +71,14 @@ class SetProfileFragment : Fragment() {
                     action = Intent.ACTION_GET_CONTENT
                 }
             resultLauncher.launch(intent)
+        })
+        setProfileViewModel.popUpSlackIDDescriptionEvent.observe(viewLifecycleOwner, EventObserver {
+            MaterialAlertDialogBuilder(requireContext())
+                .setView(R.layout.dialog_what_is_slack_id)
+                .setNeutralButton(R.string.close) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
         })
     }
 
