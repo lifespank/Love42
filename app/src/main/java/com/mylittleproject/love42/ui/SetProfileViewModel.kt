@@ -45,6 +45,8 @@ class SetProfileViewModel @Inject constructor(
     val popUpSlackIDDescriptionEvent: LiveData<Event<Unit>> get() = _popUpSlackIDDescriptionEvent
     private val _manualLanguagePopUpEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
     val manualLanguagePopUpEvent: LiveData<Event<Unit>> get() = _manualLanguagePopUpEvent
+    private val _fillOutSlackMemberIDEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
+    val fillOutSlackMemberIDEvent: LiveData<Event<Unit>> get() = _fillOutSlackMemberIDEvent
 
     fun fetchAccessToken(code: String?) {
         viewModelScope.launch {
@@ -102,18 +104,33 @@ class SetProfileViewModel @Inject constructor(
         }
     }
 
-    fun uploadProfileImage() {
+    private fun uploadProfileImage() {
         viewModelScope.launch {
             val user = userInfo.value
             user?.let {
-                firebaseRepository.uploadProfileImage(it.intraID, it.imageURI) { task ->
-                    if (task.isSuccessful) {
-                        val downloadURI = task.result
-                        _userInfo.value = it.copy(imageURI = downloadURI.toString())
-                        Log.d(NAME_TAG, "Image uploaded: ${userInfo.value}")
-                    } else {
-                        Log.d(NAME_TAG, "Image upload failed")
+                if (it.slackMemberID.isNotBlank()) {
+                    firebaseRepository.uploadProfileImage(it.intraID, it.imageURI) { task ->
+                        if (task.isSuccessful) {
+                            val downloadURI = task.result
+                            _userInfo.value = it.copy(imageURI = downloadURI.toString())
+                            Log.d(NAME_TAG, "Image uploaded: ${userInfo.value}")
+                            uploadProfile()
+                        } else {
+                            Log.d(NAME_TAG, "Image upload failed")
+                        }
                     }
+                } else {
+                    _fillOutSlackMemberIDEvent.value = Event(Unit)
+                }
+            }
+        }
+    }
+
+    private fun uploadProfile() {
+        viewModelScope.launch {
+            userInfo.value?.let {
+                firebaseRepository.uploadProfile(it) {
+                    Log.d(NAME_TAG, "Profile upload success")
                 }
             }
         }

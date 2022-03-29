@@ -1,5 +1,6 @@
 package com.mylittleproject.love42.di
 
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.mylittleproject.love42.data.room.AccessTokenDao
 import com.mylittleproject.love42.model.DataSource
@@ -18,8 +19,8 @@ object DataSourceModule {
 
     @Singleton
     @Provides
-    fun provideRemoteDataSource(intraService: IntraService, storage: FirebaseStorage): DataSource.RemoteDataSource =
-        RemoteDataSource(intraService, storage)
+    fun provideRemoteDataSource(intraService: IntraService, storage: FirebaseStorage, db: FirebaseFirestore): DataSource.RemoteDataSource =
+        RemoteDataSource(intraService, storage, db)
 
     @Singleton
     @Provides

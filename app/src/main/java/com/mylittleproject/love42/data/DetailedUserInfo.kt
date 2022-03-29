@@ -12,4 +12,19 @@ data class DetailedUserInfo(
     var bio: String = "",
     var isMale: Boolean = true,
     val languages: HashSet<String> = hashSetOf()
-)
+) {
+    fun toHashMap() =
+        hashMapOf(
+            "name" to name,
+            "intraID" to intraID,
+            "intraURL" to intraURL,
+            "imageURI" to imageURI,
+            "email" to email,
+            "campus" to campus,
+            "gitHubURL" to gitHubURL,
+            "slackMemberID" to slackMemberID,
+            "bio" to bio,
+            "isMale" to isMale,
+            "languages" to languages.toList()
+        )
+}

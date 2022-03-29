@@ -2,6 +2,7 @@ package com.mylittleproject.love42.repository
 
 import android.net.Uri
 import com.google.android.gms.tasks.Task
+import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.model.DataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,6 +17,14 @@ class FirebaseRepositoryImpl(private val remoteDataSource: DataSource.RemoteData
     ) =
         withContext(Dispatchers.IO) {
             remoteDataSource.uploadProfileImage(intraID, imageURI, onCompleteListener)
+        }
+
+    override suspend fun uploadProfile(
+        userInfo: DetailedUserInfo,
+        onSuccessListener: () -> Unit
+    ) =
+        withContext(Dispatchers.IO) {
+            remoteDataSource.uploadProfile(userInfo, onSuccessListener)
         }
 
 }

@@ -146,6 +146,9 @@ class SetProfileFragment : Fragment() {
                 }
                 .show()
         })
+        setProfileViewModel.fillOutSlackMemberIDEvent.observe(viewLifecycleOwner, EventObserver {
+            Snackbar.make(binding.root, R.string.fill_out_slack, Snackbar.LENGTH_SHORT).show()
+        })
     }
 
     private fun requestPermissions() {

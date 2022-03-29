@@ -1,5 +1,7 @@
 package com.mylittleproject.love42.di
 
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
@@ -30,4 +32,8 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideFirebaseStorage(): FirebaseStorage = Firebase.storage
+
+    @Singleton
+    @Provides
+    fun provideFirebaseDB(): FirebaseFirestore = Firebase.firestore
 }
