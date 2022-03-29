@@ -3,6 +3,7 @@ package com.mylittleproject.love42.ui
 import android.util.Log
 import androidx.lifecycle.*
 import com.mylittleproject.love42.data.AccessToken
+import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.data.UserInfo
 import com.mylittleproject.love42.repository.AccessTokenRepository
 import com.mylittleproject.love42.repository.IntraRepository
@@ -22,14 +23,12 @@ class SetProfileViewModel @Inject constructor(
 
     private var accessToken: AccessToken? = null
 
-    private val _userInfo: MutableLiveData<UserInfo> by lazy { MutableLiveData() }
-    val userInfo: LiveData<UserInfo> get() = _userInfo
+    private val _userInfo: MutableLiveData<DetailedUserInfo> by lazy { MutableLiveData() }
+    val userInfo: LiveData<DetailedUserInfo> get() = _userInfo
     private val _redirectToSignInActivityEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
     val redirectToSignInActivityEvent: LiveData<Event<Unit>> get() = _redirectToSignInActivityEvent
     private val _loadProfileImageEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
     val loadProfileImageEvent: LiveData<Event<Unit>> get() = _loadProfileImageEvent
-    private val _imageURI: MutableLiveData<String> by lazy { MutableLiveData() }
-    val imageURI: LiveData<String> get() = _imageURI
     private val _popUpSlackIDDescriptionEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
     val popUpSlackIDDescriptionEvent: LiveData<Event<Unit>> get() = _popUpSlackIDDescriptionEvent
 
@@ -51,7 +50,8 @@ class SetProfileViewModel @Inject constructor(
     }
 
     fun setImageURI(imageURI: String) {
-        _imageURI.value = imageURI
+        _userInfo.value = userInfo.value?.copy(imageURI = imageURI)
+        Log.d(NAME_TAG, "User image changed: ${userInfo.value}")
     }
 
     private fun fetchUserInfo() {
@@ -60,8 +60,7 @@ class SetProfileViewModel @Inject constructor(
                 val data = intraRepository.fetchUserInfo(it.accessToken)
                 data.onSuccess { userInfo ->
                     Log.d(NAME_TAG, "Auth with access token success: $userInfo")
-                    _userInfo.value = userInfo
-                    _imageURI.value = userInfo.imageUrl
+                    _userInfo.value = userInfo.toDetailedUserInfo()
                 }
                 data.onFailure { throwable ->
                     Log.w(NAME_TAG, "Auth with access token failure", throwable)
@@ -75,8 +74,7 @@ class SetProfileViewModel @Inject constructor(
                             val dataAgain = intraRepository.fetchUserInfo(accessToken.accessToken)
                             dataAgain.onSuccess { userInfo ->
                                 Log.d(NAME_TAG, "Auth with second access token success: $userInfo")
-                                _userInfo.value = userInfo
-                                _imageURI.value = userInfo.imageUrl
+                                _userInfo.value = userInfo.toDetailedUserInfo()
                             }
                             dataAgain.onFailure { throwable ->
                                 Log.w(NAME_TAG, "Auth with second access token failure", throwable)

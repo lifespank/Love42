@@ -54,7 +54,7 @@
                     android:layout_height="250dp"
                     android:background="@drawable/round_rectangle"
                     android:contentDescription="@string/profile_picture"
-                    app:imageURL="@{viewModel.imageURI}"
+                    app:imageURL="@{viewModel.userInfo.imageURI}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -84,7 +84,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text"
-                        android:text="@{viewModel.userInfo.login}"
+                        android:text="@{viewModel.userInfo.intraID}"
                         tools:text="sumkim" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -103,7 +103,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textUri"
-                        android:text="@{viewModel.userInfo.url}"
+                        android:text="@{viewModel.userInfo.intraURL}"
                         tools:text="aaa.ww.com" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -121,7 +121,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
-                        android:text="@{viewModel.userInfo.displayName}"
+                        android:text="@={viewModel.userInfo.name}"
                         tools:text="Sumyeong Kim" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -139,7 +139,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
-                        android:text="@{viewModel.userInfo.email}"
+                        android:text="@={viewModel.userInfo.email}"
                         tools:text="sumkim@student.42seoul.kr" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -156,7 +156,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textUri" />
+                        android:inputType="textUri"
+                        android:text="@={viewModel.userInfo.gitHubURL}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -173,7 +174,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textUri" />
+                        android:inputType="textUri"
+                        android:text="@={viewModel.userInfo.slackMemberID}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageButton
@@ -206,7 +208,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textMultiLine"
-                        android:lines="3" />
+                        android:lines="3"
+                        android:text="@={viewModel.userInfo.bio}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

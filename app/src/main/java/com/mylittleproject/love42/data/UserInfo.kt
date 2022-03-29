@@ -15,4 +15,7 @@ data class UserInfo(
     val displayName: String = "",
     @SerializedName("image_url")
     val imageUrl: String = "",
-)
+) {
+
+    fun toDetailedUserInfo() = DetailedUserInfo(displayName, login, url, imageUrl, email)
+}
