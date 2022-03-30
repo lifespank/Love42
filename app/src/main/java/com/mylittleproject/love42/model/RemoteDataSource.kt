@@ -3,8 +3,10 @@ package com.mylittleproject.love42.model
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
@@ -72,5 +74,16 @@ class RemoteDataSource(
             .addOnFailureListener {
                 Log.w(NAME_TAG, "Profile upload failed", it)
             }
+    }
+
+    override suspend fun downloadProfile(
+        intraID: String,
+        onSuccessListener: (DocumentSnapshot?) -> Unit,
+        onFailureListener: (Exception) -> Unit
+    ) {
+        val docRef = db.collection("users").document(intraID)
+        docRef.get()
+            .addOnSuccessListener(onSuccessListener)
+            .addOnFailureListener(onFailureListener)
     }
 }

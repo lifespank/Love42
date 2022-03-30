@@ -26,6 +26,7 @@ class SignInActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.lifecycleOwner = this
         binding.viewModel = signInViewModel
+        signInViewModel.initialCheck()
         subscribeToObservables()
     }
 
@@ -35,12 +36,10 @@ class SignInActivity : AppCompatActivity() {
             customTabsIntent.launchUrl(this, Uri.parse(SEOUL_SIGN_IN_URL))
         })
         signInViewModel.accessToken.observe(this, EventObserver { accessToken ->
-            accessToken?.let {
-                Log.d(NAME_TAG, "Token: $it")
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
+            Log.d(NAME_TAG, "Token: $accessToken")
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         })
     }
 }

@@ -2,6 +2,7 @@ package com.mylittleproject.love42.model
 
 import android.net.Uri
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import com.mylittleproject.love42.data.AccessToken
 import com.mylittleproject.love42.data.DetailedUserInfo
@@ -29,6 +30,12 @@ interface DataSource {
             userInfo: DetailedUserInfo,
             onSuccessListener: () -> Unit
         )
+
+        suspend fun downloadProfile(
+            intraID: String,
+            onSuccessListener: (DocumentSnapshot?) -> Unit,
+            onFailureListener: (Exception) -> Unit
+        )
     }
 
     interface LocalDataSource {
@@ -38,5 +45,7 @@ interface DataSource {
         suspend fun saveAccessToken(accessToken: AccessToken? = null): Result<Unit>
 
         suspend fun saveIntraID(intraID: String): Result<Unit>
+
+        suspend fun fetchIntraID(): Result<String?>
     }
 }

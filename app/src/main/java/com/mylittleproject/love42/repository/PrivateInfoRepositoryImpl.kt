@@ -59,4 +59,8 @@ class PrivateInfoRepositoryImpl(
             localDataSource.saveIntraID(intraID)
         }
 
+    override suspend fun fetchIntraID(): Result<String?> =
+        withContext(Dispatchers.IO) {
+            localDataSource.fetchIntraID()
+        }
 }

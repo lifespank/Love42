@@ -33,5 +33,9 @@ class LocalDataSource(
         }
     }
 
+    override suspend fun fetchIntraID(): Result<String?> = runCatching {
+        sharedPreferences.getString(intra, null)
+    }
+
     private val intra = "intraID"
 }
