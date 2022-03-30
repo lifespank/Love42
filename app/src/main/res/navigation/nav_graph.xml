@@ -2,12 +2,4 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/setProfileFragment">
-
-    <fragment
-        android:id="@+id/setProfileFragment"
-        android:name="com.mylittleproject.love42.ui.SetProfileFragment"
-        android:label="SetProfileFragment"
-        tools:layout="@layout/fragment_set_profile" />
-</navigation>
+    android:id="@+id/nav_graph" />

@@ -37,7 +37,7 @@ class SignInActivity : AppCompatActivity() {
         })
         signInViewModel.accessToken.observe(this, EventObserver { accessToken ->
             Log.d(NAME_TAG, "Token: $accessToken")
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, SetProfileActivity::class.java)
             startActivity(intent)
             finish()
         })
