@@ -2,7 +2,7 @@ package com.mylittleproject.love42.repository
 
 import com.mylittleproject.love42.data.AccessToken
 
-interface AccessTokenRepository {
+interface PrivateInfoRepository {
 
     suspend fun fetchAccessToken(
         code: String? = null,
@@ -11,4 +11,6 @@ interface AccessTokenRepository {
     ): AccessToken?
 
     suspend fun saveAccessToken(accessToken: AccessToken? = null): Result<Unit>
+
+    suspend fun saveIntraID(intraID: String): Result<Unit>
 }

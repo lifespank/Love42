@@ -52,7 +52,6 @@ class SetProfileFragment : Fragment() {
             } else {
                 Snackbar.make(binding.root, R.string.permission_needed, Snackbar.LENGTH_SHORT)
                     .show()
-
             }
         }
 

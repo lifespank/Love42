@@ -7,13 +7,17 @@ import com.mylittleproject.love42.tools.NAME_TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class AccessTokenRepositoryImpl(
+class PrivateInfoRepositoryImpl(
     private val localDataSource: DataSource.LocalDataSource,
     private val remoteDataSource: DataSource.RemoteDataSource
 ) :
-    AccessTokenRepository {
+    PrivateInfoRepository {
 
-    override suspend fun fetchAccessToken(code: String?, refreshToken: String?, grantType: String): AccessToken? {
+    override suspend fun fetchAccessToken(
+        code: String?,
+        refreshToken: String?,
+        grantType: String
+    ): AccessToken? {
         var token: Result<AccessToken>
         withContext(Dispatchers.IO) {
             token = localDataSource.fetchAccessToken()
@@ -24,14 +28,14 @@ class AccessTokenRepositoryImpl(
                 Log.w(NAME_TAG, "No token in local", it)
             }
             if (token.getOrNull() == null || token.isFailure) {
-                    token = remoteDataSource.fetchAccessToken(code, refreshToken, grantType)
-                    token.onSuccess { fetchedToken ->
-                        Log.d(NAME_TAG, "Token fetched from remote: $fetchedToken")
-                        saveAccessToken(fetchedToken)
-                    }
-                    token.onFailure { throwable ->
-                        Log.w(NAME_TAG, "Token fetch failed from remote", throwable)
-                    }
+                token = remoteDataSource.fetchAccessToken(code, refreshToken, grantType)
+                token.onSuccess { fetchedToken ->
+                    Log.d(NAME_TAG, "Token fetched from remote: $fetchedToken")
+                    saveAccessToken(fetchedToken)
+                }
+                token.onFailure { throwable ->
+                    Log.w(NAME_TAG, "Token fetch failed from remote", throwable)
+                }
 
             }
         }
@@ -49,4 +53,10 @@ class AccessTokenRepositoryImpl(
             }
         }
     }
+
+    override suspend fun saveIntraID(intraID: String): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            localDataSource.saveIntraID(intraID)
+        }
+
 }

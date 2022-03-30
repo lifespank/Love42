@@ -8,7 +8,7 @@ import androidx.lifecycle.*
 import com.mylittleproject.love42.R
 import com.mylittleproject.love42.data.AccessToken
 import com.mylittleproject.love42.data.DetailedUserInfo
-import com.mylittleproject.love42.repository.AccessTokenRepository
+import com.mylittleproject.love42.repository.PrivateInfoRepository
 import com.mylittleproject.love42.repository.FirebaseRepository
 import com.mylittleproject.love42.repository.IntraRepository
 import com.mylittleproject.love42.tools.Event
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SetProfileViewModel @Inject constructor(
-    private val accessTokenRepository: AccessTokenRepository,
+    private val privateInfoRepository: PrivateInfoRepository,
     private val intraRepository: IntraRepository,
     private val firebaseRepository: FirebaseRepository
 ) :
@@ -30,7 +30,7 @@ class SetProfileViewModel @Inject constructor(
 
     private val _userInfo: MutableLiveData<DetailedUserInfo> by lazy { MutableLiveData() }
     val userInfo: LiveData<DetailedUserInfo> get() = _userInfo
-    val preferredLanguages = userInfo.switchMap { it ->
+    val preferredLanguages = userInfo.switchMap {
         liveData {
             if (it != null) {
                 emit(it.languages.toList())
@@ -53,7 +53,7 @@ class SetProfileViewModel @Inject constructor(
     fun fetchAccessToken(code: String?) {
         viewModelScope.launch {
             accessToken =
-                accessTokenRepository.fetchAccessToken(code = code)
+                privateInfoRepository.fetchAccessToken(code = code)
             Log.d(NAME_TAG, "Access token received: $accessToken")
             fetchUserInfo()
         }
@@ -158,12 +158,13 @@ class SetProfileViewModel @Inject constructor(
                 data.onSuccess { userInfo ->
                     Log.d(NAME_TAG, "Auth with access token success: $userInfo")
                     _userInfo.value = userInfo.toDetailedUserInfo()
+                    saveIntraID(userInfo.login)
                 }
                 data.onFailure { throwable ->
                     Log.w(NAME_TAG, "Auth with access token failure", throwable)
                     if (throwable is HttpException) {
                         resetAccessToken()
-                        accessToken = accessTokenRepository.fetchAccessToken(
+                        accessToken = privateInfoRepository.fetchAccessToken(
                             refreshToken = it.refreshToken,
                             grantType = "refresh_token"
                         )
@@ -172,6 +173,7 @@ class SetProfileViewModel @Inject constructor(
                             dataAgain.onSuccess { userInfo ->
                                 Log.d(NAME_TAG, "Auth with second access token success: $userInfo")
                                 _userInfo.value = userInfo.toDetailedUserInfo()
+                                saveIntraID(userInfo.login)
                             }
                             dataAgain.onFailure { throwable ->
                                 Log.w(NAME_TAG, "Auth with second access token failure", throwable)
@@ -188,7 +190,19 @@ class SetProfileViewModel @Inject constructor(
         }
     }
 
+    private fun saveIntraID(intraID: String) {
+        viewModelScope.launch {
+            val result = privateInfoRepository.saveIntraID(intraID)
+            result.onSuccess {
+                Log.d(NAME_TAG, "Intra ID saved: $intraID")
+            }
+            result.onFailure {
+                Log.w(NAME_TAG, "Intra ID save failed", it)
+            }
+        }
+    }
+
     private suspend fun resetAccessToken() {
-        accessTokenRepository.saveAccessToken()
+        privateInfoRepository.saveAccessToken()
     }
 }

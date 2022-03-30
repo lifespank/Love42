@@ -34,6 +34,9 @@ interface DataSource {
     interface LocalDataSource {
 
         suspend fun fetchAccessToken(): Result<AccessToken>
+
         suspend fun saveAccessToken(accessToken: AccessToken? = null): Result<Unit>
+
+        suspend fun saveIntraID(intraID: String): Result<Unit>
     }
 }

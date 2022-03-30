@@ -14,11 +14,11 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideAccessTokenRepository(
+    fun providePrivateInfoRepository(
         localDataSource: DataSource.LocalDataSource,
         remoteDataSource: DataSource.RemoteDataSource
-    ): AccessTokenRepository =
-        AccessTokenRepositoryImpl(localDataSource, remoteDataSource)
+    ): PrivateInfoRepository =
+        PrivateInfoRepositoryImpl(localDataSource, remoteDataSource)
 
     @Singleton
     @Provides
