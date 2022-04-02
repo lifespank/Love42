@@ -49,6 +49,8 @@ class SetProfileViewModel @Inject constructor(
     val fillOutSlackMemberIDEvent: LiveData<Event<Unit>> get() = _fillOutSlackMemberIDEvent
     private val _showLoading: MutableLiveData<Boolean> by lazy { MutableLiveData() }
     val showLoading: LiveData<Boolean> get() = _showLoading
+    private val _moveToMainEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
+    val moveToMainEvent: LiveData<Event<Unit>> get() = _moveToMainEvent
 
     fun fetchAccessToken(code: String?) {
         viewModelScope.launch {
@@ -159,6 +161,7 @@ class SetProfileViewModel @Inject constructor(
                     Log.d(NAME_TAG, "Auth with access token success: $userInfo")
                     _userInfo.value = userInfo.toDetailedUserInfo()
                     saveIntraID(userInfo.login)
+                    checkIntraID()
                 }
                 data.onFailure { throwable ->
                     Log.w(NAME_TAG, "Auth with access token failure", throwable)
@@ -174,6 +177,7 @@ class SetProfileViewModel @Inject constructor(
                                 Log.d(NAME_TAG, "Auth with second access token success: $userInfo")
                                 _userInfo.value = userInfo.toDetailedUserInfo()
                                 saveIntraID(userInfo.login)
+                                checkIntraID()
                             }
                             dataAgain.onFailure { throwable ->
                                 Log.w(NAME_TAG, "Auth with second access token failure", throwable)
@@ -186,6 +190,27 @@ class SetProfileViewModel @Inject constructor(
                     }
                 }
                 _showLoading.value = false
+            }
+        }
+    }
+
+    private fun checkIntraID() {
+        viewModelScope.launch {
+            val intraID = userInfo.value?.intraID
+            intraID?.let {
+                firebaseRepository.downloadProfile(it,
+                    { documentSnapshot ->
+                        if (documentSnapshot != null) {
+                            //Move
+                            _moveToMainEvent.value = Event(Unit)
+                            Log.d(NAME_TAG, "DocumentSnapshot: ${documentSnapshot.data}")
+                        } else {
+                            Log.w(NAME_TAG, "No such intra ID")
+                        }
+                    },
+                    {
+                        Log.w(NAME_TAG, "get profile failed with", it)
+                    })
             }
         }
     }

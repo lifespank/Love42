@@ -26,6 +26,8 @@ class SignInViewModel @Inject constructor(
     val buttonEnabled: LiveData<Boolean> get() = _buttonEnabled
     private val _accessToken: MutableLiveData<Event<AccessToken>> by lazy { MutableLiveData() }
     val accessToken: LiveData<Event<AccessToken>> get() = _accessToken
+    private val _moveToMainEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
+    val moveToMainEvent: LiveData<Event<Unit>> get() = _moveToMainEvent
 
     fun initialCheck() {
         viewModelScope.launch {
@@ -37,6 +39,7 @@ class SignInViewModel @Inject constructor(
                         { documentSnapshot ->
                             if (documentSnapshot != null) {
                                 //Move
+                                _moveToMainEvent.value = Event(Unit)
                                 Log.d(NAME_TAG, "DocumentSnapshot: ${documentSnapshot.data}")
                             } else {
                                 Log.w(NAME_TAG, "No such intra ID")

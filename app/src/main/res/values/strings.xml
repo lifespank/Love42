@@ -25,4 +25,7 @@
     <string name="campus">Campus</string>
     <string name="permission_needed">Permission to read external storage is needed</string>
     <string name="fill_out_slack">Please fill out Slack member ID</string>
+    <string name="my_profile">My Profile</string>
+    <string name="find">Find</string>
+    <string name="match">Match</string>
 </resources>

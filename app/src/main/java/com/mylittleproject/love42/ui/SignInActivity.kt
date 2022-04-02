@@ -41,5 +41,10 @@ class SignInActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         })
+        signInViewModel.moveToMainEvent.observe(this, EventObserver {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        })
     }
 }

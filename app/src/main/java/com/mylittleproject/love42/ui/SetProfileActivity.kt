@@ -18,6 +18,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.mylittleproject.love42.MainActivity
 import com.mylittleproject.love42.R
 import com.mylittleproject.love42.databinding.ActivitySetProfileBinding
 import com.mylittleproject.love42.tools.EventObserver
@@ -138,6 +139,11 @@ class SetProfileActivity : AppCompatActivity() {
         })
         setProfileViewModel.fillOutSlackMemberIDEvent.observe(this, EventObserver {
             Snackbar.make(binding.root, R.string.fill_out_slack, Snackbar.LENGTH_SHORT).show()
+        })
+        setProfileViewModel.moveToMainEvent.observe(this, EventObserver {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         })
     }
 

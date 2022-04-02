@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/my_profile"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:title="@string/my_profile" />
+    <item
+        android:id="@+id/find"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_person_search_24"
+        android:title="@string/find" />
+    <item
+        android:id="@+id/match"
+        android:enabled="true"
+        android:icon="@drawable/ic_couple_svgrepo_com"
+        android:title="@string/match" />
+</menu>

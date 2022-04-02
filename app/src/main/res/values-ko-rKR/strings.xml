@@ -25,4 +25,7 @@
     <string name="campus">캠퍼스</string>
     <string name="permission_needed">외부 저장소 읽기 권한이 필요합니다</string>
     <string name="fill_out_slack">슬랙 멤버 ID를 입력해주세요</string>
+    <string name="my_profile">내 프로필</string>
+    <string name="find">찾기</string>
+    <string name="match">매치</string>
 </resources>
