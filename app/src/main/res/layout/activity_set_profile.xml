@@ -51,14 +51,16 @@
 
                 <ImageView
                     android:id="@+id/iv_profile"
-                    android:layout_width="250dp"
-                    android:layout_height="250dp"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
                     android:background="@drawable/round_rectangle"
                     android:contentDescription="@string/profile_picture"
                     app:imageURL="@{viewModel.userInfo.imageURI}"
+                    app:layout_constraintDimensionRatio="1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.6" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:layout_width="wrap_content"
