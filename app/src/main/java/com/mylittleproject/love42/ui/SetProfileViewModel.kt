@@ -121,8 +121,12 @@ class SetProfileViewModel @Inject constructor(
                             Log.d(NAME_TAG, "Image uploaded: ${userInfo.value}")
                             uploadProfile()
                         } else {
-                            Log.d(NAME_TAG, "Image upload failed")
-                            _showLoading.value = false
+                            if (it.imageURI.contains("intra.42")) {
+                                uploadProfile()
+                            } else {
+                                _showLoading.value = false
+                                Log.d(NAME_TAG, "Image upload failed")
+                            }
                         }
                     }
                 } else {

@@ -169,8 +169,8 @@ class SetProfileActivity : AppCompatActivity() {
 
     companion object {
         const val PARAMETER_KEY = "code"
-        private val REQUIRED_PERMISSION = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
-        private val ITEMS = listOf(
+        val REQUIRED_PERMISSION = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+        val ITEMS = listOf(
             "Ada",
             "BASIC",
             "C",

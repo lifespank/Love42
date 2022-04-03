@@ -6,6 +6,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.repository.FirebaseRepository
 import com.mylittleproject.love42.repository.PrivateInfoRepository
+import com.mylittleproject.love42.tools.Event
 import com.mylittleproject.love42.tools.NAME_TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,9 +21,104 @@ class MyProfileViewModel @Inject constructor(
 
     private val _myProfile: MutableLiveData<DetailedUserInfo> by lazy { MutableLiveData() }
     val myProfile: LiveData<DetailedUserInfo> get() = _myProfile
+    private val _loadProfileImageEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
+    val loadProfileImageEvent: LiveData<Event<Unit>> get() = _loadProfileImageEvent
+    private val _manualLanguagePopUpEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
+    val manualLanguagePopUpEvent: LiveData<Event<Unit>> get() = _manualLanguagePopUpEvent
+    private val _popUpSlackIDDescriptionEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
+    val popUpSlackIDDescriptionEvent: LiveData<Event<Unit>> get() = _popUpSlackIDDescriptionEvent
+    private val _fillOutSlackMemberIDEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
+    val fillOutSlackMemberIDEvent: LiveData<Event<Unit>> get() = _fillOutSlackMemberIDEvent
+    private val _showLoading: MutableLiveData<Boolean> by lazy { MutableLiveData() }
+    val showLoading: LiveData<Boolean> get() = _showLoading
+    val preferredLanguages = myProfile.switchMap {
+        liveData {
+            if (it != null) {
+                emit(it.languages.toList())
+            }
+        }
+    }
+
+    fun addLanguage(language: String) {
+        val languages = myProfile.value?.languages
+        languages?.let {
+            it.add(language)
+            _myProfile.value = myProfile.value?.copy(languages = it)
+        }
+    }
+
+    fun onWhatIsSlackIDClick() {
+        _popUpSlackIDDescriptionEvent.value = Event(Unit)
+    }
+
+    fun onProfileImageEditClick() {
+        _loadProfileImageEvent.value = Event(Unit)
+    }
+
+    fun setImageURI(imageURI: String) {
+        _myProfile.value = myProfile.value?.copy(imageURI = imageURI)
+        Log.d(NAME_TAG, "User image changed: ${myProfile.value}")
+    }
+
+    fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+        Log.d(NAME_TAG, "onTextChange: $s")
+        if (s.toString() != "Something else") {
+            addLanguage(s.toString())
+        } else {
+            _manualLanguagePopUpEvent.value = Event(Unit)
+        }
+    }
+
+    fun removeLanguage(language: String) {
+        val languages = myProfile.value?.languages
+        languages?.let {
+            it.remove(language)
+            _myProfile.value = myProfile.value?.copy(languages = it)
+        }
+    }
+
+    fun uploadProfileImage() {
+        viewModelScope.launch {
+            val user = myProfile.value
+            user?.let {
+                if (it.slackMemberID.isNotBlank()) {
+                    _showLoading.value = true
+                    firebaseRepository.uploadProfileImage(it.intraID, it.imageURI) { task ->
+                        if (task.isSuccessful) {
+                            val downloadURI = task.result
+                            _myProfile.value = it.copy(imageURI = downloadURI.toString())
+                            Log.d(NAME_TAG, "Image uploaded: ${myProfile.value}")
+                            uploadProfile()
+                        } else {
+                            if (it.imageURI.startsWith("https://firebasestorage")) {
+                                uploadProfile()
+                            } else {
+                                _showLoading.value = false
+                                Log.d(NAME_TAG, "Image upload failed")
+                            }
+                        }
+                    }
+                } else {
+                    _fillOutSlackMemberIDEvent.value = Event(Unit)
+                }
+            }
+        }
+    }
+
+    private fun uploadProfile() {
+        viewModelScope.launch {
+            myProfile.value?.let {
+                firebaseRepository.uploadProfile(it) {
+                    Log.d(NAME_TAG, "Profile upload success")
+                }
+            }
+            _showLoading.value = false
+        }
+    }
 
     fun downloadProfile() {
         viewModelScope.launch {
+            _showLoading.value = true
             val intraID = privateInfoRepository.fetchIntraID()
             intraID.getOrNull()?.let {
                 firebaseRepository.downloadProfile(it,
@@ -36,6 +132,7 @@ class MyProfileViewModel @Inject constructor(
                     { exception ->
                         Log.w(NAME_TAG, "Profile fetch failed", exception)
                     })
+                _showLoading.value = false
             }
         }
     }

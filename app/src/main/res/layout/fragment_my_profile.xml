@@ -41,6 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/edit_profile_photo"
+                    android:onClick="@{() -> viewModel.onProfileImageEditClick()}"
                     app:fabSize="mini"
                     app:layout_constraintBottom_toBottomOf="@id/iv_profile"
                     app:layout_constraintEnd_toEndOf="@id/iv_profile"
@@ -100,6 +101,7 @@
                     android:layout_marginStart="16dp"
                     android:background="?android:selectableItemBackground"
                     android:contentDescription="@string/what_is_slack_id"
+                    android:onClick="@{() -> viewModel.onWhatIsSlackIDClick()"
                     android:scaleType="fitCenter"
                     app:layout_constraintBottom_toBottomOf="@id/tf_slack_id"
                     app:layout_constraintDimensionRatio="1"
@@ -124,7 +126,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/preferred_language"
-                        android:inputType="none" />
+                        android:inputType="none"
+                        android:onTextChanged="@{viewModel::onTextChanged}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.chip.ChipGroup
@@ -155,6 +158,19 @@
                         android:text="@={viewModel.myProfile.bio}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:contentDescription="@string/save"
+                    android:enabled="@{!viewModel.showLoading}"
+                    android:onClick="@{() -> viewModel.uploadProfileImage()}"
+                    android:text="@string/save"
+                    app:icon="@drawable/ic_baseline_save_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
@@ -162,8 +178,8 @@
             android:id="@+id/g_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:constraint_referenced_ids="v_dim, pid_loading" />
+            app:constraint_referenced_ids="v_dim, pid_loading"
+            app:isVisible="@{viewModel.showLoading}" />
 
         <View
             android:id="@+id/v_dim"
