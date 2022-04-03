@@ -13,6 +13,21 @@ data class DetailedUserInfo(
     var isMale: Boolean = true,
     val languages: HashSet<String> = hashSetOf()
 ) {
+
+    data class FirebaseUerInfo(
+        var name: String = "",
+        val intraID: String = "",
+        val intraURL: String = "",
+        var imageURI: String = "",
+        var email: String = "",
+        val campus: String? = "",
+        var gitHubURL: String = "",
+        var slackMemberID: String = "",
+        var bio: String = "",
+        var isMale: Boolean = true,
+        val languages: List<String> = emptyList()
+    )
+
     fun toHashMap() =
         hashMapOf(
             "name" to name,
@@ -27,4 +42,21 @@ data class DetailedUserInfo(
             "isMale" to isMale,
             "languages" to languages.toList()
         )
+
+    companion object {
+
+        fun fromFirebase(firebaseUserInfo: FirebaseUerInfo): DetailedUserInfo = DetailedUserInfo(
+            firebaseUserInfo.name,
+            firebaseUserInfo.intraID,
+            firebaseUserInfo.intraURL,
+            firebaseUserInfo.imageURI,
+            firebaseUserInfo.email,
+            firebaseUserInfo.campus,
+            firebaseUserInfo.gitHubURL,
+            firebaseUserInfo.slackMemberID,
+            firebaseUserInfo.bio,
+            firebaseUserInfo.isMale,
+            HashSet(firebaseUserInfo.languages)
+        )
+    }
 }

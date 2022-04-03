@@ -12,7 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MyProfileFragment : Fragment() {
 
-    private val viewModel: MyProfileViewModel by viewModels()
+    private val myProfileViewModel: MyProfileViewModel by viewModels()
     private var _binding: FragmentMyProfileBinding? = null
     private val binding get() = _binding!!
 
@@ -22,6 +22,13 @@ class MyProfileFragment : Fragment() {
     ): View {
         _binding = FragmentMyProfileBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = myProfileViewModel
+        myProfileViewModel.downloadProfile()
     }
 
     override fun onDestroyView() {
