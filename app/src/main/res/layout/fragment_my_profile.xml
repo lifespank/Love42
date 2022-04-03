@@ -101,7 +101,7 @@
                     android:layout_marginStart="16dp"
                     android:background="?android:selectableItemBackground"
                     android:contentDescription="@string/what_is_slack_id"
-                    android:onClick="@{() -> viewModel.onWhatIsSlackIDClick()"
+                    android:onClick="@{() -> viewModel.onWhatIsSlackIDClick()}"
                     android:scaleType="fitCenter"
                     app:layout_constraintBottom_toBottomOf="@id/tf_slack_id"
                     app:layout_constraintDimensionRatio="1"
