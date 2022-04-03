@@ -28,4 +28,5 @@
     <string name="my_profile">내 프로필</string>
     <string name="find">찾기</string>
     <string name="match">매치</string>
+    <string name="profile_uploaded">프로필 업로드 완료</string>
 </resources>

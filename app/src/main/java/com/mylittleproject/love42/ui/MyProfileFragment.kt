@@ -118,8 +118,8 @@ class MyProfileFragment : Fragment() {
                 }
                 .show()
         })
-        myProfileViewModel.fillOutSlackMemberIDEvent.observe(viewLifecycleOwner, EventObserver {
-            Snackbar.make(binding.root, R.string.fill_out_slack, Snackbar.LENGTH_SHORT).show()
+        myProfileViewModel.snackBarEvent.observe(viewLifecycleOwner, EventObserver { stringID ->
+            Snackbar.make(binding.root, stringID, Snackbar.LENGTH_SHORT).show()
         })
         myProfileViewModel.loadProfileImageEvent.observe(viewLifecycleOwner, EventObserver {
             if (allPermissionGranted()) {

@@ -28,4 +28,5 @@
     <string name="my_profile">My Profile</string>
     <string name="find">Find</string>
     <string name="match">Match</string>
+    <string name="profile_uploaded">Profile uploaded</string>
 </resources>

@@ -3,6 +3,7 @@ package com.mylittleproject.love42.ui
 import android.util.Log
 import androidx.lifecycle.*
 import com.google.firebase.firestore.ktx.toObject
+import com.mylittleproject.love42.R
 import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.repository.FirebaseRepository
 import com.mylittleproject.love42.repository.PrivateInfoRepository
@@ -27,8 +28,8 @@ class MyProfileViewModel @Inject constructor(
     val manualLanguagePopUpEvent: LiveData<Event<Unit>> get() = _manualLanguagePopUpEvent
     private val _popUpSlackIDDescriptionEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
     val popUpSlackIDDescriptionEvent: LiveData<Event<Unit>> get() = _popUpSlackIDDescriptionEvent
-    private val _fillOutSlackMemberIDEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
-    val fillOutSlackMemberIDEvent: LiveData<Event<Unit>> get() = _fillOutSlackMemberIDEvent
+    private val _snackBarEvent: MutableLiveData<Event<Int>> by lazy { MutableLiveData() }
+    val snackBarEvent: LiveData<Event<Int>> get() = _snackBarEvent
     private val _showLoading: MutableLiveData<Boolean> by lazy { MutableLiveData() }
     val showLoading: LiveData<Boolean> get() = _showLoading
     val preferredLanguages = myProfile.switchMap {
@@ -99,7 +100,7 @@ class MyProfileViewModel @Inject constructor(
                         }
                     }
                 } else {
-                    _fillOutSlackMemberIDEvent.value = Event(Unit)
+                    _snackBarEvent.value = Event(R.string.fill_out_slack)
                 }
             }
         }
@@ -110,6 +111,7 @@ class MyProfileViewModel @Inject constructor(
             myProfile.value?.let {
                 firebaseRepository.uploadProfile(it) {
                     Log.d(NAME_TAG, "Profile upload success")
+                    _snackBarEvent.value = Event(R.string.profile_uploaded)
                 }
             }
             _showLoading.value = false
