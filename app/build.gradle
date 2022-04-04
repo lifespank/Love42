@@ -101,6 +101,9 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    //CardStackView
+    implementation 'com.github.yuyakaido:cardstackview:2.3.4'
 }
 
 kapt {
