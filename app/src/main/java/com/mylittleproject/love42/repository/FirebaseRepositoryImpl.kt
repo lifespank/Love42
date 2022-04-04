@@ -25,20 +25,8 @@ class FirebaseRepositoryImpl(private val remoteDataSource: DataSource.RemoteData
             remoteDataSource.downloadProfile(intraID)
         }
 
-    override suspend fun downloadCandidates(
-        intraID: String,
-        isMale: Boolean,
-        campus: String,
-        onSuccessListener: (QuerySnapshot?) -> Unit,
-        onFailureListener: (Exception) -> Unit
-    ) =
+    override suspend fun downloadCandidates(isMale: Boolean, campus: String): QuerySnapshot? =
         withContext(Dispatchers.IO) {
-            remoteDataSource.downloadCandidates(
-                intraID,
-                isMale,
-                campus,
-                onSuccessListener,
-                onFailureListener
-            )
+            remoteDataSource.downloadCandidates(isMale, campus)
         }
 }

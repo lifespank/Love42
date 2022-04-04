@@ -181,25 +181,17 @@ class MainViewModel @Inject constructor(
             viewModelScope.launch {
                 val profile = myProfile.value
                 profile?.let { myProf ->
-                    firebaseRepository.downloadCandidates(
-                        myProf.intraID,
-                        myProf.isMale,
-                        myProf.campus,
-                        { querySnapshot ->
-                            val candidates = querySnapshot?.documents?.map { documentSnapshot ->
-                                DetailedUserInfo.fromFirebase(documentSnapshot.toObject()!!)
-                            }?.filter {
-                                !profile.likes.contains(it.intraID)
-                                        && !profile.dislikes.contains(it.intraID)
-                                        && !profile.matches.contains(it.intraID)
-                            }?.shuffled()
-                            Log.d(NAME_TAG, "Candidates: $candidates")
-                            _candidateProfiles.value = candidates
-                        },
-                        { exception ->
-                            Log.w(NAME_TAG, "Candidates download failed", exception)
-                        })
-
+                    val querySnapshot =
+                        firebaseRepository.downloadCandidates(myProf.isMale, myProf.campus)
+                    val candidates = querySnapshot?.documents?.map { documentSnapshot ->
+                        DetailedUserInfo.fromFirebase(documentSnapshot.toObject()!!)
+                    }?.filter {
+                        !profile.likes.contains(it.intraID)
+                                && !profile.dislikes.contains(it.intraID)
+                                && !profile.matches.contains(it.intraID)
+                    }?.shuffled()
+                    Log.d(NAME_TAG, "Candidates: $candidates")
+                    _candidateProfiles.value = candidates
                 }
             }
         }

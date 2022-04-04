@@ -14,11 +14,5 @@ interface FirebaseRepository {
 
     suspend fun downloadProfile(intraID: String): DocumentSnapshot?
 
-    suspend fun downloadCandidates(
-        intraID: String,
-        isMale: Boolean,
-        campus: String,
-        onSuccessListener: (QuerySnapshot?) -> Unit,
-        onFailureListener: (Exception) -> Unit
-    )
+    suspend fun downloadCandidates(isMale: Boolean, campus: String): QuerySnapshot?
 }
