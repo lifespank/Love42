@@ -6,7 +6,7 @@ data class DetailedUserInfo(
     val intraURL: String,
     var imageURI: String,
     var email: String,
-    val campus: String?,
+    val campus: String,
     var gitHubURL: String = "",
     var slackMemberID: String = "",
     var bio: String = "",
@@ -17,16 +17,17 @@ data class DetailedUserInfo(
     val matches: HashSet<String> = hashSetOf()
 ) {
 
-    data class FirebaseUerInfo(
+    data class FirebaseUserInfo(
         var name: String = "",
         val intraID: String = "",
         val intraURL: String = "",
         var imageURI: String = "",
         var email: String = "",
-        val campus: String? = "",
+        val campus: String = "",
         var gitHubURL: String = "",
         var slackMemberID: String = "",
         var bio: String = "",
+        @field:JvmField
         var isMale: Boolean = true,
         val languages: List<String> = emptyList(),
         val likes: List<String> = emptyList(),
@@ -51,7 +52,7 @@ data class DetailedUserInfo(
 
     companion object {
 
-        fun fromFirebase(firebaseUserInfo: FirebaseUerInfo): DetailedUserInfo = DetailedUserInfo(
+        fun fromFirebase(firebaseUserInfo: FirebaseUserInfo): DetailedUserInfo = DetailedUserInfo(
             firebaseUserInfo.name,
             firebaseUserInfo.intraID,
             firebaseUserInfo.intraURL,

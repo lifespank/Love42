@@ -3,6 +3,7 @@ package com.mylittleproject.love42.repository
 import android.net.Uri
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.QuerySnapshot
 import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.model.DataSource
 import kotlinx.coroutines.Dispatchers
@@ -37,4 +38,20 @@ class FirebaseRepositoryImpl(private val remoteDataSource: DataSource.RemoteData
             remoteDataSource.downloadProfile(intraID, onSuccessListener, onFailureListener)
         }
 
+    override suspend fun downloadCandidates(
+        intraID: String,
+        isMale: Boolean,
+        campus: String,
+        onSuccessListener: (QuerySnapshot?) -> Unit,
+        onFailureListener: (Exception) -> Unit
+    ) =
+        withContext(Dispatchers.IO) {
+            remoteDataSource.downloadCandidates(
+                intraID,
+                isMale,
+                campus,
+                onSuccessListener,
+                onFailureListener
+            )
+        }
 }

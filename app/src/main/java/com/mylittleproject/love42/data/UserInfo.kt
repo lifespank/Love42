@@ -20,7 +20,11 @@ data class UserInfo(
 ) {
 
     fun toDetailedUserInfo() =
-        DetailedUserInfo(displayName, login, url, imageUrl, email, campus.firstOrNull()?.name)
+        if (campus.firstOrNull() == null) {
+            DetailedUserInfo(displayName, login, url, imageUrl, email, "")
+        } else {
+            DetailedUserInfo(displayName, login, url, imageUrl, email, campus.first().name)
+        }
 }
 
 data class Campus(

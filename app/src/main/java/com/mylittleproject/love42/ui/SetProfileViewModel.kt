@@ -212,8 +212,8 @@ class SetProfileViewModel @Inject constructor(
                             Log.w(NAME_TAG, "No such intra ID")
                         }
                     },
-                    {
-                        Log.w(NAME_TAG, "get profile failed with", it)
+                    { exception ->
+                        Log.w(NAME_TAG, "get profile failed with", exception)
                     })
             }
         }

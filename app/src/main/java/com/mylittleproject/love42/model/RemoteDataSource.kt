@@ -86,4 +86,19 @@ class RemoteDataSource(
             .addOnSuccessListener(onSuccessListener)
             .addOnFailureListener(onFailureListener)
     }
+
+    override suspend fun downloadCandidates(
+        intraID: String,
+        isMale: Boolean,
+        campus: String,
+        onSuccessListener: (QuerySnapshot?) -> Unit,
+        onFailureListener: (Exception) -> Unit
+    ) {
+        val userRef = db.collection("users")
+        userRef.whereNotEqualTo("isMale", isMale)
+            .whereEqualTo("campus", campus)
+            .get()
+            .addOnSuccessListener(onSuccessListener)
+            .addOnFailureListener(onFailureListener)
+    }
 }

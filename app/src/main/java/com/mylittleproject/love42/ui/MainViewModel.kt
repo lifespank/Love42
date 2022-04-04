@@ -32,6 +32,8 @@ class MainViewModel @Inject constructor(
     val snackBarEvent: LiveData<Event<Int>> get() = _snackBarEvent
     private val _showLoading: MutableLiveData<Boolean> by lazy { MutableLiveData() }
     val showLoading: LiveData<Boolean> get() = _showLoading
+    private val _candidateProfiles: MutableLiveData<List<DetailedUserInfo>> by lazy { MutableLiveData() }
+    val candidateProfiles: LiveData<List<DetailedUserInfo>> get() = _candidateProfiles
     val preferredLanguages = myProfile.switchMap {
         liveData {
             if (it != null) {
@@ -119,14 +121,14 @@ class MainViewModel @Inject constructor(
     }
 
     fun downloadProfile() {
-        viewModelScope.launch {
-            if (myProfile.value == null) {
+        if (myProfile.value == null) {
+            viewModelScope.launch {
                 _showLoading.value = true
                 val intraID = privateInfoRepository.fetchIntraID()
                 intraID.getOrNull()?.let {
                     firebaseRepository.downloadProfile(it,
                         { documentSnapshot ->
-                            documentSnapshot?.toObject<DetailedUserInfo.FirebaseUerInfo>()
+                            documentSnapshot?.toObject<DetailedUserInfo.FirebaseUserInfo>()
                                 ?.let { userInfo ->
                                     _myProfile.value = DetailedUserInfo.fromFirebase(userInfo)
                                     Log.d(NAME_TAG, "Profile fetched: $userInfo")
@@ -141,4 +143,32 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun downloadCandidates() {
+        if (candidateProfiles.value == null) {
+            viewModelScope.launch {
+                val profile = myProfile.value
+                profile?.let { myProf ->
+                    firebaseRepository.downloadCandidates(
+                        myProf.intraID,
+                        myProf.isMale,
+                        myProf.campus,
+                        { querySnapshot ->
+                            val candidates = querySnapshot?.documents?.map { documentSnapshot ->
+                                DetailedUserInfo.fromFirebase(documentSnapshot.toObject()!!)
+                            }?.filter {
+                                !profile.likes.contains(it.intraID)
+                                        && !profile.dislikes.contains(it.intraID)
+                                        && !profile.matches.contains(it.intraID)
+                            }
+                            Log.d(NAME_TAG, "Candidates: $candidates")
+                            _candidateProfiles.value = candidates
+                        },
+                        { exception ->
+                            Log.w(NAME_TAG, "Candidates download failed", exception)
+                        })
+
+                }
+            }
+        }
+    }
 }

@@ -36,6 +36,14 @@ interface DataSource {
             onSuccessListener: (DocumentSnapshot?) -> Unit,
             onFailureListener: (Exception) -> Unit
         )
+
+        suspend fun downloadCandidates(
+            intraID: String,
+            isMale: Boolean,
+            campus: String,
+            onSuccessListener: (QuerySnapshot?) -> Unit,
+            onFailureListener: (Exception) -> Unit
+        )
     }
 
     interface LocalDataSource {
