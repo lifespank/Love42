@@ -133,7 +133,7 @@ class SetProfileViewModel @Inject constructor(
     private fun uploadProfile() {
         viewModelScope.launch {
             userInfo.value?.let {
-                firebaseRepository.uploadProfile(it) {
+                if (firebaseRepository.uploadProfile(it)) {
                     Log.d(NAME_TAG, "Profile upload success")
                     _moveToMainEvent.value = Event(Unit)
                 }

@@ -20,12 +20,9 @@ interface DataSource {
 
         suspend fun fetchUserInfo(accessToken: String): Result<UserInfo>
 
-        suspend fun uploadProfileImageCoroutine(intraID: String, imageURI: String): String
+        suspend fun uploadProfileImage(intraID: String, imageURI: String): String
 
-        suspend fun uploadProfile(
-            userInfo: DetailedUserInfo,
-            onSuccessListener: () -> Unit
-        )
+        suspend fun uploadProfile(userInfo: DetailedUserInfo): Boolean
 
         suspend fun downloadProfile(
             intraID: String,

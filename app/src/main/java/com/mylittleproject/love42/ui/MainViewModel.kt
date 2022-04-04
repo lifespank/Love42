@@ -57,10 +57,10 @@ class MainViewModel @Inject constructor(
                 } else {
                     me.likes.add(like.intraID)
                 }
-                firebaseRepository.uploadProfile(like) {
+                if (firebaseRepository.uploadProfile(like)) {
                     Log.d(NAME_TAG, "like uploaded: $like")
                 }
-                firebaseRepository.uploadProfile(me) {
+                if (firebaseRepository.uploadProfile(me)) {
                     Log.d(NAME_TAG, "me uploaded: $me")
                 }
                 _candidateProfiles.value = candidates
@@ -75,10 +75,10 @@ class MainViewModel @Inject constructor(
             if (!candidates.isNullOrEmpty() && me != null) {
                 val dislike = candidates.removeFirst()
                 me.dislikes.add(dislike.intraID)
-                firebaseRepository.uploadProfile(dislike) {
+                if (firebaseRepository.uploadProfile(dislike)) {
                     Log.d(NAME_TAG, "like uploaded: $dislike")
                 }
-                firebaseRepository.uploadProfile(me) {
+                if (firebaseRepository.uploadProfile(me)) {
                     Log.d(NAME_TAG, "me uploaded: $me")
                 }
                 _candidateProfiles.value = candidates
@@ -137,7 +137,8 @@ class MainViewModel @Inject constructor(
                         Log.d(NAME_TAG, "Image uploaded: ${myProfile.value}")
                         uploadProfile()
                     } else if (it.imageURI.startsWith("https://firebasestorage")
-                        || it.imageURI.contains("intra.42")) {
+                        || it.imageURI.contains("intra.42")
+                    ) {
                         uploadProfile()
                     }
                 } else {
@@ -150,7 +151,7 @@ class MainViewModel @Inject constructor(
     private fun uploadProfile() {
         viewModelScope.launch {
             myProfile.value?.let {
-                firebaseRepository.uploadProfile(it) {
+                if (firebaseRepository.uploadProfile(it)) {
                     Log.d(NAME_TAG, "Profile upload success")
                     _snackBarEvent.value = Event(R.string.profile_uploaded)
                 }

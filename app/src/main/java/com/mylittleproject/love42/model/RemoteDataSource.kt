@@ -43,7 +43,8 @@ class RemoteDataSource(
         intraService.fetchUserInfo(accessToken)
     }
 
-    override suspend fun uploadProfileImageCoroutine(intraID: String, imageURI: String): String {        return try {
+    override suspend fun uploadProfileImage(intraID: String, imageURI: String): String {
+        return try {
             val imageRef = storageRef.child("images/$intraID.jpg")
             imageRef.putFile(Uri.parse(imageURI))
                 .await()
@@ -57,18 +58,17 @@ class RemoteDataSource(
         }
     }
 
-    override suspend fun uploadProfile(
-        userInfo: DetailedUserInfo,
-        onSuccessListener: () -> Unit
-    ) {
-        db.collection("users")
-            .document(userInfo.intraID)
-            .set(userInfo.toHashMap())
-            .addOnSuccessListener { onSuccessListener.invoke() }
-            .addOnFailureListener {
-                Log.w(NAME_TAG, "Profile upload failed", it)
-            }
-    }
+    override suspend fun uploadProfile(userInfo: DetailedUserInfo): Boolean =
+        try {
+            db.collection("users")
+                .document(userInfo.intraID)
+                .set(userInfo.toHashMap())
+                .await()
+            true
+        } catch (e: Exception) {
+            Log.w(NAME_TAG, "Profile upload failed", e)
+            false
+        }
 
     override suspend fun downloadProfile(
         intraID: String,

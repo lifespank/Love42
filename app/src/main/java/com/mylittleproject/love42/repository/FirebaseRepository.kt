@@ -8,7 +8,7 @@ import com.mylittleproject.love42.data.DetailedUserInfo
 
 interface FirebaseRepository {
 
-    suspend fun uploadProfile(userInfo: DetailedUserInfo, onSuccessListener: () -> Unit)
+    suspend fun uploadProfile(userInfo: DetailedUserInfo): Boolean
 
     suspend fun uploadProfileImage(intraID: String, imageURI: String): String
 
