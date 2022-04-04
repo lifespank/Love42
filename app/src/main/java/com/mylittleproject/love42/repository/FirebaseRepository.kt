@@ -12,11 +12,7 @@ interface FirebaseRepository {
 
     suspend fun uploadProfileImage(intraID: String, imageURI: String): String
 
-    suspend fun downloadProfile(
-        intraID: String,
-        onSuccessListener: (DocumentSnapshot?) -> Unit,
-        onFailureListener: (Exception) -> Unit
-    )
+    suspend fun downloadProfile(intraID: String): DocumentSnapshot?
 
     suspend fun downloadCandidates(
         intraID: String,

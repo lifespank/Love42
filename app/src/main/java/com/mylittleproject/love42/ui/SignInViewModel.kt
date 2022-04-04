@@ -35,19 +35,13 @@ class SignInViewModel @Inject constructor(
             val intraID = privateInfoRepository.fetchIntraID()
             intraID.onSuccess {
                 if (it != null) {
-                    firebaseRepository.downloadProfile(it,
-                        { documentSnapshot ->
-                            if (documentSnapshot?.data != null) {
-                                //Move
-                                _moveToMainEvent.value = Event(Unit)
-                                Log.d(NAME_TAG, "DocumentSnapshot: ${documentSnapshot.data}")
-                            } else {
-                                Log.w(NAME_TAG, "No such intra ID")
-                            }
-                        },
-                        { exception ->
-                            Log.w(NAME_TAG, "get profile failed with", exception)
-                        })
+                    if (firebaseRepository.downloadProfile(it)?.data != null) {
+                        //Move
+                        _moveToMainEvent.value = Event(Unit)
+                        Log.d(NAME_TAG, "Moving to Main")
+                    } else {
+                        Log.w(NAME_TAG, "No such intra ID")
+                    }
                 }
             }
             if (intraID.getOrNull() == null) {

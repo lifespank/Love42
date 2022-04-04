@@ -20,14 +20,9 @@ class FirebaseRepositoryImpl(private val remoteDataSource: DataSource.RemoteData
             remoteDataSource.uploadProfileImage(intraID, imageURI)
         }
 
-
-    override suspend fun downloadProfile(
-        intraID: String,
-        onSuccessListener: (DocumentSnapshot?) -> Unit,
-        onFailureListener: (Exception) -> Unit
-    ) =
+    override suspend fun downloadProfile(intraID: String): DocumentSnapshot? =
         withContext(Dispatchers.IO) {
-            remoteDataSource.downloadProfile(intraID, onSuccessListener, onFailureListener)
+            remoteDataSource.downloadProfile(intraID)
         }
 
     override suspend fun downloadCandidates(

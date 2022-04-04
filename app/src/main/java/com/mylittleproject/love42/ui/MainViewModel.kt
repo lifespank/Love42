@@ -166,17 +166,10 @@ class MainViewModel @Inject constructor(
                 _showLoading.value = true
                 val intraID = privateInfoRepository.fetchIntraID()
                 intraID.getOrNull()?.let {
-                    firebaseRepository.downloadProfile(it,
-                        { documentSnapshot ->
-                            documentSnapshot?.toObject<DetailedUserInfo.FirebaseUserInfo>()
-                                ?.let { userInfo ->
-                                    _myProfile.value = DetailedUserInfo.fromFirebase(userInfo)
-                                    Log.d(NAME_TAG, "Profile fetched: $userInfo")
-                                }
-                        },
-                        { exception ->
-                            Log.w(NAME_TAG, "Profile fetch failed", exception)
-                        })
+                    val documentSnapshot = firebaseRepository.downloadProfile(it)
+                    val profile = DetailedUserInfo.fromFirebase(documentSnapshot?.toObject()!!)
+                    _myProfile.value = profile
+                    Log.d(NAME_TAG, "Profile fetched: $profile")
                     _showLoading.value = false
                 }
             }

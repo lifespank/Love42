@@ -24,11 +24,7 @@ interface DataSource {
 
         suspend fun uploadProfile(userInfo: DetailedUserInfo): Boolean
 
-        suspend fun downloadProfile(
-            intraID: String,
-            onSuccessListener: (DocumentSnapshot?) -> Unit,
-            onFailureListener: (Exception) -> Unit
-        )
+        suspend fun downloadProfile(intraID: String): DocumentSnapshot?
 
         suspend fun downloadCandidates(
             intraID: String,

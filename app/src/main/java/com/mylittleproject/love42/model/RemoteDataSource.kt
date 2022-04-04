@@ -70,16 +70,17 @@ class RemoteDataSource(
             false
         }
 
-    override suspend fun downloadProfile(
-        intraID: String,
-        onSuccessListener: (DocumentSnapshot?) -> Unit,
-        onFailureListener: (Exception) -> Unit
-    ) {
-        val docRef = db.collection("users").document(intraID)
-        docRef.get()
-            .addOnSuccessListener(onSuccessListener)
-            .addOnFailureListener(onFailureListener)
-    }
+    override suspend fun downloadProfile(intraID: String): DocumentSnapshot? =
+        try {
+            val data = db.collection("users")
+                .document(intraID)
+                .get()
+                .await()
+            data
+        } catch (e: Exception) {
+            Log.w(NAME_TAG, "Profile download failed", e)
+            null
+        }
 
     override suspend fun downloadCandidates(
         intraID: String,
