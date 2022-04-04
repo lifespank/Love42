@@ -16,4 +16,5 @@
     <color name="second_happy_blue_light">#d3fbff</color>
     <color name="second_happy_blue_dark">#6e97cc</color>
     <color name="black_opac80">#E0000000</color>
+    <color name="red">#FF0000</color>
 </resources>

@@ -29,4 +29,6 @@
     <string name="find">Find</string>
     <string name="match">Match</string>
     <string name="profile_uploaded">Profile uploaded</string>
+    <string name="dislike">Dislike</string>
+    <string name="like">Like</string>
 </resources>

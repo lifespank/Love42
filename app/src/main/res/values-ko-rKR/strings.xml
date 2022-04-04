@@ -29,4 +29,6 @@
     <string name="find">찾기</string>
     <string name="match">매치</string>
     <string name="profile_uploaded">프로필 업로드 완료</string>
+    <string name="dislike">싫어요</string>
+    <string name="like">좋아요</string>
 </resources>

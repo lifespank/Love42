@@ -68,5 +68,31 @@
             app:layout_constraintEnd_toEndOf="@id/iv_profile"
             app:layout_constraintStart_toStartOf="@id/iv_profile" />
 
+        <FrameLayout
+            android:id="@+id/left_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/dislike"
+                android:src="@drawable/ic_baseline_heart_broken_24"
+                app:tint="@color/happy_blue_dark" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/right_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp"
+                android:contentDescription="@string/like"
+                android:src="@drawable/ic_heart_svgrepo_com"
+                app:tint="@color/red" />
+        </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
