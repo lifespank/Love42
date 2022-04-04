@@ -54,7 +54,7 @@ class UserInfoListAdapter :
                                     R.color.white
                                 )
                             )
-                            setChipBackgroundColorResource(R.color.purple_200)
+                            setChipBackgroundColorResource(R.color.black_opac80)
                         })
             }
         }

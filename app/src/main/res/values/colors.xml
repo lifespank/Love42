@@ -9,4 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="black_transparent">#68000000</color>
     <color name="transparent">#00000000</color>
+    <color name="happy_blue">#00B8FF</color>
+    <color name="happy_blue_light">#6aeaff</color>
+    <color name="happy_blue_dark">#0088cb</color>
+    <color name="black_opac80">#E0000000</color>
 </resources>
