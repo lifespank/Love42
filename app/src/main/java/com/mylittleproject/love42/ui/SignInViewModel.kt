@@ -37,7 +37,7 @@ class SignInViewModel @Inject constructor(
                 if (it != null) {
                     firebaseRepository.downloadProfile(it,
                         { documentSnapshot ->
-                            if (documentSnapshot != null) {
+                            if (documentSnapshot?.data != null) {
                                 //Move
                                 _moveToMainEvent.value = Event(Unit)
                                 Log.d(NAME_TAG, "DocumentSnapshot: ${documentSnapshot.data}")

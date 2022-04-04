@@ -61,6 +61,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-dynamic-links-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0'
 
     //Navigation
     def nav_version = "2.4.1"

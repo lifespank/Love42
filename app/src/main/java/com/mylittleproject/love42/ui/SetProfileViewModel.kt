@@ -114,20 +114,14 @@ class SetProfileViewModel @Inject constructor(
             user?.let {
                 if (it.slackMemberID.isNotBlank()) {
                     _showLoading.value = true
-                    firebaseRepository.uploadProfileImage(it.intraID, it.imageURI) { task ->
-                        if (task.isSuccessful) {
-                            val downloadURI = task.result
-                            _userInfo.value = it.copy(imageURI = downloadURI.toString())
-                            Log.d(NAME_TAG, "Image uploaded: ${userInfo.value}")
-                            uploadProfile()
-                        } else {
-                            if (it.imageURI.contains("intra.42")) {
-                                uploadProfile()
-                            } else {
-                                _showLoading.value = false
-                                Log.d(NAME_TAG, "Image upload failed")
-                            }
-                        }
+                    val downloadURL =
+                        firebaseRepository.uploadProfileImage(it.intraID, it.imageURI)
+                    if (downloadURL.isNotBlank()) {
+                        _userInfo.value = it.copy(imageURI = downloadURL)
+                        Log.d(NAME_TAG, "Image uploaded: ${userInfo.value}")
+                        uploadProfile()
+                    } else if (it.imageURI.contains("intra.42")) {
+                        uploadProfile()
                     }
                 } else {
                     _fillOutSlackMemberIDEvent.value = Event(Unit)
@@ -141,6 +135,7 @@ class SetProfileViewModel @Inject constructor(
             userInfo.value?.let {
                 firebaseRepository.uploadProfile(it) {
                     Log.d(NAME_TAG, "Profile upload success")
+                    _moveToMainEvent.value = Event(Unit)
                 }
             }
             _showLoading.value = false
@@ -204,7 +199,7 @@ class SetProfileViewModel @Inject constructor(
             intraID?.let {
                 firebaseRepository.downloadProfile(it,
                     { documentSnapshot ->
-                        if (documentSnapshot != null) {
+                        if (documentSnapshot?.data != null) {
                             //Move
                             _moveToMainEvent.value = Event(Unit)
                             Log.d(NAME_TAG, "DocumentSnapshot: ${documentSnapshot.data}")

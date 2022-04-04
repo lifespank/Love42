@@ -12,15 +12,6 @@ import kotlinx.coroutines.withContext
 class FirebaseRepositoryImpl(private val remoteDataSource: DataSource.RemoteDataSource) :
     FirebaseRepository {
 
-    override suspend fun uploadProfileImage(
-        intraID: String,
-        imageURI: String,
-        onCompleteListener: (Task<Uri>) -> Unit
-    ) =
-        withContext(Dispatchers.IO) {
-            remoteDataSource.uploadProfileImage(intraID, imageURI, onCompleteListener)
-        }
-
     override suspend fun uploadProfile(
         userInfo: DetailedUserInfo,
         onSuccessListener: () -> Unit
@@ -28,6 +19,12 @@ class FirebaseRepositoryImpl(private val remoteDataSource: DataSource.RemoteData
         withContext(Dispatchers.IO) {
             remoteDataSource.uploadProfile(userInfo, onSuccessListener)
         }
+
+    override suspend fun uploadProfileImage(intraID: String, imageURI: String): String =
+        withContext(Dispatchers.IO) {
+            remoteDataSource.uploadProfileImageCoroutine(intraID, imageURI)
+        }
+
 
     override suspend fun downloadProfile(
         intraID: String,

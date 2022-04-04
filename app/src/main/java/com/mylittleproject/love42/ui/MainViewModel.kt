@@ -34,6 +34,8 @@ class MainViewModel @Inject constructor(
     val showLoading: LiveData<Boolean> get() = _showLoading
     private val _candidateProfiles: MutableLiveData<List<DetailedUserInfo>> by lazy { MutableLiveData() }
     val candidateProfiles: LiveData<List<DetailedUserInfo>> get() = _candidateProfiles
+    private val _matchProfiles: MutableLiveData<List<DetailedUserInfo>> by lazy { MutableLiveData() }
+    val matchProfiles: LiveData<List<DetailedUserInfo>> get() = _matchProfiles
     val preferredLanguages = myProfile.switchMap {
         liveData {
             if (it != null) {
@@ -128,20 +130,15 @@ class MainViewModel @Inject constructor(
             user?.let {
                 if (it.slackMemberID.isNotBlank()) {
                     _showLoading.value = true
-                    firebaseRepository.uploadProfileImage(it.intraID, it.imageURI) { task ->
-                        if (task.isSuccessful) {
-                            val downloadURI = task.result
-                            _myProfile.value = it.copy(imageURI = downloadURI.toString())
-                            Log.d(NAME_TAG, "Image uploaded: ${myProfile.value}")
-                            uploadProfile()
-                        } else {
-                            if (it.imageURI.startsWith("https://firebasestorage")) {
-                                uploadProfile()
-                            } else {
-                                _showLoading.value = false
-                                Log.d(NAME_TAG, "Image upload failed")
-                            }
-                        }
+                    val downloadURL =
+                        firebaseRepository.uploadProfileImage(it.intraID, it.imageURI)
+                    if (downloadURL.isNotBlank()) {
+                        _myProfile.value = it.copy(imageURI = downloadURL)
+                        Log.d(NAME_TAG, "Image uploaded: ${myProfile.value}")
+                        uploadProfile()
+                    } else if (it.imageURI.startsWith("https://firebasestorage")
+                        || it.imageURI.contains("intra.42")) {
+                        uploadProfile()
                     }
                 } else {
                     _snackBarEvent.value = Event(R.string.fill_out_slack)
@@ -211,6 +208,13 @@ class MainViewModel @Inject constructor(
 
                 }
             }
+        }
+    }
+
+    fun downloadMatches() {
+        viewModelScope.launch {
+            val matches = myProfile.value?.matches
+
         }
     }
 }

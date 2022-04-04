@@ -17,6 +17,7 @@ import com.mylittleproject.love42.data.AccessToken
 import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.network.IntraService
 import com.mylittleproject.love42.tools.NAME_TAG
+import kotlinx.coroutines.tasks.await
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -42,24 +43,17 @@ class RemoteDataSource(
         intraService.fetchUserInfo(accessToken)
     }
 
-    override suspend fun uploadProfileImage(
-        intraID: String,
-        imageURI: String,
-        onCompleteListener: (Task<Uri>) -> Unit
-    ) {
-        val imageRef = storageRef.child("images/$intraID.jpg")
-        try {
-            val uploadTask = imageRef.putFile(Uri.parse(imageURI))
-            uploadTask.continueWithTask { task ->
-                if (!task.isSuccessful) {
-                    task.exception?.let {
-                        throw it
-                    }
-                }
-                imageRef.downloadUrl
-            }.addOnCompleteListener(onCompleteListener)
-        } catch (e: FileNotFoundException) {
-            Log.w(NAME_TAG, "File not found: $imageURI", e)
+    override suspend fun uploadProfileImageCoroutine(intraID: String, imageURI: String): String {        return try {
+            val imageRef = storageRef.child("images/$intraID.jpg")
+            imageRef.putFile(Uri.parse(imageURI))
+                .await()
+                .storage
+                .downloadUrl
+                .await()
+                .toString()
+        } catch (e: Exception) {
+            Log.w(NAME_TAG, "File upload failed", e)
+            ""
         }
     }
 
