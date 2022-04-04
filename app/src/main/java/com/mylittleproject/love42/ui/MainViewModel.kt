@@ -42,6 +42,48 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun popLike() {
+        viewModelScope.launch {
+            val candidates = candidateProfiles.value?.toMutableList()
+            val me = myProfile.value
+            if (!candidates.isNullOrEmpty() && me != null) {
+                val like = candidates.removeFirst()
+                if (like.likes.contains(me.intraID)) {
+                    me.matches.add(like.intraID)
+                    like.likes.remove(me.intraID)
+                    like.matches.add(me.intraID)
+                } else {
+                    me.likes.add(like.intraID)
+                }
+                firebaseRepository.uploadProfile(like) {
+                    Log.d(NAME_TAG, "like uploaded: $like")
+                }
+                firebaseRepository.uploadProfile(me) {
+                    Log.d(NAME_TAG, "me uploaded: $me")
+                }
+                _candidateProfiles.value = candidates
+            }
+        }
+    }
+
+    fun popDislike() {
+        viewModelScope.launch {
+            val candidates = candidateProfiles.value?.toMutableList()
+            val me = myProfile.value
+            if (!candidates.isNullOrEmpty() && me != null) {
+                val dislike = candidates.removeFirst()
+                me.dislikes.add(dislike.intraID)
+                firebaseRepository.uploadProfile(dislike) {
+                    Log.d(NAME_TAG, "like uploaded: $dislike")
+                }
+                firebaseRepository.uploadProfile(me) {
+                    Log.d(NAME_TAG, "me uploaded: $me")
+                }
+                _candidateProfiles.value = candidates
+            }
+        }
+    }
+
     fun addLanguage(language: String) {
         val languages = myProfile.value?.languages
         languages?.let {
@@ -159,7 +201,7 @@ class MainViewModel @Inject constructor(
                                 !profile.likes.contains(it.intraID)
                                         && !profile.dislikes.contains(it.intraID)
                                         && !profile.matches.contains(it.intraID)
-                            }
+                            }?.shuffled()
                             Log.d(NAME_TAG, "Candidates: $candidates")
                             _candidateProfiles.value = candidates
                         },

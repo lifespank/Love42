@@ -9,10 +9,12 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import com.mylittleproject.love42.R
 import com.mylittleproject.love42.databinding.FragmentFindBinding
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager
+import com.yuyakaido.android.cardstackview.CardStackListener
+import com.yuyakaido.android.cardstackview.Direction
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FindFragment : Fragment() {
+class FindFragment : Fragment(), CardStackListener {
 
     private val mainViewModel: MainViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private var _binding: FragmentFindBinding? = null
@@ -35,7 +37,7 @@ class FindFragment : Fragment() {
     }
 
     private fun initCardStackView() {
-        binding.csvCandidates.layoutManager = CardStackLayoutManager(requireContext())
+        binding.csvCandidates.layoutManager = CardStackLayoutManager(requireContext(), this)
         binding.csvCandidates.adapter = adapter
     }
 
@@ -48,5 +50,32 @@ class FindFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onCardDragging(direction: Direction?, ratio: Float) {
+    }
+
+    override fun onCardSwiped(direction: Direction?) {
+        when (direction) {
+            Direction.Right -> {
+                mainViewModel.popLike()
+            }
+            Direction.Left -> {
+                mainViewModel.popDislike()
+            }
+            else -> {}
+        }
+    }
+
+    override fun onCardRewound() {
+    }
+
+    override fun onCardCanceled() {
+    }
+
+    override fun onCardAppeared(view: View?, position: Int) {
+    }
+
+    override fun onCardDisappeared(view: View?, position: Int) {
     }
 }

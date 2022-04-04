@@ -47,7 +47,10 @@ data class DetailedUserInfo(
             "slackMemberID" to slackMemberID,
             "bio" to bio,
             "isMale" to isMale,
-            "languages" to languages.toList()
+            "languages" to languages.toList(),
+            "likes" to likes.toList(),
+            "dislikes" to dislikes.toList(),
+            "matches" to matches.toList()
         )
 
     companion object {
