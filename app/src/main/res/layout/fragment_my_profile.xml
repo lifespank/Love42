@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.mylittleproject.love42.ui.MyProfileViewModel" />
+            type="com.mylittleproject.love42.ui.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

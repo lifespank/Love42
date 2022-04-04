@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MyProfileViewModel @Inject constructor(
+class MainViewModel @Inject constructor(
     private val firebaseRepository: FirebaseRepository,
     private val privateInfoRepository: PrivateInfoRepository
 ) :
@@ -120,21 +120,23 @@ class MyProfileViewModel @Inject constructor(
 
     fun downloadProfile() {
         viewModelScope.launch {
-            _showLoading.value = true
-            val intraID = privateInfoRepository.fetchIntraID()
-            intraID.getOrNull()?.let {
-                firebaseRepository.downloadProfile(it,
-                    { documentSnapshot ->
-                        documentSnapshot?.toObject<DetailedUserInfo.FirebaseUerInfo>()
-                            ?.let { userInfo ->
-                                _myProfile.value = DetailedUserInfo.fromFirebase(userInfo)
-                                Log.d(NAME_TAG, "Profile fetched: $userInfo")
-                            }
-                    },
-                    { exception ->
-                        Log.w(NAME_TAG, "Profile fetch failed", exception)
-                    })
-                _showLoading.value = false
+            if (myProfile.value == null) {
+                _showLoading.value = true
+                val intraID = privateInfoRepository.fetchIntraID()
+                intraID.getOrNull()?.let {
+                    firebaseRepository.downloadProfile(it,
+                        { documentSnapshot ->
+                            documentSnapshot?.toObject<DetailedUserInfo.FirebaseUerInfo>()
+                                ?.let { userInfo ->
+                                    _myProfile.value = DetailedUserInfo.fromFirebase(userInfo)
+                                    Log.d(NAME_TAG, "Profile fetched: $userInfo")
+                                }
+                        },
+                        { exception ->
+                            Log.w(NAME_TAG, "Profile fetch failed", exception)
+                        })
+                    _showLoading.value = false
+                }
             }
         }
     }

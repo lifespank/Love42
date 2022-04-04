@@ -11,7 +11,10 @@ data class DetailedUserInfo(
     var slackMemberID: String = "",
     var bio: String = "",
     var isMale: Boolean = true,
-    val languages: HashSet<String> = hashSetOf()
+    val languages: HashSet<String> = hashSetOf(),
+    val likes: HashSet<String> = hashSetOf(),
+    val dislikes: HashSet<String> = hashSetOf(),
+    val matches: HashSet<String> = hashSetOf()
 ) {
 
     data class FirebaseUerInfo(
@@ -25,7 +28,10 @@ data class DetailedUserInfo(
         var slackMemberID: String = "",
         var bio: String = "",
         var isMale: Boolean = true,
-        val languages: List<String> = emptyList()
+        val languages: List<String> = emptyList(),
+        val likes: List<String> = emptyList(),
+        val dislikes: List<String> = emptyList(),
+        val matches: List<String> = emptyList()
     )
 
     fun toHashMap() =
@@ -56,7 +62,10 @@ data class DetailedUserInfo(
             firebaseUserInfo.slackMemberID,
             firebaseUserInfo.bio,
             firebaseUserInfo.isMale,
-            HashSet(firebaseUserInfo.languages)
+            HashSet(firebaseUserInfo.languages),
+            HashSet(firebaseUserInfo.likes),
+            HashSet(firebaseUserInfo.dislikes),
+            HashSet(firebaseUserInfo.matches)
         )
     }
 }

@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -27,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MyProfileFragment : Fragment() {
 
-    private val myProfileViewModel: MyProfileViewModel by viewModels()
+    private val mainViewModel: MainViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private var _binding: FragmentMyProfileBinding? = null
     private val binding get() = _binding!!
     private val resultLauncher =
@@ -35,7 +36,7 @@ class MyProfileFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data
                 val imageURI = data?.data
-                myProfileViewModel.setImageURI(imageURI.toString())
+                mainViewModel.setImageURI(imageURI.toString())
             }
         }
     private val permissionLauncher =
@@ -64,10 +65,10 @@ class MyProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewModel = myProfileViewModel
+        binding.viewModel = mainViewModel
         binding.ivProfile.clipToOutline = true
         setChip()
-        myProfileViewModel.downloadProfile()
+        mainViewModel.downloadProfile()
         subscribeToObservables()
     }
 
@@ -77,7 +78,7 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun subscribeToObservables() {
-        myProfileViewModel.preferredLanguages.observe(viewLifecycleOwner) {
+        mainViewModel.preferredLanguages.observe(viewLifecycleOwner) {
             binding.cgLanguages.removeAllViews()
             val newContext = ContextThemeWrapper(
                 requireContext(),
@@ -90,19 +91,19 @@ class MyProfileFragment : Fragment() {
                             text = language
                             isCloseIconVisible = true
                             setOnCloseIconClickListener {
-                                myProfileViewModel.removeLanguage(text.toString())
+                                mainViewModel.removeLanguage(text.toString())
                             }
                         })
             }
         }
-        myProfileViewModel.manualLanguagePopUpEvent.observe(viewLifecycleOwner, EventObserver {
+        mainViewModel.manualLanguagePopUpEvent.observe(viewLifecycleOwner, EventObserver {
             val editText = TextInputEditText(requireContext())
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.preferred_language)
                 .setView(editText)
                 .setPositiveButton(R.string.confirm) { _, _ ->
                     if (!editText.text.isNullOrBlank()) {
-                        myProfileViewModel.addLanguage(editText.text.toString())
+                        mainViewModel.addLanguage(editText.text.toString())
                     }
                 }
                 .setNegativeButton(R.string.cancel) { dialog, _ ->
@@ -110,7 +111,7 @@ class MyProfileFragment : Fragment() {
                 }
                 .show()
         })
-        myProfileViewModel.popUpSlackIDDescriptionEvent.observe(viewLifecycleOwner, EventObserver {
+        mainViewModel.popUpSlackIDDescriptionEvent.observe(viewLifecycleOwner, EventObserver {
             MaterialAlertDialogBuilder(requireContext())
                 .setView(R.layout.dialog_what_is_slack_id)
                 .setNeutralButton(R.string.close) { dialog, _ ->
@@ -118,10 +119,10 @@ class MyProfileFragment : Fragment() {
                 }
                 .show()
         })
-        myProfileViewModel.snackBarEvent.observe(viewLifecycleOwner, EventObserver { stringID ->
+        mainViewModel.snackBarEvent.observe(viewLifecycleOwner, EventObserver { stringID ->
             Snackbar.make(binding.root, stringID, Snackbar.LENGTH_SHORT).show()
         })
-        myProfileViewModel.loadProfileImageEvent.observe(viewLifecycleOwner, EventObserver {
+        mainViewModel.loadProfileImageEvent.observe(viewLifecycleOwner, EventObserver {
             if (allPermissionGranted()) {
                 val intent = Intent()
                     .apply {

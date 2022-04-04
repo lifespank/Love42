@@ -9,4 +9,9 @@
         android:name="com.mylittleproject.love42.ui.MyProfileFragment"
         android:label="MyProfileFragment"
         tools:layout="@layout/fragment_my_profile" />
+    <fragment
+        android:id="@+id/findFragment"
+        android:name="com.mylittleproject.love42.ui.FindFragment"
+        android:label="FindFragment"
+        tools:layout="@layout/fragment_my_profile" />
 </navigation>
