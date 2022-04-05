@@ -8,6 +8,10 @@
         <variable
             name="userInfo"
             type="com.mylittleproject.love42.data.DetailedUserInfo" />
+
+        <variable
+            name="viewModel"
+            type="com.mylittleproject.love42.ui.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,6 +26,7 @@
             android:clickable="true"
             android:contentDescription="@string/profile_picture"
             android:focusable="true"
+            android:onClick="@{() -> viewModel.onMatchClick(userInfo)}"
             android:foreground="?attr/selectableItemBackground"
             app:imageURL="@{userInfo.imageURI}" />
 

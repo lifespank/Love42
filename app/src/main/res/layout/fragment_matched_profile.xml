@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.mylittleproject.love42.ui.MainViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.MatchedProfileFragment">
+
+            <ImageView
+                android:id="@+id/iv_profile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/profile_picture"
+                app:imageURLNoCrop="@{viewModel.selectedProfile.imageURI}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="@{viewModel.selectedProfile.name}"
+                android:textSize="28sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_profile"
+                tools:text="Sumyeong Kim" />
+
+            <TextView
+                android:id="@+id/tv_intra_id"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.selectedProfile.intraID}"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="@id/tv_name"
+                app:layout_constraintStart_toStartOf="@id/tv_name"
+                app:layout_constraintTop_toBottomOf="@id/tv_name"
+                tools:text="sumkim" />
+
+            <TextView
+                android:id="@+id/tv_bio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:text="@{viewModel.selectedProfile.bio}"
+                app:layout_constraintEnd_toEndOf="@id/tv_name"
+                app:layout_constraintStart_toStartOf="@id/tv_name"
+                app:layout_constraintTop_toBottomOf="@id/tv_intra_id"
+                tools:text="안녕하세요~" />
+
+            <View
+                android:id="@+id/horizontal_line_1"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginVertical="16dp"
+                android:background="@color/black_transparent"
+                app:layout_constraintEnd_toEndOf="@id/tv_name"
+                app:layout_constraintStart_toStartOf="@id/tv_name"
+                app:layout_constraintTop_toBottomOf="@id/tv_bio" />
+
+            <TextView
+                android:id="@+id/tv_language"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:text="@string/preferred_language"
+                android:textSize="25sp"
+                app:layout_constraintEnd_toEndOf="@id/tv_name"
+                app:layout_constraintStart_toStartOf="@id/tv_name"
+                app:layout_constraintTop_toBottomOf="@id/horizontal_line_1" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cg_languages"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:layoutDirection="locale"
+                app:layout_constraintEnd_toEndOf="@id/tv_name"
+                app:layout_constraintStart_toStartOf="@id/tv_name"
+                app:layout_constraintTop_toBottomOf="@id/tv_language" />
+
+            <View
+                android:id="@+id/horizontal_line_2"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginVertical="16dp"
+                android:background="@color/black_transparent"
+                app:layout_constraintEnd_toEndOf="@id/tv_name"
+                app:layout_constraintStart_toStartOf="@id/tv_name"
+                app:layout_constraintTop_toBottomOf="@id/cg_languages" />
+
+            <TextView
+                android:id="@+id/tv_contact"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:text="@string/contact"
+                android:textSize="25sp"
+                app:layout_constraintEnd_toEndOf="@id/tv_name"
+                app:layout_constraintStart_toStartOf="@id/tv_name"
+                app:layout_constraintTop_toBottomOf="@id/horizontal_line_2" />
+
+            <ImageButton
+                android:id="@+id/btn_slack"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginVertical="16dp"
+                android:background="@drawable/round_rectangle"
+                android:backgroundTint="@color/second_happy_blue_light"
+                android:contentDescription="@string/slack_message"
+                android:onClick="@{() -> viewModel.onSlackButtonClick()}"
+                android:scaleType="fitCenter"
+                app:layout_constraintEnd_toEndOf="@id/tv_name"
+                app:layout_constraintStart_toStartOf="@id/tv_name"
+                app:layout_constraintTop_toBottomOf="@id/tv_contact"
+                app:srcCompat="@drawable/ic_slack_rgb" />
+
+            <ImageButton
+                android:id="@+id/btn_42"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginVertical="16dp"
+                android:background="@drawable/round_rectangle"
+                android:backgroundTint="@color/second_happy_blue_light"
+                android:contentDescription="@string/slack_message"
+                android:onClick="@{() -> viewModel.on42ButtonClick()}"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                app:layout_constraintEnd_toEndOf="@id/tv_name"
+                app:layout_constraintStart_toStartOf="@id/tv_name"
+                app:layout_constraintTop_toBottomOf="@id/btn_slack"
+                app:srcCompat="@drawable/ic_42_logo" />
+
+            <ImageButton
+                android:id="@+id/btn_email"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginVertical="16dp"
+                android:background="@drawable/round_rectangle"
+                android:backgroundTint="@color/second_happy_blue_light"
+                android:contentDescription="@string/slack_message"
+                android:onClick="@{() -> viewModel.onEmailButtonClick()}"
+                android:scaleType="fitCenter"
+                app:layout_constraintEnd_toEndOf="@id/tv_name"
+                app:layout_constraintStart_toStartOf="@id/tv_name"
+                app:layout_constraintTop_toBottomOf="@id/btn_42"
+                app:srcCompat="@drawable/ic_baseline_email_24"
+                app:tint="@color/happy_blue_dark" />
+
+            <ImageButton
+                android:id="@+id/btn_gitHub"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginVertical="16dp"
+                android:background="@drawable/round_rectangle"
+                android:backgroundTint="@color/black"
+                android:contentDescription="@string/slack_message"
+                android:onClick="@{() -> viewModel.onGitHubButtonClick()}"
+                android:scaleType="fitCenter"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/tv_name"
+                app:layout_constraintStart_toStartOf="@id/tv_name"
+                app:layout_constraintTop_toBottomOf="@id/btn_email"
+                app:srcCompat="@drawable/ic_github" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

@@ -10,7 +10,7 @@
     <string name="email">Email</string>
     <string name="intra_url">Intra URL</string>
     <string name="bio">Bio</string>
-    <string name="github" translatable="false">GitHub URL</string>
+    <string name="github" translatable="false">GitHub ID</string>
     <string name="edit_profile_photo">Edit profile photo</string>
     <string name="slack_id">Slack member ID</string>
     <string name="what_is_slack_id">What is slack member ID?</string>
@@ -35,4 +35,8 @@
     <string name="no_candidates">No one left to swipe! Let your friends in campus join the app!</string>
     <string name="match_occurred">It\'s a match!</string>
     <string name="match_description">Move to match tab below and see who it is!</string>
+    <string name="contact">Contact</string>
+    <string name="slack_message">Send slack message</string>
+    <string name="invalid_url">Invalid URL</string>
+    <string name="sending_email">Sending Email</string>
 </resources>

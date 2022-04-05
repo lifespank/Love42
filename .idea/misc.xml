@@ -11,6 +11,8 @@
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/ic_baseline_refresh_24.xml" value="0.193" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/ic_baseline_save_24.xml" value="0.193" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/ic_couple_svgrepo_com.xml" value="0.2985" />
+        <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/ic_github.xml" value="0.1945" />
+        <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/ic_github_white.xml" value="0.1945" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/ic_launcher_background.xml" value="0.193" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/ic_question_mark_button_svgrepo_com.xml" value="0.1945" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/round_rectangle.xml" value="0.1945" />
@@ -24,6 +26,7 @@
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/layout/dialog_what_is_slack_id.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/layout/fragment_find.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/layout/fragment_match.xml" value="0.29713552800342025" />
+        <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/layout/fragment_matched_profile.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/layout/fragment_my_profile.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/layout/fragment_set_profile.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/layout/fragment_sign_in.xml" value="0.22" />

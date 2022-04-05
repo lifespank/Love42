@@ -23,6 +23,14 @@ fun setImageWithUrl(view: ImageView, imageURL: String?) {
         .into(view)
 }
 
+@BindingAdapter("imageURLNoCrop")
+fun setImageWithUrlNoCrop(view: ImageView, imageURL: String?) {
+    Glide.with(view)
+        .load(imageURL)
+        .placeholder(R.drawable.ic_baseline_person_24)
+        .into(view)
+}
+
 @BindingAdapter("isMenuItemEnabled")
 fun setMenuItemEnabled(view: Toolbar, isEnabled: Boolean) {
     view.menu.forEach {

@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.mylittleproject.love42.R
 import com.mylittleproject.love42.databinding.FragmentMatchBinding
+import com.mylittleproject.love42.tools.EventObserver
 import com.mylittleproject.love42.tools.NAME_TAG
 
 class MatchFragment : Fragment() {
@@ -18,7 +20,7 @@ class MatchFragment : Fragment() {
     private var _binding: FragmentMatchBinding? = null
     private val binding get() = _binding!!
     private val mainViewModel: MainViewModel by hiltNavGraphViewModels(R.id.nav_graph)
-    private val adapter = MatchListAdapter()
+    private lateinit var adapter: MatchListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +38,7 @@ class MatchFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
+        adapter = MatchListAdapter(mainViewModel)
         binding.rvMatches.adapter = adapter
         binding.rvMatches.layoutManager =
             GridLayoutManager(requireContext(), 2)
@@ -53,6 +56,10 @@ class MatchFragment : Fragment() {
                 binding.tvNoMatches.isVisible = false
             }
         }
+        mainViewModel.selectProfileEvent.observe(viewLifecycleOwner, EventObserver {
+            Log.d(NAME_TAG, "Moving to profile...")
+            findNavController().navigate(R.id.action_matchFragment_to_matchedProfileFragment)
+        })
     }
 
     override fun onDestroyView() {

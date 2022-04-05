@@ -13,7 +13,7 @@ import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.databinding.CardItemBinding
 import com.mylittleproject.love42.databinding.MatchItemBinding
 
-class MatchListAdapter :
+class MatchListAdapter(private val viewModel: MainViewModel) :
     ListAdapter<DetailedUserInfo, RecyclerView.ViewHolder>(UserInfoCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -22,7 +22,7 @@ class MatchListAdapter :
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ), viewModel
         )
     }
 
@@ -36,12 +36,16 @@ class MatchListAdapter :
         (holder as MatchViewHolder).recycle()
     }
 
-    class MatchViewHolder(private val binding: MatchItemBinding) :
+    class MatchViewHolder(
+        private val binding: MatchItemBinding,
+        private val viewModel: MainViewModel
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: DetailedUserInfo) {
             binding.userInfo = item
             binding.ivProfile.clipToOutline = true
+            binding.viewModel = viewModel
         }
 
         fun recycle() {

@@ -7,7 +7,9 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
+import com.google.android.material.snackbar.Snackbar
 import com.mylittleproject.love42.MainActivity
+import com.mylittleproject.love42.R
 import com.mylittleproject.love42.databinding.ActivitySignInBinding
 import com.mylittleproject.love42.keys.SEOUL_SIGN_IN_URL
 import com.mylittleproject.love42.tools.EventObserver
@@ -32,8 +34,15 @@ class SignInActivity : AppCompatActivity() {
 
     private fun subscribeToObservables() {
         signInViewModel.signInClickEvent.observe(this, EventObserver {
-            val customTabsIntent = CustomTabsIntent.Builder().build()
-            customTabsIntent.launchUrl(this, Uri.parse(SEOUL_SIGN_IN_URL))
+            try {
+                CustomTabsIntent
+                    .Builder()
+                    .build()
+                    .launchUrl(this, Uri.parse(SEOUL_SIGN_IN_URL))
+            } catch (e: Exception) {
+                Log.w(NAME_TAG, "Invalid URL", e)
+                Snackbar.make(binding.root, R.string.invalid_url, Snackbar.LENGTH_SHORT).show()
+            }
         })
         signInViewModel.accessToken.observe(this, EventObserver { accessToken ->
             Log.d(NAME_TAG, "Token: $accessToken")

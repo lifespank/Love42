@@ -35,4 +35,8 @@
     <string name="no_candidates">남은 사람이 없습니다! 캠퍼스의 동료들에게 가입을 권하세요!</string>
     <string name="match_occurred">매치!</string>
     <string name="match_description">아리 매치 탭으로 이동하여 확인해보세요!</string>
+    <string name="contact">연락하기</string>
+    <string name="slack_message">슬랙 메시지 보내기</string>
+    <string name="invalid_url">유효하지 않은 URL</string>
+    <string name="sending_email">이메일 보내기</string>
 </resources>

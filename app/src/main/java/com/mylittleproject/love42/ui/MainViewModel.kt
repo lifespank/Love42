@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.google.firebase.firestore.ktx.toObject
 import com.mylittleproject.love42.R
 import com.mylittleproject.love42.data.DetailedUserInfo
+import com.mylittleproject.love42.keys.TEAM_ID
 import com.mylittleproject.love42.repository.FirebaseRepository
 import com.mylittleproject.love42.repository.PrivateInfoRepository
 import com.mylittleproject.love42.tools.Event
@@ -38,6 +39,16 @@ class MainViewModel @Inject constructor(
     val candidateProfiles: LiveData<List<DetailedUserInfo>> get() = _candidateProfiles
     private val _matchProfiles: MutableLiveData<List<DetailedUserInfo>> by lazy { MutableLiveData() }
     val matchProfiles: LiveData<List<DetailedUserInfo>> get() = _matchProfiles
+    private val _selectedProfile: MutableLiveData<DetailedUserInfo> by lazy { MutableLiveData() }
+    val selectedProfile: LiveData<DetailedUserInfo> get() = _selectedProfile
+    private val _selectProfileEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
+    val selectProfileEvent: LiveData<Event<Unit>> get() = _selectProfileEvent
+    private val _openSchemeEvent: MutableLiveData<Event<String>> by lazy { MutableLiveData() }
+    val openSchemeEvent: LiveData<Event<String>> get() = _openSchemeEvent
+    private val _openURLEvent: MutableLiveData<Event<String>> by lazy { MutableLiveData() }
+    val openURLEvent: LiveData<Event<String>> get() = _openURLEvent
+    private val _sendEmailEvent: MutableLiveData<Event<Array<String>>> by lazy { MutableLiveData() }
+    val sendEmailEvent: LiveData<Event<Array<String>>> get() = _sendEmailEvent
     private val _matchEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
     val matchEvent: LiveData<Event<Unit>> get() = _matchEvent
     val preferredLanguages = myProfile.switchMap {
@@ -45,6 +56,36 @@ class MainViewModel @Inject constructor(
             if (it != null) {
                 emit(it.languages.toList())
             }
+        }
+    }
+
+    fun onMatchClick(matchInfo: DetailedUserInfo) {
+        Log.d(NAME_TAG, "Selected: $matchInfo")
+        _selectedProfile.value = matchInfo
+        _selectProfileEvent.value = Event(Unit)
+    }
+
+    fun onSlackButtonClick() {
+        selectedProfile.value?.let {
+            _openSchemeEvent.value = Event("slack://user?team=$TEAM_ID&id=${it.slackMemberID}")
+        }
+    }
+
+    fun onGitHubButtonClick() {
+        selectedProfile.value?.let {
+            _openURLEvent.value = Event("https://github.com/${it.gitHubID}")
+        }
+    }
+
+    fun on42ButtonClick() {
+        selectedProfile.value?.let {
+            _openURLEvent.value = Event("https://profile.intra.42.fr/users/${it.intraID}")
+        }
+    }
+
+    fun onEmailButtonClick() {
+        selectedProfile.value?.let {
+            _sendEmailEvent.value = Event(arrayOf(it.email))
         }
     }
 
