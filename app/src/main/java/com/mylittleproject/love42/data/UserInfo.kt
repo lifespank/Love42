@@ -21,9 +21,9 @@ data class UserInfo(
 
     fun toDetailedUserInfo() =
         if (campus.firstOrNull() == null) {
-            DetailedUserInfo(displayName, login, url, imageUrl, email, "")
+            DetailedUserInfo(displayName, login, imageUrl, email, "")
         } else {
-            DetailedUserInfo(displayName, login, url, imageUrl, email, campus.first().name)
+            DetailedUserInfo(displayName, login, imageUrl, email, campus.first().name)
         }
 }
 
