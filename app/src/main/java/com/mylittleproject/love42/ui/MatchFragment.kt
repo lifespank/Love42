@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.mylittleproject.love42.R
@@ -44,7 +45,13 @@ class MatchFragment : Fragment() {
     private fun subscribeToObservables() {
         mainViewModel.matchProfiles.observe(viewLifecycleOwner) {
             Log.d(NAME_TAG, "Matches: $it")
-            adapter.submitList(it.ifEmpty { null })
+            if (it.isEmpty()) {
+                adapter.submitList(null)
+                binding.tvNoMatches.isVisible = true
+            } else {
+                adapter.submitList(it)
+                binding.tvNoMatches.isVisible = false
+            }
         }
     }
 

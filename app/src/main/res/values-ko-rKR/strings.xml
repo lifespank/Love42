@@ -31,4 +31,6 @@
     <string name="profile_uploaded">프로필 업로드 완료</string>
     <string name="dislike">싫어요</string>
     <string name="like">좋아요</string>
+    <string name="no_matches">아직 매치가 없습니다! 카드를 스와이프해서 사랑을 찾아보세요!</string>
+    <string name="no_candidates">남은 사람이 없습니다! 캠퍼스의 동료들에게 가입을 권하세요!</string>
 </resources>

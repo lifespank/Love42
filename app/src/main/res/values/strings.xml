@@ -31,4 +31,6 @@
     <string name="profile_uploaded">Profile uploaded</string>
     <string name="dislike">Dislike</string>
     <string name="like">Like</string>
+    <string name="no_matches">There is no match yet! Find your love by swiping cards!</string>
+    <string name="no_candidates">No one left to swipe! Let your friends in campus join the app!</string>
 </resources>
