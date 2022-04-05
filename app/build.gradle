@@ -9,6 +9,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('D:\\AndroidStudioProjects\\Love42\\app\\lovekey.jks')
+            storePassword 'WiliNKlv!1'
+            keyAlias 'key0'
+            keyPassword 'WiliNKlv!1'
+        }
+    }
     compileSdk 32
 
     defaultConfig {
@@ -30,6 +38,7 @@ android {
             proguardFile 'proguard-okhttp.pro'
             proguardFile 'proguard-okio.pro'
             proguardFile 'proguard-retrofit.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -99,8 +108,8 @@ dependencies {
     implementation "androidx.security:security-crypto:1.0.0"
 
     //Glide
-    implementation 'com.github.bumptech.glide:glide:4.13.0'
-    kapt 'com.github.bumptech.glide:compiler:4.13.0'
+    implementation 'com.github.bumptech.glide:glide:4.13.1'
+    kapt 'com.github.bumptech.glide:compiler:4.13.1'
 
     //Room
     def room_version = "2.4.2"
