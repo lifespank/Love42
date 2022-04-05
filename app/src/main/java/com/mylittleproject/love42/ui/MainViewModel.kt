@@ -10,6 +10,8 @@ import com.mylittleproject.love42.repository.PrivateInfoRepository
 import com.mylittleproject.love42.tools.Event
 import com.mylittleproject.love42.tools.NAME_TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -183,8 +185,9 @@ class MainViewModel @Inject constructor(
                 profile?.let { myProf ->
                     val querySnapshot =
                         firebaseRepository.downloadCandidates(myProf.isMale, myProf.campus)
-                    val candidates = querySnapshot?.documents?.map { documentSnapshot ->
-                        DetailedUserInfo.fromFirebase(documentSnapshot.toObject()!!)
+                    val candidates = querySnapshot?.documents?.mapNotNull { documentSnapshot ->
+                        documentSnapshot.toObject<DetailedUserInfo.FirebaseUserInfo>()
+                            ?.let { DetailedUserInfo.fromFirebase(it) }
                     }?.filter {
                         !profile.likes.contains(it.intraID)
                                 && !profile.dislikes.contains(it.intraID)
@@ -199,8 +202,13 @@ class MainViewModel @Inject constructor(
 
     fun downloadMatches() {
         viewModelScope.launch {
-            val matches = myProfile.value?.matches
-
+            val matches = myProfile.value?.matches?.map { id ->
+                async {
+                    val documentSnapshot = firebaseRepository.downloadProfile(id)
+                    DetailedUserInfo.fromFirebase(documentSnapshot?.toObject()!!)
+                }
+            }?.awaitAll()
+            _matchProfiles.value = matches
         }
     }
 }

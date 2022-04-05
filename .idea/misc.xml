@@ -14,6 +14,7 @@
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/ic_launcher_background.xml" value="0.193" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/ic_question_mark_button_svgrepo_com.xml" value="0.1945" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/round_rectangle.xml" value="0.1945" />
+        <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/drawable/round_rectangle_ripple.xml" value="0.193" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/layout/activity_set_profile.xml" value="0.29713552800342025" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/layout/activity_sign_in.xml" value="0.29713552800342025" />
@@ -26,6 +27,7 @@
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/layout/fragment_set_profile.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/layout/fragment_sign_in.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/layout/list_item.xml" value="0.15177426250534418" />
+        <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/layout/match_item.xml" value="0.15305686190679776" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.18489583333333334" />
         <entry key="..\:/AndroidStudioProjects/Love42/app/src/main/res/menu/profile_top_app_bar.xml" value="0.15177426250534418" />
       </map>

@@ -2,7 +2,6 @@ package com.mylittleproject.love42.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,6 +11,46 @@ import com.google.android.material.chip.Chip
 import com.mylittleproject.love42.R
 import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.databinding.CardItemBinding
+import com.mylittleproject.love42.databinding.MatchItemBinding
+
+class MatchListAdapter :
+    ListAdapter<DetailedUserInfo, RecyclerView.ViewHolder>(UserInfoCallback()) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return MatchViewHolder(
+            MatchItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val match = getItem(position)
+        (holder as MatchViewHolder).bind(match)
+    }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        super.onViewRecycled(holder)
+        (holder as MatchViewHolder).recycle()
+    }
+
+    class MatchViewHolder(private val binding: MatchItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: DetailedUserInfo) {
+            binding.userInfo = item
+            binding.ivProfile.clipToOutline = true
+        }
+
+        fun recycle() {
+            Glide.with(binding.ivProfile).clear(binding.ivProfile)
+            binding.ivProfile.setImageDrawable(null)
+        }
+    }
+
+}
 
 class UserInfoListAdapter :
     ListAdapter<DetailedUserInfo, RecyclerView.ViewHolder>(UserInfoCallback()) {

@@ -43,7 +43,7 @@ class FindFragment : Fragment(), CardStackListener {
 
     private fun subscribeToObservables() {
         mainViewModel.candidateProfiles.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+            adapter.submitList(it.ifEmpty { null })
         }
     }
 
