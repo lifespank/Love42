@@ -48,7 +48,7 @@ class MatchFragment : Fragment() {
     private fun subscribeToObservables() {
         mainViewModel.matchProfiles.observe(viewLifecycleOwner) {
             Log.d(NAME_TAG, "Matches: $it")
-            if (it.isEmpty()) {
+            if (it.isNullOrEmpty()) {
                 adapter.submitList(null)
                 binding.tvNoMatches.isVisible = true
             } else {
