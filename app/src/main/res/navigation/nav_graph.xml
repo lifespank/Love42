@@ -21,7 +21,10 @@
         tools:layout="@layout/fragment_match" >
         <action
             android:id="@+id/action_matchFragment_to_matchedProfileFragment"
-            app:destination="@id/matchedProfileFragment" />
+            app:destination="@id/matchedProfileFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/fake"
+            app:popExitAnim="@anim/slide_out_bottom" />
     </fragment>
     <fragment
         android:id="@+id/matchedProfileFragment"
