@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mylittleproject.love42.R
 import com.mylittleproject.love42.databinding.FragmentFindBinding
+import com.mylittleproject.love42.tools.EventObserver
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager
 import com.yuyakaido.android.cardstackview.CardStackListener
 import com.yuyakaido.android.cardstackview.Direction
@@ -52,6 +54,14 @@ class FindFragment : Fragment(), CardStackListener {
                 binding.tvNoCandidates.isVisible = false
             }
         }
+        mainViewModel.matchEvent.observe(viewLifecycleOwner, EventObserver {
+            MaterialAlertDialogBuilder(requireContext())
+                .setView(R.layout.dialog_match)
+                .setNeutralButton(R.string.close) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        })
     }
 
     override fun onDestroyView() {

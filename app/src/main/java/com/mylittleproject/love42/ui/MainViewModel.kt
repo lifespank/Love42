@@ -38,6 +38,8 @@ class MainViewModel @Inject constructor(
     val candidateProfiles: LiveData<List<DetailedUserInfo>> get() = _candidateProfiles
     private val _matchProfiles: MutableLiveData<List<DetailedUserInfo>> by lazy { MutableLiveData() }
     val matchProfiles: LiveData<List<DetailedUserInfo>> get() = _matchProfiles
+    private val _matchEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
+    val matchEvent: LiveData<Event<Unit>> get() = _matchEvent
     val preferredLanguages = myProfile.switchMap {
         liveData {
             if (it != null) {
@@ -56,6 +58,7 @@ class MainViewModel @Inject constructor(
                     me.matches.add(like.intraID)
                     like.likes.remove(me.intraID)
                     like.matches.add(me.intraID)
+                    _matchEvent.value = Event(Unit)
                 } else {
                     me.likes.add(like.intraID)
                 }
