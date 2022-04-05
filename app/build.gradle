@@ -5,6 +5,7 @@ plugins {
     id 'org.jetbrains.kotlin.kapt'
     id 'dagger.hilt.android.plugin'
     id 'com.google.firebase.crashlytics'
+    id 'com.google.firebase.firebase-perf'
 }
 
 android {
@@ -65,6 +66,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-perf-ktx'
 
     //Navigation
     def nav_version = "2.4.1"
