@@ -8,6 +8,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.mylittleproject.love42.MainActivity
 import com.mylittleproject.love42.R
 import com.mylittleproject.love42.databinding.ActivitySignInBinding
@@ -20,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class SignInActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignInBinding
+    private val auth = Firebase.auth
     private val signInViewModel: SignInViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +33,21 @@ class SignInActivity : AppCompatActivity() {
         binding.viewModel = signInViewModel
         signInViewModel.initialCheck()
         subscribeToObservables()
+    }
+
+    public override fun onStart() {
+        super.onStart()
+        // Check if user is signed in (non-null) and update UI accordingly.
+        auth.signInAnonymously()
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(NAME_TAG, "signInAnonymously:success")
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(NAME_TAG, "signInAnonymously:failure", task.exception)
+                }
+            }
     }
 
     private fun subscribeToObservables() {
