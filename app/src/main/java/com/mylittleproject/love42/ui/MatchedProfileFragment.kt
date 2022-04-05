@@ -83,13 +83,13 @@ class MatchedProfileFragment : Fragment() {
                 Log.w(NAME_TAG, "Email failed", e)
             }
         })
-        mainViewModel.preferredLanguages.observe(viewLifecycleOwner) {
+        mainViewModel.selectedPrefferedLanguages.observe(viewLifecycleOwner) {
             it.forEach { language ->
                 binding.cgLanguages.addView(
                     Chip(requireContext())
-                    .apply {
-                        text = language
-                    })
+                        .apply {
+                            text = language
+                        })
             }
         }
     }

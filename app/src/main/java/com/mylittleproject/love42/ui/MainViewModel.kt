@@ -58,6 +58,13 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+    val selectedPrefferedLanguages = selectedProfile.switchMap {
+        liveData {
+            if (it != null) {
+                emit(it.languages.toList())
+            }
+        }
+    }
 
     fun onMatchClick(matchInfo: DetailedUserInfo) {
         Log.d(NAME_TAG, "Selected: $matchInfo")
