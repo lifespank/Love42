@@ -13,7 +13,8 @@ data class DetailedUserInfo(
     val languages: HashSet<String> = hashSetOf(),
     val likes: HashSet<String> = hashSetOf(),
     val dislikes: HashSet<String> = hashSetOf(),
-    val matches: HashSet<String> = hashSetOf()
+    val matches: HashSet<String> = hashSetOf(),
+    var timeStamp: Long = System.currentTimeMillis()
 ) {
 
     data class FirebaseUserInfo(
@@ -30,7 +31,8 @@ data class DetailedUserInfo(
         val languages: List<String> = emptyList(),
         val likes: List<String> = emptyList(),
         val dislikes: List<String> = emptyList(),
-        val matches: List<String> = emptyList()
+        val matches: List<String> = emptyList(),
+        var timeStamp: Long = 0L
     )
 
     fun toHashMap() =
@@ -47,7 +49,8 @@ data class DetailedUserInfo(
             "languages" to languages.toList(),
             "likes" to likes.toList(),
             "dislikes" to dislikes.toList(),
-            "matches" to matches.toList()
+            "matches" to matches.toList(),
+            "timeStamp" to timeStamp
         )
 
     companion object {
@@ -65,7 +68,8 @@ data class DetailedUserInfo(
             HashSet(firebaseUserInfo.languages),
             HashSet(firebaseUserInfo.likes),
             HashSet(firebaseUserInfo.dislikes),
-            HashSet(firebaseUserInfo.matches)
+            HashSet(firebaseUserInfo.matches),
+            firebaseUserInfo.timeStamp
         )
     }
 }

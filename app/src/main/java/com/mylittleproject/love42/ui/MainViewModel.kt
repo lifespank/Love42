@@ -93,7 +93,7 @@ class MainViewModel @Inject constructor(
                     Log.w(NAME_TAG, "Candidate fetch failed", throwable)
                 }.collect {
                     Log.d(NAME_TAG, "ViewModel candidates: $it")
-                    _candidateProfiles.value = it
+                    _candidateProfiles.value = it.sortedBy { candidate -> candidate.timeStamp }
                 }
             }
         }
