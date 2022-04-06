@@ -10,6 +10,7 @@ import com.mylittleproject.love42.repository.PrivateInfoRepository
 import com.mylittleproject.love42.tools.Event
 import com.mylittleproject.love42.tools.NAME_TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,7 +23,7 @@ class MainViewModel @Inject constructor(
     ViewModel() {
 
     private val _myProfile: MutableLiveData<DetailedUserInfo> by lazy { MutableLiveData() }
-    val myProfile: LiveData<DetailedUserInfo> get() = _myProfile
+    private val myProfile: LiveData<DetailedUserInfo> get() = _myProfile
     private val _localProfile: MutableLiveData<DetailedUserInfo> by lazy { MutableLiveData() }
     val localProfile: LiveData<DetailedUserInfo> get() = _localProfile
     private val _loadProfileImageEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
@@ -54,7 +55,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    val candidates = myProfile.switchMap {
+    private val candidates = myProfile.switchMap {
         liveData {
             firebaseRepository.candidatesInFlow(
                 it.isMale,
@@ -70,6 +71,9 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    val mutableCandidates: MutableLiveData<List<DetailedUserInfo>> =
+        candidates as MutableLiveData<List<DetailedUserInfo>>
 
     val matches = myProfile.switchMap { me ->
         liveData {
@@ -121,23 +125,25 @@ class MainViewModel @Inject constructor(
 
     fun popLike() {
         viewModelScope.launch {
-            val candidates = candidates.value?.toMutableList()
             val me = myProfile.value
-            if (!candidates.isNullOrEmpty() && me != null) {
-                val like = candidates.removeFirst()
-                if (like.likes.contains(me.intraID)) {
-                    me.matches.add(like.intraID)
-                    like.likes.remove(me.intraID)
-                    like.matches.add(me.intraID)
-                    _matchEvent.value = Event(Unit)
-                } else {
-                    me.likes.add(like.intraID)
-                }
-                if (firebaseRepository.uploadProfile(like)) {
-                    Log.d(NAME_TAG, "like uploaded: $like")
-                }
-                if (firebaseRepository.uploadProfile(me)) {
-                    Log.d(NAME_TAG, "me uploaded: $me")
+            mutableCandidates.value?.toMutableList()?.let { candidateList ->
+                if (candidateList.isNotEmpty() && me != null) {
+                    val like = candidateList.removeFirst()
+                    if (like.likes.contains(me.intraID)) {
+                        me.matches.add(like.intraID)
+                        like.likes.remove(me.intraID)
+                        like.matches.add(me.intraID)
+                        _matchEvent.value = Event(Unit)
+                    } else {
+                        me.likes.add(like.intraID)
+                    }
+                    if (firebaseRepository.uploadProfile(like)) {
+                        Log.d(NAME_TAG, "like uploaded: $like")
+                    }
+                    if (firebaseRepository.uploadProfile(me)) {
+                        Log.d(NAME_TAG, "me uploaded: $me")
+                    }
+                    mutableCandidates.value = candidateList
                 }
             }
         }
@@ -145,16 +151,18 @@ class MainViewModel @Inject constructor(
 
     fun popDislike() {
         viewModelScope.launch {
-            val candidates = candidates.value?.toMutableList()
             val me = myProfile.value
-            if (!candidates.isNullOrEmpty() && me != null) {
-                val dislike = candidates.removeFirst()
-                me.dislikes.add(dislike.intraID)
-                if (firebaseRepository.uploadProfile(dislike)) {
-                    Log.d(NAME_TAG, "like uploaded: $dislike")
-                }
-                if (firebaseRepository.uploadProfile(me)) {
-                    Log.d(NAME_TAG, "me uploaded: $me")
+            mutableCandidates.value?.toMutableList()?.let { candidateList ->
+                if (candidateList.isNotEmpty() && me != null) {
+                    val dislike = candidateList.removeFirst()
+                    me.dislikes.add(dislike.intraID)
+                    if (firebaseRepository.uploadProfile(dislike)) {
+                        Log.d(NAME_TAG, "dislike uploaded: $dislike")
+                    }
+                    if (firebaseRepository.uploadProfile(me)) {
+                        Log.d(NAME_TAG, "me uploaded: $me")
+                    }
+                    mutableCandidates.value = candidateList
                 }
             }
         }

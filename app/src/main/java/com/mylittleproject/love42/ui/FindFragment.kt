@@ -44,7 +44,7 @@ class FindFragment : Fragment(), CardStackListener {
     }
 
     private fun subscribeToObservables() {
-        mainViewModel.candidates.observe(viewLifecycleOwner) {
+        mainViewModel.mutableCandidates.observe(viewLifecycleOwner) {
             if (it.isNullOrEmpty()) {
                 adapter.submitList(null)
                 binding.tvNoCandidates.isVisible = true
