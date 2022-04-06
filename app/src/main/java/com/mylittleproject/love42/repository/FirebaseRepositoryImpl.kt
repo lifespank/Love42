@@ -21,6 +21,11 @@ class FirebaseRepositoryImpl(private val remoteDataSource: DataSource.RemoteData
             remoteDataSource.uploadProfile(userInfo)
         }
 
+    override suspend fun uploadLocalProfile(userInfo: DetailedUserInfo): Boolean =
+        withContext(Dispatchers.IO) {
+            remoteDataSource.uploadLocalProfile(userInfo)
+        }
+
     override suspend fun uploadProfileImage(intraID: String, imageURI: String): String =
         withContext(Dispatchers.IO) {
             remoteDataSource.uploadProfileImage(intraID, imageURI)

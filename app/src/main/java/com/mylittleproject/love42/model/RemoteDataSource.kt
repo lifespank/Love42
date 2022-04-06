@@ -62,6 +62,22 @@ class RemoteDataSource(
             false
         }
 
+    override suspend fun uploadLocalProfile(userInfo: DetailedUserInfo): Boolean =
+        try {
+            val userRef = db.collection("users")
+                .document(userInfo.intraID)
+            db.runTransaction { transaction ->
+                transaction.update(userRef, "gitHubID", userInfo.gitHubID)
+                transaction.update(userRef, "slackMemberID", userInfo.slackMemberID)
+                transaction.update(userRef, "languages", userInfo.languages.toList())
+                transaction.update(userRef, "bio", userInfo.bio)
+            }.await()
+            true
+        } catch (e: Exception) {
+            Log.w(NAME_TAG, "Local profile upload failed", e)
+            false
+        }
+
     override suspend fun downloadProfile(intraID: String): DocumentSnapshot? =
         try {
             val data = db.collection("users")

@@ -8,6 +8,8 @@ interface FirebaseRepository {
 
     suspend fun uploadProfile(userInfo: DetailedUserInfo): Boolean
 
+    suspend fun uploadLocalProfile(userInfo: DetailedUserInfo): Boolean
+
     suspend fun uploadProfileImage(intraID: String, imageURI: String): String
 
     suspend fun downloadProfile(intraID: String): DocumentSnapshot?

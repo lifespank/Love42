@@ -10,7 +10,6 @@ import com.mylittleproject.love42.repository.PrivateInfoRepository
 import com.mylittleproject.love42.tools.Event
 import com.mylittleproject.love42.tools.NAME_TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -217,11 +216,11 @@ class MainViewModel @Inject constructor(
                     if (downloadURL.isNotBlank()) {
                         _localProfile.value = it.copy(imageURI = downloadURL)
                         Log.d(NAME_TAG, "Image uploaded: ${localProfile.value}")
-                        uploadProfile()
+                        uploadLocalProfile()
                     } else if (it.imageURI.startsWith("https://firebasestorage")
                         || it.imageURI.contains("intra.42")
                     ) {
-                        uploadProfile()
+                        uploadLocalProfile()
                     }
                 } else {
                     _snackBarEvent.value = Event(R.string.fill_out_slack)
@@ -230,10 +229,10 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun uploadProfile() {
+    private fun uploadLocalProfile() {
         viewModelScope.launch {
             localProfile.value?.let {
-                if (firebaseRepository.uploadProfile(it)) {
+                if (firebaseRepository.uploadLocalProfile(it)) {
                     Log.d(NAME_TAG, "Profile upload success")
                     _snackBarEvent.value = Event(R.string.profile_uploaded)
                 }

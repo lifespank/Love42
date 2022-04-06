@@ -23,6 +23,8 @@ interface DataSource {
 
         suspend fun uploadProfile(userInfo: DetailedUserInfo): Boolean
 
+        suspend fun uploadLocalProfile(userInfo: DetailedUserInfo): Boolean
+
         suspend fun downloadProfile(intraID: String): DocumentSnapshot?
 
         fun candidatesInFlow(isMale: Boolean, campus: String): Flow<QuerySnapshot?>
