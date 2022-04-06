@@ -60,7 +60,7 @@ class MatchFragment : Fragment() {
         }
         mainViewModel.selectProfileEvent.observe(viewLifecycleOwner, EventObserver {
             Log.d(NAME_TAG, "Moving to profile...")
-            findNavController().navigate(MatchFragmentDirections.actionMatchFragmentToMatchedProfileFragment())
+            findNavController().navigate(R.id.action_matchFragment_to_matchedProfileFragment)
         })
     }
 
