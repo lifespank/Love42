@@ -1,10 +1,8 @@
 package com.mylittleproject.love42.repository
 
-import android.net.Uri
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.QuerySnapshot
 import com.mylittleproject.love42.data.DetailedUserInfo
+import kotlinx.coroutines.flow.Flow
 
 interface FirebaseRepository {
 
@@ -14,5 +12,11 @@ interface FirebaseRepository {
 
     suspend fun downloadProfile(intraID: String): DocumentSnapshot?
 
-    suspend fun downloadCandidates(isMale: Boolean, campus: String): QuerySnapshot?
+    fun candidatesInFlow(
+        isMale: Boolean,
+        campus: String,
+        likes: HashSet<String>,
+        dislikes: HashSet<String>,
+        matches: HashSet<String>
+    ): Flow<List<DetailedUserInfo>>
 }

@@ -13,6 +13,7 @@ import com.mylittleproject.love42.tools.NAME_TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -58,7 +59,8 @@ class MainViewModel @Inject constructor(
             }
         }
     }
-    val selectedPrefferedLanguages = selectedProfile.switchMap {
+
+    val selectedPreferredLanguages = selectedProfile.switchMap {
         liveData {
             if (it != null) {
                 emit(it.languages.toList())
@@ -75,6 +77,25 @@ class MainViewModel @Inject constructor(
     fun onSlackButtonClick() {
         selectedProfile.value?.let {
             _openSchemeEvent.value = Event("slack://user?team=$TEAM_ID&id=${it.slackMemberID}")
+        }
+    }
+
+    fun collectCandidates() {
+        viewModelScope.launch {
+            myProfile.value?.let { me ->
+                firebaseRepository.candidatesInFlow(
+                    me.isMale,
+                    me.campus,
+                    me.likes,
+                    me.dislikes,
+                    me.matches
+                ).catch { throwable ->
+                    Log.w(NAME_TAG, "Candidate fetch failed", throwable)
+                }.collect {
+                    Log.d(NAME_TAG, "ViewModel candidates: $it")
+                    _candidateProfiles.value = it
+                }
+            }
         }
     }
 
@@ -224,28 +245,6 @@ class MainViewModel @Inject constructor(
                     _myProfile.value = profile
                     Log.d(NAME_TAG, "Profile fetched: $profile")
                     _showLoading.value = false
-                }
-            }
-        }
-    }
-
-    fun downloadCandidates() {
-        if (candidateProfiles.value == null) {
-            viewModelScope.launch {
-                val profile = myProfile.value
-                profile?.let { myProf ->
-                    val querySnapshot =
-                        firebaseRepository.downloadCandidates(myProf.isMale, myProf.campus)
-                    val candidates = querySnapshot?.documents?.mapNotNull { documentSnapshot ->
-                        documentSnapshot.toObject<DetailedUserInfo.FirebaseUserInfo>()
-                            ?.let { DetailedUserInfo.fromFirebase(it) }
-                    }?.filter {
-                        !profile.likes.contains(it.intraID)
-                                && !profile.dislikes.contains(it.intraID)
-                                && !profile.matches.contains(it.intraID)
-                    }?.shuffled()
-                    Log.d(NAME_TAG, "Candidates: $candidates")
-                    _candidateProfiles.value = candidates
                 }
             }
         }

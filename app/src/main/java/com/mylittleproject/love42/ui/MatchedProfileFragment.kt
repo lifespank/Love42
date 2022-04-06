@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import com.google.android.material.chip.Chip
@@ -83,7 +82,7 @@ class MatchedProfileFragment : Fragment() {
                 Log.w(NAME_TAG, "Email failed", e)
             }
         })
-        mainViewModel.selectedPrefferedLanguages.observe(viewLifecycleOwner) {
+        mainViewModel.selectedPreferredLanguages.observe(viewLifecycleOwner) {
             it.forEach { language ->
                 binding.cgLanguages.addView(
                     Chip(requireContext())

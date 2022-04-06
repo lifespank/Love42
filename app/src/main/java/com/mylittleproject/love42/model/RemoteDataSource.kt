@@ -1,26 +1,17 @@
 package com.mylittleproject.love42.model
 
-import android.content.Context
 import android.net.Uri
 import android.util.Log
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storage
 import com.mylittleproject.love42.data.AccessToken
 import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.network.IntraService
 import com.mylittleproject.love42.tools.NAME_TAG
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
 
 class RemoteDataSource(
     private val intraService: IntraService,
@@ -82,16 +73,20 @@ class RemoteDataSource(
             null
         }
 
-    override suspend fun downloadCandidates(isMale: Boolean, campus: String): QuerySnapshot? =
-        try {
+    override fun candidatesInFlow(isMale: Boolean, campus: String) = flow {
+        while (true) {
             val userRef = db.collection("users")
             val data = userRef.whereNotEqualTo("isMale", isMale)
                 .whereEqualTo("campus", campus)
                 .get()
                 .await()
-            data
-        } catch (e: Exception) {
-            Log.w(NAME_TAG, "Candidate download failed", e)
-            null
+            Log.d(NAME_TAG, "Datasource candidates: $data")
+            emit(data)
+            delay(REFRESH_INTERVAL_MS)
         }
+    }
+
+    companion object {
+        const val REFRESH_INTERVAL_MS = 5_000L
+    }
 }

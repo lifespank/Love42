@@ -1,10 +1,8 @@
 package com.mylittleproject.love42
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.navigation.Navigation
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.mylittleproject.love42.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint

@@ -105,6 +105,7 @@ class UserInfoListAdapter :
         fun recycle() {
             Glide.with(binding.ivProfile).clear(binding.ivProfile)
             binding.ivProfile.setImageDrawable(null)
+            binding.cgLanguages.removeAllViews()
         }
     }
 }

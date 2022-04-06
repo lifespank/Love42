@@ -1,12 +1,11 @@
 package com.mylittleproject.love42.model
 
-import android.net.Uri
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import com.mylittleproject.love42.data.AccessToken
 import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.data.UserInfo
+import kotlinx.coroutines.flow.Flow
 
 interface DataSource {
 
@@ -26,7 +25,7 @@ interface DataSource {
 
         suspend fun downloadProfile(intraID: String): DocumentSnapshot?
 
-        suspend fun downloadCandidates(isMale: Boolean, campus: String): QuerySnapshot?
+        fun candidatesInFlow(isMale: Boolean, campus: String): Flow<QuerySnapshot?>
     }
 
     interface LocalDataSource {

@@ -35,7 +35,7 @@ class FindFragment : Fragment(), CardStackListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initCardStackView()
-        mainViewModel.downloadCandidates()
+        mainViewModel.collectCandidates()
         subscribeToObservables()
     }
 
