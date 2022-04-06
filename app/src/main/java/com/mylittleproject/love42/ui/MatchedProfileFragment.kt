@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.transition.TransitionInflater
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.mylittleproject.love42.R

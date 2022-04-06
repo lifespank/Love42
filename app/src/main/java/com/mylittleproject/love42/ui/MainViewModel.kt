@@ -1,6 +1,8 @@
 package com.mylittleproject.love42.ui
 
 import android.util.Log
+import android.view.View
+import android.widget.ImageView
 import androidx.lifecycle.*
 import com.mylittleproject.love42.R
 import com.mylittleproject.love42.data.DetailedUserInfo

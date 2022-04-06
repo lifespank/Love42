@@ -18,17 +18,19 @@
         android:id="@+id/matchFragment"
         android:name="com.mylittleproject.love42.ui.MatchFragment"
         android:label="MatchFragment"
-        tools:layout="@layout/fragment_match" >
+        tools:layout="@layout/fragment_match">
         <action
             android:id="@+id/action_matchFragment_to_matchedProfileFragment"
             app:destination="@id/matchedProfileFragment"
-            app:enterAnim="@anim/slide_in_bottom"
-            app:exitAnim="@anim/fake"
-            app:popExitAnim="@anim/slide_out_bottom" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/matchedProfileFragment"
         android:name="com.mylittleproject.love42.ui.MatchedProfileFragment"
         android:label="MatchedProfileFragment"
-        tools:layout="@layout/fragment_matched_profile" />
+        tools:layout="@layout/fragment_matched_profile">
+    </fragment>
 </navigation>
