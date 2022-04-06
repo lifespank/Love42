@@ -32,9 +32,7 @@ class SetProfileViewModel @Inject constructor(
     val userInfo: LiveData<DetailedUserInfo> get() = _userInfo
     val preferredLanguages = userInfo.switchMap {
         liveData {
-            if (it != null) {
-                emit(it.languages.toList())
-            }
+            emit(it.languages.toList())
         }
     }
     private val _redirectToSignInActivityEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }

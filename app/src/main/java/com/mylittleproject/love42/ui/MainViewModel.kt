@@ -23,6 +23,8 @@ class MainViewModel @Inject constructor(
 
     private val _myProfile: MutableLiveData<DetailedUserInfo> by lazy { MutableLiveData() }
     val myProfile: LiveData<DetailedUserInfo> get() = _myProfile
+    private val _localProfile: MutableLiveData<DetailedUserInfo> by lazy { MutableLiveData() }
+    val localProfile: LiveData<DetailedUserInfo> get() = _localProfile
     private val _loadProfileImageEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
     val loadProfileImageEvent: LiveData<Event<Unit>> get() = _loadProfileImageEvent
     private val _manualLanguagePopUpEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
@@ -46,11 +48,9 @@ class MainViewModel @Inject constructor(
     private val _matchEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
     val matchEvent: LiveData<Event<Unit>> get() = _matchEvent
 
-    val preferredLanguages = myProfile.switchMap {
+    val preferredLanguages = localProfile.switchMap {
         liveData {
-            if (it != null) {
-                emit(it.languages.toList())
-            }
+            emit(it.languages.toList())
         }
     }
 
@@ -85,9 +85,7 @@ class MainViewModel @Inject constructor(
 
     val selectedPreferredLanguages = selectedProfile.switchMap {
         liveData {
-            if (it != null) {
-                emit(it.languages.toList())
-            }
+            emit(it.languages.toList())
         }
     }
 
@@ -163,10 +161,10 @@ class MainViewModel @Inject constructor(
     }
 
     fun addLanguage(language: String) {
-        val languages = myProfile.value?.languages
+        val languages = localProfile.value?.languages
         languages?.let {
             it.add(language)
-            _myProfile.value = myProfile.value?.copy(languages = it)
+            _localProfile.value = _localProfile.value?.copy(languages = it)
         }
     }
 
@@ -179,8 +177,8 @@ class MainViewModel @Inject constructor(
     }
 
     fun setImageURI(imageURI: String) {
-        _myProfile.value = myProfile.value?.copy(imageURI = imageURI)
-        Log.d(NAME_TAG, "User image changed: ${myProfile.value}")
+        _localProfile.value = _localProfile.value?.copy(imageURI = imageURI)
+        Log.d(NAME_TAG, "User image changed: ${localProfile.value}")
     }
 
     fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -193,24 +191,24 @@ class MainViewModel @Inject constructor(
     }
 
     fun removeLanguage(language: String) {
-        val languages = myProfile.value?.languages
+        val languages = localProfile.value?.languages
         languages?.let {
             it.remove(language)
-            _myProfile.value = myProfile.value?.copy(languages = it)
+            _localProfile.value = _localProfile.value?.copy(languages = it)
         }
     }
 
     fun uploadProfileImage() {
         viewModelScope.launch {
-            val user = myProfile.value
+            val user = localProfile.value
             user?.let {
                 if (it.slackMemberID.isNotBlank()) {
                     _showLoading.value = true
                     val downloadURL =
                         firebaseRepository.uploadProfileImage(it.intraID, it.imageURI)
                     if (downloadURL.isNotBlank()) {
-                        _myProfile.value = it.copy(imageURI = downloadURL)
-                        Log.d(NAME_TAG, "Image uploaded: ${myProfile.value}")
+                        _localProfile.value = it.copy(imageURI = downloadURL)
+                        Log.d(NAME_TAG, "Image uploaded: ${localProfile.value}")
                         uploadProfile()
                     } else if (it.imageURI.startsWith("https://firebasestorage")
                         || it.imageURI.contains("intra.42")
@@ -226,7 +224,7 @@ class MainViewModel @Inject constructor(
 
     private fun uploadProfile() {
         viewModelScope.launch {
-            myProfile.value?.let {
+            localProfile.value?.let {
                 if (firebaseRepository.uploadProfile(it)) {
                     Log.d(NAME_TAG, "Profile upload success")
                     _snackBarEvent.value = Event(R.string.profile_uploaded)
@@ -242,6 +240,9 @@ class MainViewModel @Inject constructor(
                 Log.w(NAME_TAG, "My profile fetch failed", throwable)
             }.collect { me ->
                 _myProfile.value = me
+                if (localProfile.value == null) {
+                    _localProfile.value = me
+                }
                 Log.d(NAME_TAG, "My profile: ${myProfile.value}")
             }
     }

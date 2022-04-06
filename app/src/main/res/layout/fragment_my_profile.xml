@@ -27,7 +27,7 @@
 
                 <ImageView
                     android:id="@+id/iv_profile"
-                    imageURL="@{viewModel.myProfile.imageURI}"
+                    imageURL="@{viewModel.localProfile.imageURI}"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="@drawable/round_rectangle"
@@ -51,7 +51,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="@{viewModel.myProfile.name}"
+                    android:text="@{viewModel.localProfile.name}"
                     android:textSize="25sp"
                     app:layout_constraintBottom_toBottomOf="@id/iv_profile"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +73,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textUri"
-                        android:text="@={viewModel.myProfile.gitHubID}" />
+                        android:text="@={viewModel.localProfile.gitHubID}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -91,7 +91,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textUri"
-                        android:text="@={viewModel.myProfile.slackMemberID}" />
+                        android:text="@={viewModel.localProfile.slackMemberID}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageButton
@@ -155,7 +155,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="textMultiLine"
                         android:lines="3"
-                        android:text="@={viewModel.myProfile.bio}" />
+                        android:text="@={viewModel.localProfile.bio}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
