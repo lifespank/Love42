@@ -97,7 +97,7 @@ class SetProfileViewModel @Inject constructor(
         }
     }
 
-    fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+    fun onTextChanged(s: CharSequence) {
         Log.d(NAME_TAG, "onTextChange: $s")
         if (s.toString() != "Something else") {
             addLanguage(s.toString())
