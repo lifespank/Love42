@@ -97,6 +97,14 @@ class RemoteDataSource(
         }
     }
 
+    override fun myProfileInFlow(intraID: String): Flow<DocumentSnapshot?> = flow {
+        while (true) {
+            val myProfile = downloadProfile(intraID)
+            emit(myProfile)
+            delay(REFRESH_INTERVAL_MS)
+        }
+    }
+
     companion object {
         const val REFRESH_INTERVAL_MS = 5_000L
     }

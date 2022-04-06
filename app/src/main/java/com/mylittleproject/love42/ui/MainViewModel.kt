@@ -2,7 +2,6 @@ package com.mylittleproject.love42.ui
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.google.firebase.firestore.ktx.toObject
 import com.mylittleproject.love42.R
 import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.keys.TEAM_ID
@@ -34,10 +33,6 @@ class MainViewModel @Inject constructor(
     val snackBarEvent: LiveData<Event<Int>> get() = _snackBarEvent
     private val _showLoading: MutableLiveData<Boolean> by lazy { MutableLiveData() }
     val showLoading: LiveData<Boolean> get() = _showLoading
-    private val _candidateProfiles: MutableLiveData<List<DetailedUserInfo>> by lazy { MutableLiveData() }
-    val candidateProfiles: LiveData<List<DetailedUserInfo>> get() = _candidateProfiles
-    private val _matchProfiles: MutableLiveData<List<DetailedUserInfo>> by lazy { MutableLiveData() }
-    val matchProfiles: LiveData<List<DetailedUserInfo>> get() = _matchProfiles
     private val _selectedProfile: MutableLiveData<DetailedUserInfo> by lazy { MutableLiveData() }
     val selectedProfile: LiveData<DetailedUserInfo> get() = _selectedProfile
     private val _selectProfileEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
@@ -50,11 +45,41 @@ class MainViewModel @Inject constructor(
     val sendEmailEvent: LiveData<Event<Array<String>>> get() = _sendEmailEvent
     private val _matchEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
     val matchEvent: LiveData<Event<Unit>> get() = _matchEvent
+
     val preferredLanguages = myProfile.switchMap {
         liveData {
             if (it != null) {
                 emit(it.languages.toList())
             }
+        }
+    }
+
+    val candidates = myProfile.switchMap {
+        liveData {
+            firebaseRepository.candidatesInFlow(
+                it.isMale,
+                it.campus,
+                it.likes,
+                it.dislikes,
+                it.matches
+            ).catch { throwable ->
+                Log.w(NAME_TAG, "Candidate fetch failed", throwable)
+            }.collect {
+                Log.d(NAME_TAG, "ViewModel candidates: $it")
+                emit(it.sortedBy { cards -> cards.timeStamp })
+            }
+        }
+    }
+
+    val matches = myProfile.switchMap { me ->
+        liveData {
+            firebaseRepository.matchesInFlow(me.matches)
+                .catch { throwable ->
+                    Log.w(NAME_TAG, "Matches fetch failed", throwable)
+                }.collect {
+                    Log.d(NAME_TAG, "Matches fetched: $it")
+                    emit(it)
+                }
         }
     }
 
@@ -78,39 +103,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun collectCandidates() {
-        viewModelScope.launch {
-            myProfile.value?.let { me ->
-                firebaseRepository.candidatesInFlow(
-                    me.isMale,
-                    me.campus,
-                    me.likes,
-                    me.dislikes,
-                    me.matches
-                ).catch { throwable ->
-                    Log.w(NAME_TAG, "Candidate fetch failed", throwable)
-                }.collect {
-                    Log.d(NAME_TAG, "ViewModel candidates: $it")
-                    _candidateProfiles.value = it.sortedBy { candidate -> candidate.timeStamp }
-                }
-            }
-        }
-    }
-
-    fun collectMatches() {
-        viewModelScope.launch {
-            myProfile.value?.let { me ->
-                firebaseRepository.matchesInFlow(me.matches)
-                    .catch { throwable ->
-                        Log.w(NAME_TAG, "Matches fetch failed", throwable)
-                    }.collect {
-                        Log.d(NAME_TAG, "Matches fetched: $it")
-                        _matchProfiles.value = it
-                    }
-            }
-        }
-    }
-
     fun onGitHubButtonClick() {
         selectedProfile.value?.let {
             _openURLEvent.value = Event("https://github.com/${it.gitHubID}")
@@ -131,7 +123,7 @@ class MainViewModel @Inject constructor(
 
     fun popLike() {
         viewModelScope.launch {
-            val candidates = candidateProfiles.value?.toMutableList()
+            val candidates = candidates.value?.toMutableList()
             val me = myProfile.value
             if (!candidates.isNullOrEmpty() && me != null) {
                 val like = candidates.removeFirst()
@@ -149,14 +141,13 @@ class MainViewModel @Inject constructor(
                 if (firebaseRepository.uploadProfile(me)) {
                     Log.d(NAME_TAG, "me uploaded: $me")
                 }
-                _candidateProfiles.value = candidates
             }
         }
     }
 
     fun popDislike() {
         viewModelScope.launch {
-            val candidates = candidateProfiles.value?.toMutableList()
+            val candidates = candidates.value?.toMutableList()
             val me = myProfile.value
             if (!candidates.isNullOrEmpty() && me != null) {
                 val dislike = candidates.removeFirst()
@@ -167,7 +158,6 @@ class MainViewModel @Inject constructor(
                 if (firebaseRepository.uploadProfile(me)) {
                     Log.d(NAME_TAG, "me uploaded: $me")
                 }
-                _candidateProfiles.value = candidates
             }
         }
     }
@@ -246,18 +236,21 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private suspend fun collectMyProfile(intraID: String) {
+        firebaseRepository.myProfileInFlow(intraID)
+            .catch { throwable ->
+                Log.w(NAME_TAG, "My profile fetch failed", throwable)
+            }.collect { me ->
+                _myProfile.value = me
+                Log.d(NAME_TAG, "My profile: ${myProfile.value}")
+            }
+    }
+
     fun downloadProfile() {
-        if (myProfile.value == null) {
-            viewModelScope.launch {
-                _showLoading.value = true
-                val intraID = privateInfoRepository.fetchIntraID()
-                intraID.getOrNull()?.let {
-                    val documentSnapshot = firebaseRepository.downloadProfile(it)
-                    val profile = DetailedUserInfo.fromFirebase(documentSnapshot?.toObject()!!)
-                    _myProfile.value = profile
-                    Log.d(NAME_TAG, "Profile fetched: $profile")
-                    _showLoading.value = false
-                }
+        viewModelScope.launch {
+            val intraID = privateInfoRepository.fetchIntraID()
+            intraID.getOrNull()?.let {
+                collectMyProfile(it)
             }
         }
     }

@@ -32,7 +32,6 @@ class MatchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainViewModel.collectMatches()
         initRecyclerView()
         subscribeToObservables()
     }
@@ -46,7 +45,7 @@ class MatchFragment : Fragment() {
     }
 
     private fun subscribeToObservables() {
-        mainViewModel.matchProfiles.observe(viewLifecycleOwner) {
+        mainViewModel.matches.observe(viewLifecycleOwner) {
             Log.d(NAME_TAG, "Matches: $it")
             if (it.isNullOrEmpty()) {
                 adapter.submitList(null)

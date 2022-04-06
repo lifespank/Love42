@@ -21,4 +21,6 @@ interface FirebaseRepository {
     ): Flow<List<DetailedUserInfo>>
 
     fun matchesInFlow(likes: HashSet<String>): Flow<List<DetailedUserInfo>>
+
+    fun myProfileInFlow(intraID: String): Flow<DetailedUserInfo>
 }

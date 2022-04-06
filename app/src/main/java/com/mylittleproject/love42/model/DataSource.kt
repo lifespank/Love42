@@ -28,6 +28,8 @@ interface DataSource {
         fun candidatesInFlow(isMale: Boolean, campus: String): Flow<QuerySnapshot?>
 
         fun matchesInFlow(likes: HashSet<String>): Flow<List<DocumentSnapshot?>>
+
+        fun myProfileInFlow(intraID: String): Flow<DocumentSnapshot?>
     }
 
     interface LocalDataSource {

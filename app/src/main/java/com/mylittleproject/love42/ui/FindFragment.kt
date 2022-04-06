@@ -35,7 +35,6 @@ class FindFragment : Fragment(), CardStackListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initCardStackView()
-        mainViewModel.collectCandidates()
         subscribeToObservables()
     }
 
@@ -45,7 +44,7 @@ class FindFragment : Fragment(), CardStackListener {
     }
 
     private fun subscribeToObservables() {
-        mainViewModel.candidateProfiles.observe(viewLifecycleOwner) {
+        mainViewModel.candidates.observe(viewLifecycleOwner) {
             if (it.isNullOrEmpty()) {
                 adapter.submitList(null)
                 binding.tvNoCandidates.isVisible = true
