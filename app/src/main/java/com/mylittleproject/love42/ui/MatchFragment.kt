@@ -32,7 +32,7 @@ class MatchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainViewModel.downloadMatches()
+        mainViewModel.collectMatches()
         initRecyclerView()
         subscribeToObservables()
     }

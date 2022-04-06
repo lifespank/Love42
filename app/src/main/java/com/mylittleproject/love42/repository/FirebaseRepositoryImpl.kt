@@ -9,6 +9,7 @@ import com.mylittleproject.love42.tools.NAME_TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.withContext
 
@@ -51,4 +52,13 @@ class FirebaseRepositoryImpl(private val remoteDataSource: DataSource.RemoteData
         Log.d(NAME_TAG, "Repository Candidates: $candidates")
         return candidates
     }
+
+    override fun matchesInFlow(likes: HashSet<String>) = remoteDataSource.matchesInFlow(likes)
+        .map { documentSnapshots ->
+            documentSnapshots.mapNotNull { documentSnapshot ->
+                documentSnapshot?.toObject<DetailedUserInfo.FirebaseUserInfo>()?.let { fbUser ->
+                    DetailedUserInfo.fromFirebase(fbUser)
+                }
+            }
+        }.flowOn(Dispatchers.IO)
 }

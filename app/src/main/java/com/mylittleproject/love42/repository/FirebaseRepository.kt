@@ -19,4 +19,6 @@ interface FirebaseRepository {
         dislikes: HashSet<String>,
         matches: HashSet<String>
     ): Flow<List<DetailedUserInfo>>
+
+    fun matchesInFlow(likes: HashSet<String>): Flow<List<DetailedUserInfo>>
 }

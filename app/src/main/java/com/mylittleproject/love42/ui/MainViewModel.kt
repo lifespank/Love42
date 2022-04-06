@@ -11,8 +11,6 @@ import com.mylittleproject.love42.repository.PrivateInfoRepository
 import com.mylittleproject.love42.tools.Event
 import com.mylittleproject.love42.tools.NAME_TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -95,6 +93,20 @@ class MainViewModel @Inject constructor(
                     Log.d(NAME_TAG, "ViewModel candidates: $it")
                     _candidateProfiles.value = it.sortedBy { candidate -> candidate.timeStamp }
                 }
+            }
+        }
+    }
+
+    fun collectMatches() {
+        viewModelScope.launch {
+            myProfile.value?.let { me ->
+                firebaseRepository.matchesInFlow(me.matches)
+                    .catch { throwable ->
+                        Log.w(NAME_TAG, "Matches fetch failed", throwable)
+                    }.collect {
+                        Log.d(NAME_TAG, "Matches fetched: $it")
+                        _matchProfiles.value = it
+                    }
             }
         }
     }
@@ -247,18 +259,6 @@ class MainViewModel @Inject constructor(
                     _showLoading.value = false
                 }
             }
-        }
-    }
-
-    fun downloadMatches() {
-        viewModelScope.launch {
-            val matches = myProfile.value?.matches?.map { id ->
-                async {
-                    val documentSnapshot = firebaseRepository.downloadProfile(id)
-                    DetailedUserInfo.fromFirebase(documentSnapshot?.toObject()!!)
-                }
-            }?.awaitAll()
-            _matchProfiles.value = matches
         }
     }
 }

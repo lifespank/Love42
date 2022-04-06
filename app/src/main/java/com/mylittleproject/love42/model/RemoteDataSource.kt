@@ -9,7 +9,8 @@ import com.mylittleproject.love42.data.AccessToken
 import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.network.IntraService
 import com.mylittleproject.love42.tools.NAME_TAG
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 
@@ -72,6 +73,16 @@ class RemoteDataSource(
             Log.w(NAME_TAG, "Profile download failed", e)
             null
         }
+
+    override fun matchesInFlow(likes: HashSet<String>): Flow<List<DocumentSnapshot?>> = flow {
+        while (true) {
+            val candidates = likes.map {
+                downloadProfile(it)
+            }
+            emit(candidates)
+            delay(REFRESH_INTERVAL_MS)
+        }
+    }
 
     override fun candidatesInFlow(isMale: Boolean, campus: String) = flow {
         while (true) {
