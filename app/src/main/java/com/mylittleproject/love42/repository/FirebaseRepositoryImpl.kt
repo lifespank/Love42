@@ -43,7 +43,7 @@ class FirebaseRepositoryImpl(private val remoteDataSource: DataSource.RemoteData
         dislikes: HashSet<String>,
         matches: HashSet<String>
     ): Flow<List<DetailedUserInfo>> {
-        val candidates = remoteDataSource.candidatesInFlow(isMale, campus)
+        val candidates = remoteDataSource.candidatesUpdateFlow(isMale, campus)
             .mapNotNull { querySnapShot ->
                 querySnapShot?.documents?.mapNotNull { documentSnapshot ->
                     documentSnapshot.toObject<DetailedUserInfo.FirebaseUserInfo>()?.let { fbUser ->

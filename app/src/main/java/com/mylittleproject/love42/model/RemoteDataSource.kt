@@ -100,18 +100,14 @@ class RemoteDataSource(
         }
     }
 
-    override fun candidatesInFlow(isMale: Boolean, campus: String) = flow {
-        while (true) {
-            val userRef = db.collection("users")
-            val data = userRef.whereNotEqualTo("isMale", isMale)
-                .whereEqualTo("campus", campus)
-                .get()
-                .await()
-            Log.d(NAME_TAG, "Datasource candidates: $data")
-            emit(data)
-            delay(REFRESH_INTERVAL_MS)
-        }
-    }
+    override fun candidatesUpdateFlow(isMale: Boolean, campus: String): Flow<QuerySnapshot?> =
+        db.collection("users")
+            .whereNotEqualTo("isMale", isMale)
+            .whereEqualTo("campus", campus)
+            .getDataFlow { querySnapshot ->
+                querySnapshot
+            }
+
 
     override fun myProfileUpdateFlow(intraID: String) =
         db.collection("users").document(intraID)

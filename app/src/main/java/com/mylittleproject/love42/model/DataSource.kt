@@ -27,7 +27,7 @@ interface DataSource {
 
         suspend fun downloadProfile(intraID: String): DocumentSnapshot?
 
-        fun candidatesInFlow(isMale: Boolean, campus: String): Flow<QuerySnapshot?>
+        fun candidatesUpdateFlow(isMale: Boolean, campus: String): Flow<QuerySnapshot?>
 
         fun matchesInFlow(likes: HashSet<String>): Flow<List<DocumentSnapshot?>>
 
