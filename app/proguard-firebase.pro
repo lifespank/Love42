@@ -7,3 +7,6 @@
 -keepclassmembers class com.mylittleproject.love42.data.** {
   *;
 }
+
+-keepattributes SourceFile,LineNumberTable        # Keep file names and line numbers.
+-keep public class * extends java.lang.Exception  # Optional: Keep custom exceptions.
