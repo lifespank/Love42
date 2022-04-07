@@ -9,8 +9,6 @@ import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.network.IntraService
 import com.mylittleproject.love42.tools.NAME_TAG
 import com.mylittleproject.love42.tools.getDataFlow
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
 
@@ -91,12 +89,16 @@ class RemoteDataSource(
             null
         }
 
-    override fun matchesInFlow(likes: HashSet<String>): Flow<QuerySnapshot?> =
-        db.collection("users")
-            .whereIn("intraID", likes.toList())
-            .getDataFlow { querySnapshot ->
-                querySnapshot
-            }
+    override fun matchesInFlow(matches: HashSet<String>): Flow<QuerySnapshot?> =
+        if (matches.isNotEmpty()) {
+            db.collection("users")
+                .whereIn("intraID", matches.toList())
+                .getDataFlow { querySnapshot ->
+                    querySnapshot
+                }
+        } else {
+            flowOf(null)
+        }
 
 
     override fun candidatesUpdateFlow(isMale: Boolean, campus: String): Flow<QuerySnapshot?> =
