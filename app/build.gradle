@@ -38,6 +38,8 @@ android {
             proguardFile 'proguard-okhttp.pro'
             proguardFile 'proguard-okio.pro'
             proguardFile 'proguard-retrofit.pro'
+            proguardFile 'proguard-compressor.pro'
+            proguardFile 'proguard-glide.pro'
             signingConfig signingConfigs.release
         }
     }
@@ -119,6 +121,9 @@ dependencies {
 
     //CardStackView
     implementation 'com.github.yuyakaido:cardstackview:2.3.4'
+
+    //Compressor
+    implementation 'id.zelory:compressor:3.0.1'
 }
 
 kapt {

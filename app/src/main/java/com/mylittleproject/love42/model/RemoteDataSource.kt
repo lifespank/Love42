@@ -2,20 +2,26 @@ package com.mylittleproject.love42.model
 
 import android.net.Uri
 import android.util.Log
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.mylittleproject.love42.data.AccessToken
 import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.network.IntraService
+import com.mylittleproject.love42.tools.ImageCompressor
 import com.mylittleproject.love42.tools.NAME_TAG
 import com.mylittleproject.love42.tools.getDataFlow
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.tasks.await
+import java.io.FileInputStream
 
 class RemoteDataSource(
     private val intraService: IntraService,
     storage: FirebaseStorage,
-    private val db: FirebaseFirestore
+    private val db: FirebaseFirestore,
+    private val imageCompressor: ImageCompressor
 ) :
     DataSource.RemoteDataSource {
 
@@ -36,12 +42,23 @@ class RemoteDataSource(
     override suspend fun uploadProfileImage(intraID: String, imageURI: String): String {
         return try {
             val imageRef = storageRef.child("images/$intraID.jpg")
-            imageRef.putFile(Uri.parse(imageURI))
-                .await()
-                .storage
-                .downloadUrl
-                .await()
-                .toString()
+            Log.d(NAME_TAG, "imageURI: $imageURI")
+            val compressedFile = imageCompressor.compressImage(Uri.parse(imageURI))
+            val stream = runCatching {
+                return@runCatching FileInputStream(compressedFile)
+            }.getOrNull()
+            if (stream != null) {
+                Log.d(NAME_TAG, "Uploading file...")
+                imageRef.putStream(stream)
+                    .await()
+                    .storage
+                    .downloadUrl
+                    .await()
+                    .toString()
+            } else {
+                Log.d(NAME_TAG, "File stream failed...")
+                ""
+            }
         } catch (e: Exception) {
             Log.w(NAME_TAG, "File upload failed", e)
             ""

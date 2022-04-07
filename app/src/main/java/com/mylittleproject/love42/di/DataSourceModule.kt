@@ -11,6 +11,7 @@ import com.mylittleproject.love42.model.DataSource
 import com.mylittleproject.love42.model.LocalDataSource
 import com.mylittleproject.love42.model.RemoteDataSource
 import com.mylittleproject.love42.network.IntraService
+import com.mylittleproject.love42.tools.ImageCompressor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,9 +28,10 @@ object DataSourceModule {
     fun provideRemoteDataSource(
         intraService: IntraService,
         storage: FirebaseStorage,
-        db: FirebaseFirestore
+        db: FirebaseFirestore,
+        imageCompressor: ImageCompressor
     ): DataSource.RemoteDataSource =
-        RemoteDataSource(intraService, storage, db)
+        RemoteDataSource(intraService, storage, db, imageCompressor)
 
     @Singleton
     @Provides
