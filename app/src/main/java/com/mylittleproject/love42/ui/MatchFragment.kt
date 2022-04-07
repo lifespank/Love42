@@ -42,8 +42,10 @@ class MatchFragment : Fragment() {
         binding.rvMatches.apply {
             this.adapter = this@MatchFragment.adapter
             layoutManager =
-                StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-            addItemDecoration(GridSpacingItemDecoration(2, 50, true))
+                StaggeredGridLayoutManager(2, LinearLayoutManager.HORIZONTAL).apply {
+                    gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
+                }
+            addItemDecoration(GridSpacingItemDecoration(2, 50))
         }
     }
 
