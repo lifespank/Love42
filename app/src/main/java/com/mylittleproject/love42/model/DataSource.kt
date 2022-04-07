@@ -31,7 +31,7 @@ interface DataSource {
 
         fun matchesInFlow(likes: HashSet<String>): Flow<List<DocumentSnapshot?>>
 
-        fun myProfileInFlow(intraID: String): Flow<DocumentSnapshot?>
+        fun myProfileUpdateFlow(intraID: String): Flow<DocumentSnapshot?>
     }
 
     interface LocalDataSource {

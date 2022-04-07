@@ -2,16 +2,16 @@ package com.mylittleproject.love42.model
 
 import android.net.Uri
 import android.util.Log
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import com.mylittleproject.love42.data.AccessToken
 import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.network.IntraService
 import com.mylittleproject.love42.tools.NAME_TAG
+import com.mylittleproject.love42.tools.getDataFlow
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
 
 class RemoteDataSource(
@@ -113,13 +113,11 @@ class RemoteDataSource(
         }
     }
 
-    override fun myProfileInFlow(intraID: String): Flow<DocumentSnapshot?> = flow {
-        while (true) {
-            val myProfile = downloadProfile(intraID)
-            emit(myProfile)
-            delay(REFRESH_INTERVAL_MS)
-        }
-    }
+    override fun myProfileUpdateFlow(intraID: String) =
+        db.collection("users").document(intraID)
+            .getDataFlow { documentSnapshot ->
+                documentSnapshot
+            }
 
     companion object {
         const val REFRESH_INTERVAL_MS = 5_000L

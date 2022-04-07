@@ -68,7 +68,7 @@ class FirebaseRepositoryImpl(private val remoteDataSource: DataSource.RemoteData
         }.flowOn(Dispatchers.IO)
 
     override fun myProfileInFlow(intraID: String): Flow<DetailedUserInfo> =
-        remoteDataSource.myProfileInFlow(intraID)
+        remoteDataSource.myProfileUpdateFlow(intraID)
             .mapNotNull { documentSnapshot ->
                 documentSnapshot?.toObject<DetailedUserInfo.FirebaseUserInfo>()?.let { fbUser ->
                     DetailedUserInfo.fromFirebase(fbUser)
