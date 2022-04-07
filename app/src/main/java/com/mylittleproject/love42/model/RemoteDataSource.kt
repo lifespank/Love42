@@ -71,6 +71,7 @@ class RemoteDataSource(
                 transaction.update(userRef, "slackMemberID", userInfo.slackMemberID)
                 transaction.update(userRef, "languages", userInfo.languages.toList())
                 transaction.update(userRef, "bio", userInfo.bio)
+                transaction.update(userRef, "imageURI", userInfo.imageURI)
             }.await()
             true
         } catch (e: Exception) {
