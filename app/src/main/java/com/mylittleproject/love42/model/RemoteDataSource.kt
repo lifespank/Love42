@@ -90,15 +90,13 @@ class RemoteDataSource(
             null
         }
 
-    override fun matchesInFlow(likes: HashSet<String>): Flow<List<DocumentSnapshot?>> = flow {
-        while (true) {
-            val candidates = likes.map {
-                downloadProfile(it)
+    override fun matchesInFlow(likes: HashSet<String>): Flow<QuerySnapshot?> =
+        db.collection("users")
+            .whereIn("intraID", likes.toList())
+            .getDataFlow { querySnapshot ->
+                querySnapshot
             }
-            emit(candidates)
-            delay(REFRESH_INTERVAL_MS)
-        }
-    }
+
 
     override fun candidatesUpdateFlow(isMale: Boolean, campus: String): Flow<QuerySnapshot?> =
         db.collection("users")

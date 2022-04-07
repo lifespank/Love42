@@ -59,9 +59,9 @@ class FirebaseRepositoryImpl(private val remoteDataSource: DataSource.RemoteData
     }
 
     override fun matchesInFlow(likes: HashSet<String>) = remoteDataSource.matchesInFlow(likes)
-        .map { documentSnapshots ->
-            documentSnapshots.mapNotNull { documentSnapshot ->
-                documentSnapshot?.toObject<DetailedUserInfo.FirebaseUserInfo>()?.let { fbUser ->
+        .mapNotNull { querySnapshot ->
+            querySnapshot?.documents?.mapNotNull { documentSnapshot ->
+                documentSnapshot.toObject<DetailedUserInfo.FirebaseUserInfo>()?.let { fbUser ->
                     DetailedUserInfo.fromFirebase(fbUser)
                 }
             }
