@@ -25,6 +25,14 @@ interface DataSource {
 
         suspend fun uploadLocalProfile(userInfo: DetailedUserInfo): Boolean
 
+        suspend fun addElementToArray(docName: String, arrayName: String, element: String): Boolean
+
+        suspend fun deleteElementFromArray(
+            docName: String,
+            arrayName: String,
+            element: String
+        ): Boolean
+
         suspend fun downloadProfile(intraID: String): DocumentSnapshot?
 
         fun candidatesUpdateFlow(isMale: Boolean, campus: String): Flow<QuerySnapshot?>

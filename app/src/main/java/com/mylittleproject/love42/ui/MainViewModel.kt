@@ -129,18 +129,12 @@ class MainViewModel @Inject constructor(
                 if (candidateList.isNotEmpty() && me != null) {
                     val like = candidateList.removeFirst()
                     if (like.likes.contains(me.intraID)) {
-                        me.matches.add(like.intraID)
-                        like.likes.remove(me.intraID)
-                        like.matches.add(me.intraID)
+                        firebaseRepository.addElementToArray(me.intraID, "matches", like.intraID)
+                        firebaseRepository.deleteElementFromArray(like.intraID, "likes", me.intraID)
+                        firebaseRepository.addElementToArray(like.intraID, "matches", me.intraID)
                         _matchEvent.value = Event(Unit)
                     } else {
-                        me.likes.add(like.intraID)
-                    }
-                    if (firebaseRepository.uploadProfile(like)) {
-                        Log.d(NAME_TAG, "like uploaded: $like")
-                    }
-                    if (firebaseRepository.uploadProfile(me)) {
-                        Log.d(NAME_TAG, "me uploaded: $me")
+                        firebaseRepository.addElementToArray(me.intraID, "likes", like.intraID)
                     }
                     mutableCandidates.value = candidateList
                 }
@@ -154,13 +148,7 @@ class MainViewModel @Inject constructor(
             mutableCandidates.value?.toMutableList()?.let { candidateList ->
                 if (candidateList.isNotEmpty() && me != null) {
                     val dislike = candidateList.removeFirst()
-                    me.dislikes.add(dislike.intraID)
-                    if (firebaseRepository.uploadProfile(dislike)) {
-                        Log.d(NAME_TAG, "dislike uploaded: $dislike")
-                    }
-                    if (firebaseRepository.uploadProfile(me)) {
-                        Log.d(NAME_TAG, "me uploaded: $me")
-                    }
+                    firebaseRepository.addElementToArray(me.intraID, "dislikes", dislike.intraID)
                     mutableCandidates.value = candidateList
                 }
             }

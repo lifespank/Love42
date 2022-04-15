@@ -3,6 +3,7 @@ package com.mylittleproject.love42.model
 import android.net.Uri
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
@@ -37,6 +38,36 @@ class RemoteDataSource(
 
     override suspend fun fetchUserInfo(accessToken: String) = runCatching {
         intraService.fetchUserInfo(accessToken)
+    }
+
+    override suspend fun addElementToArray(
+        docName: String,
+        arrayName: String,
+        element: String
+    ): Boolean {
+        return try {
+            val docRef = db.collection("users").document(docName)
+            docRef.update(arrayName, FieldValue.arrayUnion(element)).await()
+            true
+        } catch (e: Exception) {
+            Log.w(NAME_TAG, "Add element failed")
+            false
+        }
+    }
+
+    override suspend fun deleteElementFromArray(
+        docName: String,
+        arrayName: String,
+        element: String
+    ): Boolean {
+        return try {
+            val docRef = db.collection("users").document(docName)
+            docRef.update(arrayName, FieldValue.arrayRemove(element)).await()
+            true
+        } catch (e: Exception) {
+            Log.w(NAME_TAG, "Delete element failed")
+            false
+        }
     }
 
     override suspend fun uploadProfileImage(intraID: String, imageURI: String): String {
@@ -132,8 +163,4 @@ class RemoteDataSource(
             .getDataFlow { documentSnapshot ->
                 documentSnapshot
             }
-
-    companion object {
-        const val REFRESH_INTERVAL_MS = 5_000L
-    }
 }

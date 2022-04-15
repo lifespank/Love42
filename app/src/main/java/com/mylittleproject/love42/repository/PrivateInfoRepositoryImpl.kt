@@ -4,12 +4,14 @@ import android.util.Log
 import com.mylittleproject.love42.data.AccessToken
 import com.mylittleproject.love42.model.DataSource
 import com.mylittleproject.love42.tools.NAME_TAG
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class PrivateInfoRepositoryImpl(
     private val localDataSource: DataSource.LocalDataSource,
-    private val remoteDataSource: DataSource.RemoteDataSource
+    private val remoteDataSource: DataSource.RemoteDataSource,
+    private val defaultDispatcher: CoroutineDispatcher
 ) :
     PrivateInfoRepository {
 
@@ -19,7 +21,7 @@ class PrivateInfoRepositoryImpl(
         grantType: String
     ): AccessToken? {
         var token: Result<AccessToken>
-        withContext(Dispatchers.IO) {
+        withContext(defaultDispatcher) {
             token = localDataSource.fetchAccessToken()
             token.onSuccess {
                 Log.d(NAME_TAG, "Token fetched from local: $it")
@@ -43,7 +45,7 @@ class PrivateInfoRepositoryImpl(
     }
 
     override suspend fun saveAccessToken(accessToken: AccessToken?): Result<Unit> = runCatching {
-        withContext(Dispatchers.IO) {
+        withContext(defaultDispatcher) {
             val result = localDataSource.saveAccessToken(accessToken)
             result.onSuccess {
                 Log.d(NAME_TAG, "Token save success")
@@ -55,12 +57,12 @@ class PrivateInfoRepositoryImpl(
     }
 
     override suspend fun saveIntraID(intraID: String): Result<Unit> =
-        withContext(Dispatchers.IO) {
+        withContext(defaultDispatcher) {
             localDataSource.saveIntraID(intraID)
         }
 
     override suspend fun fetchIntraID(): Result<String?> =
-        withContext(Dispatchers.IO) {
+        withContext(defaultDispatcher) {
             localDataSource.fetchIntraID()
         }
 }

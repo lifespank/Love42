@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @Module
@@ -18,7 +19,7 @@ object RepositoryModule {
         localDataSource: DataSource.LocalDataSource,
         remoteDataSource: DataSource.RemoteDataSource
     ): PrivateInfoRepository =
-        PrivateInfoRepositoryImpl(localDataSource, remoteDataSource)
+        PrivateInfoRepositoryImpl(localDataSource, remoteDataSource, Dispatchers.IO)
 
     @Singleton
     @Provides
@@ -28,5 +29,5 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideFirebaseRepository(remoteDataSource: DataSource.RemoteDataSource): FirebaseRepository =
-        FirebaseRepositoryImpl(remoteDataSource)
+        FirebaseRepositoryImpl(remoteDataSource, Dispatchers.IO)
 }
