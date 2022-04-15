@@ -67,7 +67,8 @@ class MainViewModel @Inject constructor(
                 it.campus,
                 it.likes,
                 it.dislikes,
-                it.matches
+                it.matches,
+                it.isGlobal
             ).catch { throwable ->
                 Log.w(NAME_TAG, "Candidate fetch failed", throwable)
             }.collect {

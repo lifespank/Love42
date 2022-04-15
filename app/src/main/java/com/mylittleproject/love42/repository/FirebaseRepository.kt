@@ -29,7 +29,8 @@ interface FirebaseRepository {
         campus: String,
         likes: HashSet<String>,
         dislikes: HashSet<String>,
-        matches: HashSet<String>
+        matches: HashSet<String>,
+        isGlobal: Boolean
     ): Flow<List<DetailedUserInfo>>
 
     fun matchesInFlow(matches: HashSet<String>): Flow<List<DetailedUserInfo>?>

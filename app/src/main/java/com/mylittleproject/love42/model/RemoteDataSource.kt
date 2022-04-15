@@ -118,6 +118,7 @@ class RemoteDataSource(
                 transaction.update(userRef, "languages", userInfo.languages.toList())
                 transaction.update(userRef, "bio", userInfo.bio)
                 transaction.update(userRef, "imageURI", userInfo.imageURI)
+                transaction.update(userRef, "isGlobal", userInfo.isGlobal)
             }.await()
             true
         } catch (e: Exception) {
@@ -149,13 +150,25 @@ class RemoteDataSource(
         }
 
 
-    override fun candidatesUpdateFlow(isMale: Boolean, campus: String): Flow<QuerySnapshot?> =
-        db.collection("users")
-            .whereNotEqualTo("isMale", isMale)
-            .whereEqualTo("campus", campus)
-            .getDataFlow { querySnapshot ->
-                querySnapshot
-            }
+    override fun candidatesUpdateFlow(
+        isMale: Boolean,
+        campus: String,
+        isGlobal: Boolean
+    ): Flow<QuerySnapshot?> =
+        if (isGlobal) {
+            db.collection("users")
+                .whereNotEqualTo("isMale", isMale)
+                .getDataFlow { querySnapshot ->
+                    querySnapshot
+                }
+        } else {
+            db.collection("users")
+                .whereNotEqualTo("isMale", isMale)
+                .whereEqualTo("campus", campus)
+                .getDataFlow { querySnapshot ->
+                    querySnapshot
+                }
+        }
 
 
     override fun myProfileUpdateFlow(intraID: String) =

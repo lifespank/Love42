@@ -14,7 +14,8 @@ data class DetailedUserInfo(
     val likes: HashSet<String> = hashSetOf(),
     val dislikes: HashSet<String> = hashSetOf(),
     val matches: HashSet<String> = hashSetOf(),
-    var timeStamp: Long = System.currentTimeMillis()
+    var timeStamp: Long = System.currentTimeMillis(),
+    var isGlobal: Boolean = false
 ) {
 
     data class FirebaseUserInfo(
@@ -32,7 +33,9 @@ data class DetailedUserInfo(
         val likes: List<String> = emptyList(),
         val dislikes: List<String> = emptyList(),
         val matches: List<String> = emptyList(),
-        var timeStamp: Long = 0L
+        var timeStamp: Long = 0L,
+        @field:JvmField
+        var isGlobal: Boolean = false
     )
 
     fun toHashMap() =
@@ -50,8 +53,17 @@ data class DetailedUserInfo(
             "likes" to likes.toList(),
             "dislikes" to dislikes.toList(),
             "matches" to matches.toList(),
-            "timeStamp" to timeStamp
+            "timeStamp" to timeStamp,
+            "isGlobal" to isGlobal
         )
+
+    fun setIsGlobal(isGlobal: Boolean) {
+        this.isGlobal = isGlobal
+    }
+
+    fun getIsGlobal(): Boolean {
+        return this.isGlobal
+    }
 
     companion object {
 
@@ -69,7 +81,8 @@ data class DetailedUserInfo(
             HashSet(firebaseUserInfo.likes),
             HashSet(firebaseUserInfo.dislikes),
             HashSet(firebaseUserInfo.matches),
-            firebaseUserInfo.timeStamp
+            firebaseUserInfo.timeStamp,
+            firebaseUserInfo.isGlobal
         )
     }
 }

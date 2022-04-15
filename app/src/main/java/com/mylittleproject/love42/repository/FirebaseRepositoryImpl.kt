@@ -67,9 +67,10 @@ class FirebaseRepositoryImpl(
         campus: String,
         likes: HashSet<String>,
         dislikes: HashSet<String>,
-        matches: HashSet<String>
+        matches: HashSet<String>,
+        isGlobal: Boolean
     ): Flow<List<DetailedUserInfo>> {
-        val candidates = remoteDataSource.candidatesUpdateFlow(isMale, campus)
+        val candidates = remoteDataSource.candidatesUpdateFlow(isMale, campus, isGlobal)
             .mapNotNull { querySnapShot ->
                 querySnapShot?.documents?.mapNotNull { documentSnapshot ->
                     documentSnapshot.toObject<DetailedUserInfo.FirebaseUserInfo>()?.let { fbUser ->
