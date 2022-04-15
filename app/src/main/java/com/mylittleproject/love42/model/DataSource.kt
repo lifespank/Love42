@@ -40,6 +40,8 @@ interface DataSource {
         fun matchesInFlow(matches: HashSet<String>): Flow<QuerySnapshot?>
 
         fun myProfileUpdateFlow(intraID: String): Flow<DocumentSnapshot?>
+
+        suspend fun deleteAccount(intraID: String): Boolean
     }
 
     interface LocalDataSource {

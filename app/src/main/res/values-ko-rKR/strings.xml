@@ -39,4 +39,6 @@
     <string name="slack_message">슬랙 메시지 보내기</string>
     <string name="invalid_url">유효하지 않은 URL</string>
     <string name="sending_email">이메일 보내기</string>
+    <string name="delete_account">계정 삭제</string>
+    <string name="are_you_sure">확실한가요?</string>
 </resources>

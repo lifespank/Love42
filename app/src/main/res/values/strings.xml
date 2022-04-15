@@ -39,4 +39,6 @@
     <string name="slack_message">Send slack message</string>
     <string name="invalid_url">Invalid URL</string>
     <string name="sending_email">Sending Email</string>
+    <string name="delete_account">Delete account</string>
+    <string name="are_you_sure">Are you sure?</string>
 </resources>

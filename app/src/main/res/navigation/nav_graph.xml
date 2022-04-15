@@ -8,7 +8,12 @@
         android:id="@+id/myProfileFragment"
         android:name="com.mylittleproject.love42.ui.MyProfileFragment"
         android:label="MyProfileFragment"
-        tools:layout="@layout/fragment_my_profile" />
+        tools:layout="@layout/fragment_my_profile" >
+        <action
+            android:id="@+id/action_myProfileFragment_to_signInActivity"
+            app:destination="@id/signInActivity"
+            app:popUpTo="@id/signInActivity" />
+    </fragment>
     <fragment
         android:id="@+id/findFragment"
         android:name="com.mylittleproject.love42.ui.FindFragment"
@@ -31,6 +36,10 @@
         android:id="@+id/matchedProfileFragment"
         android:name="com.mylittleproject.love42.ui.MatchedProfileFragment"
         android:label="MatchedProfileFragment"
-        tools:layout="@layout/fragment_matched_profile">
-    </fragment>
+        tools:layout="@layout/fragment_matched_profile" />
+    <activity
+        android:id="@+id/signInActivity"
+        android:name="com.mylittleproject.love42.ui.SignInActivity"
+        android:label="SignInActivity"
+        tools:layout="@layout/activity_sign_in" />
 </navigation>

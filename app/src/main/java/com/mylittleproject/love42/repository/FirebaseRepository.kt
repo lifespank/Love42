@@ -22,6 +22,8 @@ interface FirebaseRepository {
 
     suspend fun downloadProfile(intraID: String): DocumentSnapshot?
 
+    suspend fun deleteAccount(intraID: String): Boolean
+
     fun candidatesInFlow(
         isMale: Boolean,
         campus: String,

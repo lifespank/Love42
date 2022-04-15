@@ -50,7 +50,7 @@ class RemoteDataSource(
             docRef.update(arrayName, FieldValue.arrayUnion(element)).await()
             true
         } catch (e: Exception) {
-            Log.w(NAME_TAG, "Add element failed")
+            Log.w(NAME_TAG, "Add element failed", e)
             false
         }
     }
@@ -163,4 +163,15 @@ class RemoteDataSource(
             .getDataFlow { documentSnapshot ->
                 documentSnapshot
             }
+
+    override suspend fun deleteAccount(intraID: String): Boolean {
+        return try {
+            db.collection("users").document(intraID).delete().await()
+            storageRef.child("images/$intraID.jpg").delete().await()
+            true
+        } catch (e: Exception) {
+            Log.w(NAME_TAG, "Delete account failed", e)
+            false
+        }
+    }
 }

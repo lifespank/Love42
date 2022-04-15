@@ -57,6 +57,11 @@ class FirebaseRepositoryImpl(
             remoteDataSource.downloadProfile(intraID)
         }
 
+    override suspend fun deleteAccount(intraID: String): Boolean =
+        withContext(defaultDispatcher) {
+            remoteDataSource.deleteAccount(intraID)
+        }
+
     override fun candidatesInFlow(
         isMale: Boolean,
         campus: String,

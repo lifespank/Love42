@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -132,6 +133,22 @@ class MyProfileFragment : Fragment() {
             } else {
                 requestPermissions()
             }
+        })
+        mainViewModel.deletePopUpEvent.observe(viewLifecycleOwner, EventObserver {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.delete_account)
+                .setMessage(R.string.are_you_sure)
+                .setNegativeButton(R.string.cancel) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton(R.string.confirm) { dialog, _ ->
+                    mainViewModel.deleteAccount()
+                }
+                .show()
+        })
+        mainViewModel.goToSignInActivityEvent.observe(viewLifecycleOwner, EventObserver {
+            findNavController().navigate(R.id.action_myProfileFragment_to_signInActivity)
+            requireActivity().finish()
         })
     }
 

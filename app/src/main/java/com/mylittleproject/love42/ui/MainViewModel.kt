@@ -10,6 +10,8 @@ import com.mylittleproject.love42.repository.PrivateInfoRepository
 import com.mylittleproject.love42.tools.Event
 import com.mylittleproject.love42.tools.NAME_TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -47,6 +49,10 @@ class MainViewModel @Inject constructor(
     val sendEmailEvent: LiveData<Event<Array<String>>> get() = _sendEmailEvent
     private val _matchEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
     val matchEvent: LiveData<Event<Unit>> get() = _matchEvent
+    private val _deletePopUpEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
+    val deletePopUpEvent: LiveData<Event<Unit>> get() = _deletePopUpEvent
+    private val _goToSignInActivityEvent: MutableLiveData<Event<Unit>> by lazy { MutableLiveData() }
+    val goToSignInActivityEvent: LiveData<Event<Unit>> get() = _goToSignInActivityEvent
 
     val preferredLanguages = localProfile.switchMap {
         liveData {
@@ -119,6 +125,28 @@ class MainViewModel @Inject constructor(
     fun onEmailButtonClick() {
         selectedProfile.value?.let {
             _sendEmailEvent.value = Event(arrayOf(it.email))
+        }
+    }
+
+    fun onDeleteButtonClick() {
+        _deletePopUpEvent.value = Event(Unit)
+    }
+
+    fun deleteAccount() {
+        viewModelScope.launch {
+            myProfile.value?.let { me ->
+                me.matches.map { match ->
+                    async {
+                        firebaseRepository.deleteElementFromArray(
+                            match,
+                            "matches",
+                            me.intraID
+                        )
+                    }
+                }.awaitAll()
+                firebaseRepository.deleteAccount(me.intraID)
+                _goToSignInActivityEvent.value = Event(Unit)
+            }
         }
     }
 
