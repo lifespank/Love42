@@ -193,6 +193,7 @@ class SetProfileActivity : AppCompatActivity() {
             "Python",
             "R",
             "Ruby",
+            "Rust",
             "Scala",
             "Smalltalk",
             "Swift",
