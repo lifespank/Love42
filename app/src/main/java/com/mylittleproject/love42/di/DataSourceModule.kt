@@ -3,7 +3,7 @@ package com.mylittleproject.love42.di
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
+import androidx.security.crypto.MasterKey
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.mylittleproject.love42.data.room.AccessTokenDao
@@ -44,12 +44,13 @@ object DataSourceModule {
     @Singleton
     @Provides
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
-        val keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC
-        val mainKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec)
+        val masterKey = MasterKey.Builder(context, MasterKey.DEFAULT_MASTER_KEY_ALIAS)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
         return EncryptedSharedPreferences.create(
-            FILE_NAME,
-            mainKeyAlias,
             context,
+            FILE_NAME,
+            masterKey,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )

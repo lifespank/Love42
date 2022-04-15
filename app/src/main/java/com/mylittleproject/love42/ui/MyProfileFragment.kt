@@ -141,7 +141,7 @@ class MyProfileFragment : Fragment() {
                 .setNegativeButton(R.string.cancel) { dialog, _ ->
                     dialog.dismiss()
                 }
-                .setPositiveButton(R.string.confirm) { dialog, _ ->
+                .setPositiveButton(R.string.confirm) { _, _ ->
                     mainViewModel.deleteAccount()
                 }
                 .show()
