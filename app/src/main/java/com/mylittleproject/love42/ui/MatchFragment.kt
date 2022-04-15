@@ -54,6 +54,7 @@ class MatchFragment : Fragment() {
             Log.d(NAME_TAG, "Matches: $it")
             if (it.isNullOrEmpty()) {
                 adapter.submitList(null)
+                Log.d(NAME_TAG, "match empty")
                 binding.tvNoMatches.isVisible = true
             } else {
                 adapter.submitList(it)

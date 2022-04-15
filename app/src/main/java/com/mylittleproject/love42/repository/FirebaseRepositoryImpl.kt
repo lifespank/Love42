@@ -7,7 +7,6 @@ import com.mylittleproject.love42.data.DetailedUserInfo
 import com.mylittleproject.love42.model.DataSource
 import com.mylittleproject.love42.tools.NAME_TAG
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -80,14 +79,15 @@ class FirebaseRepositoryImpl(
         return candidates
     }
 
-    override fun matchesInFlow(likes: HashSet<String>) = remoteDataSource.matchesInFlow(likes)
-        .mapNotNull { querySnapshot ->
-            querySnapshot?.documents?.mapNotNull { documentSnapshot ->
-                documentSnapshot.toObject<DetailedUserInfo.FirebaseUserInfo>()?.let { fbUser ->
-                    DetailedUserInfo.fromFirebase(fbUser)
+    override fun matchesInFlow(matches: HashSet<String>): Flow<List<DetailedUserInfo>?> =
+        remoteDataSource.matchesInFlow(matches)
+            .map { querySnapshot ->
+                querySnapshot?.documents?.mapNotNull { documentSnapshot ->
+                    documentSnapshot.toObject<DetailedUserInfo.FirebaseUserInfo>()?.let { fbUser ->
+                        DetailedUserInfo.fromFirebase(fbUser)
+                    }
                 }
-            }
-        }.flowOn(defaultDispatcher)
+            }.flowOn(defaultDispatcher)
 
     override fun myProfileInFlow(intraID: String): Flow<DetailedUserInfo> =
         remoteDataSource.myProfileUpdateFlow(intraID)
