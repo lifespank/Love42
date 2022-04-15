@@ -16,7 +16,7 @@
     <string name="what_is_slack_id">What is slack member ID?</string>
     <string name="slack_id_description">Slack member ID can be found in your slack\'s 42born2code profile. It is used for someone to DM you in slack.</string>
     <string name="close">Close</string>
-    <string name="preferred_language">Preferred language</string>
+    <string name="preferred_language">Preferred languages</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="male">Male</string>
