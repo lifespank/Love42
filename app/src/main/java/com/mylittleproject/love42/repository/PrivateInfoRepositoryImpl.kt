@@ -5,7 +5,6 @@ import com.mylittleproject.love42.data.AccessToken
 import com.mylittleproject.love42.model.DataSource
 import com.mylittleproject.love42.tools.NAME_TAG
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class PrivateInfoRepositoryImpl(
