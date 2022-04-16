@@ -40,10 +40,23 @@
             android:text="@{userInfo.name}"
             android:textColor="@color/white"
             android:textSize="30sp"
-            app:layout_constraintBottom_toTopOf="@id/tv_bio"
+            app:layout_constraintBottom_toTopOf="@id/tv_campus"
             app:layout_constraintEnd_toEndOf="@id/iv_profile"
             app:layout_constraintStart_toStartOf="@id/iv_profile"
             tools:text="Sumyeong Kim" />
+
+        <TextView
+            android:id="@+id/tv_campus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@{userInfo.campus}"
+            android:textColor="@color/white"
+            android:textSize="26sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_bio"
+            app:layout_constraintEnd_toEndOf="@id/iv_profile"
+            app:layout_constraintStart_toStartOf="@id/iv_profile"
+            tools:text="Seoul" />
 
         <TextView
             android:id="@+id/tv_bio"

@@ -34,7 +34,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/slack_member_id" />
+            tools:src="@drawable/ic_baseline_person_24" />
 
         <View
             android:layout_width="0dp"
@@ -52,10 +52,23 @@
             android:layout_margin="16dp"
             android:text="@{userInfo.name}"
             android:textColor="@color/white"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="@id/iv_profile"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_campus"
             app:layout_constraintEnd_toEndOf="@id/iv_profile"
             app:layout_constraintStart_toStartOf="@id/iv_profile"
             tools:text="Sumyeong Kim" />
+
+        <TextView
+            android:id="@+id/tv_campus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@{userInfo.campus}"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_profile"
+            app:layout_constraintEnd_toEndOf="@id/iv_profile"
+            app:layout_constraintStart_toStartOf="@id/iv_profile"
+            tools:text="Seoul" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
